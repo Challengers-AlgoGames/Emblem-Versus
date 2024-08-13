@@ -74,3 +74,4 @@ crashlytics-build.properties
 # Custom
 *.meta
 .vscode/
+ProjectSettings/
