@@ -1,55 +1,53 @@
+using System;
 using UnityEngine;
-using Board;
 
-namespace Units {
 public class Unit : MonoBehaviour
 {
-    public float speed;
-    public int maxStep;
-    public Commander commander;
-    public bool isHaveMove;
-    public GameObject tile;
-    public void Move()
+    /* Units states */
+    [SerializeField] private string title;
+    [SerializeField] private float health;
+    [SerializeField] private int attack;
+    [SerializeField] private int defense;
+    [SerializeField] private int spitituality;
+    [SerializeField] private int mobility; 
+
+    /* Weapon inventory */
+    [Serializable]
+    public struct WeaponStruct
     {
-        if(!isHaveMove && commander == GameBoard.commanderTurn)
-        {
-            isHaveMove = true;
-            Debug.Log(gameObject.name+" was moved");
-        }
+        public GameObject weapon;
+        public bool isUsed;
     }
+    [SerializeField] private WeaponStruct[] weapons;
+    public WeaponStruct[] WeaponList { get=> weapons; }
 
-    public void DrawMovementTiles()
+    /* variables need to do unit class work */
+    private bool isHaveMove = false;
+    private int currendWeaponIndex = -1;
+
+    void Start()
     {
-        int maxTile = maxStep;
-        Vector3 centerPosition = transform.position;
-        Vector3 startingPosition = centerPosition;
-
-        int iteration = maxTile;
-        for(int i=0; i < iteration; i++)
-        {
-            int toGenrarateTile = maxTile - i;
-            Vector3 tilePosition;
-            for(int j=0; j < toGenrarateTile; j++)
+        // save unity used wapon index for last use
+        for(int i = 0; i < weapons.Length; i++) {
+            if(weapons[i].isUsed)
             {
-                // y+ && x+
-                tilePosition = new Vector3(startingPosition.x + j+1, startingPosition.y + i+1, startingPosition.z + 1);
-                Instantiate(tile, tilePosition, Quaternion.identity);
-
-                // y+ && x-
-                tilePosition = new Vector3(startingPosition.x - j-1, startingPosition.y + i+1, startingPosition.z + 1);
-                Instantiate(tile, tilePosition, Quaternion.identity);
-
-                // // y- && x+
-                tilePosition = new Vector3(startingPosition.x + j+1, startingPosition.y - i-1, startingPosition.z + 1);
-                Instantiate(tile, tilePosition, Quaternion.identity);
-
-                // // y- && x-
-                tilePosition = new Vector3(startingPosition.x - j-1, startingPosition.y - i-1, startingPosition.z + 1);
-                Instantiate(tile, tilePosition, Quaternion.identity);
+                currendWeaponIndex = i;
+                break;
             }
-            
         }
     }
-}
 
+    void Update()
+    {
+        // active used weapon to hiararchy
+        GameObject currentWeapon = weapons[currendWeaponIndex].weapon;
+        if(!currentWeapon.activeInHierarchy)
+            currentWeapon.SetActive(true);
+    }
+
+    public void SwitchWeapon(int _index)
+    {
+        weapons[currendWeaponIndex].weapon.SetActive(false); // deactive last weapon to hiararchy
+        currendWeaponIndex =  _index; // save new used weapon index
+    }
 }
