@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MainScene.unity
     guid: 9ea7c7660aec33d56ad5510cf534a9e0
   - enabled: 1
-    path: Assets/Scenes/PVPScene.unity
+    path: Assets/Scenes/TestScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
     path: Assets/Scenes/TutoScene.unity
@@ -17,4 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CreditsScene.unity
     guid: 6324e6f78376695d2b4bf0bca79aa065
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 59c0bb59d1793b2a59702e0bc45f4f4f,
+      type: 2}

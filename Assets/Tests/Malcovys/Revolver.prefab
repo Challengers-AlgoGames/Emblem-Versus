@@ -11,14 +11,14 @@ GameObject:
   - component: {fileID: 6773851860489836248}
   - component: {fileID: 707547771000149839}
   - component: {fileID: 2465076087022148715}
-  - component: {fileID: 8872517153297013843}
+  - component: {fileID: 6762069130915573138}
   m_Layer: 0
   m_Name: Revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6773851860489836248
 Transform:
   m_ObjectHideFlags: 0
@@ -84,24 +84,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8872517153297013843
-BoxCollider:
+--- !u!114 &6762069130915573138
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911585694002126282}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waponName: Revolver Model 1873
+  range: 70
+  acuracy: 50
+  category: 0
+  type: 1
+  attribute: 0

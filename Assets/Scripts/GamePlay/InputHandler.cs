@@ -1,5 +1,6 @@
 using UnityEngine;
-//using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
+using UnitUI;
 
 public class InputHandler : MonoBehaviour
 {
@@ -10,17 +11,21 @@ public class InputHandler : MonoBehaviour
         _mainCamera = Camera.main;
     }
 
-    /*
     public void OnClick(InputAction.CallbackContext context)
     {
         if(!context.started) return;
 
-        var rayHit = Physics2D.GetRayIntersection(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()));
+        /* Detection */
+        RaycastHit hit;
+        Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out hit);
 
-        if(!rayHit.collider) return;
+        if(!hit.collider) return; // the hit haven't collider
 
-        Warrior warrior = rayHit.collider.gameObject.GetComponent<Warrior>();
-        warrior.DrawMovementTiles();
+        // check if hit is a unit
+        if(hit.collider.gameObject.CompareTag("Unit"))
+        {
+            UnitActionsUIController unitActionsUIController = hit.collider.gameObject.GetComponent<UnitActionsUIController>();
+            unitActionsUIController.ShowUnitPossibleActionsUI();
+        }
     }
-    */
 }

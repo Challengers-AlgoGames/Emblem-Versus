@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Challengers
   productName: Emblem Versus
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -913,7 +913,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 72447e42-dc6f-41b6-ba1f-0cf53d1338fd
   framebufferDepthMemorylessMode: 0

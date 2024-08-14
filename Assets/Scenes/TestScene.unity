@@ -134,24 +134,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2103486097}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &14061769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 14061764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waponName: Bayonet
-  range: 1
-  acuracy: 2
-  category: 1
-  type: 1
-  attribute: 3
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,6 +457,98 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &412967945
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 412967946}
+  - component: {fileID: 412967947}
+  - component: {fileID: 412967948}
+  m_Layer: 0
+  m_Name: InputHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &412967946
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412967945}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.628202, y: 0.19314742, z: 6.697615}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &412967947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412967945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 97398b11283a753a19ad435bf24c05d2,
+    type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 412967948}
+        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: ee3f94fb-db24-4881-875a-50b902facac5
+    m_ActionName: gamePlay/leftClick[/Mouse/leftButton]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: GamePlay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &412967948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412967945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c53166ef790adbca358d1e47212f44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &436765232
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -487,11 +561,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Revolver
-      objectReference: {fileID: 0}
-    - target: {fileID: 911585694002126282, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
@@ -546,11 +615,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 911585694002126282, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 635492440}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885, type: 3}
 --- !u!1 &508773196
 GameObject:
@@ -657,24 +722,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 436765232}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &635492440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635492435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waponName: Revolver Model 1873
-  range: 70
-  acuracy: 50
-  category: 0
-  type: 1
-  attribute: 0
 --- !u!1 &805765008
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,7 +740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &805765009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -758,7 +805,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2130114222}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Unit, Assembly-CSharp
         m_MethodName: SwitchWeapon
         m_Mode: 3
@@ -1064,7 +1111,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1338194125}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1135,11 +1182,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fusil
       objectReference: {fileID: 0}
-    - target: {fileID: 911585694002126282, guid: e528ccacd497380fe848fb9e50111cf5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: e528ccacd497380fe848fb9e50111cf5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1193,11 +1235,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 911585694002126282, guid: e528ccacd497380fe848fb9e50111cf5,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2029709926}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e528ccacd497380fe848fb9e50111cf5, type: 3}
 --- !u!1 &2029709921 stripped
 GameObject:
@@ -1211,24 +1249,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1473331927}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2029709926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029709921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waponName: Fat Gun Model 1874
-  range: 2
-  acuracy: 80
-  category: 0
-  type: 0
-  attribute: 0
 --- !u!1 &2066208733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,7 +1273,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066208733}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1275,11 +1295,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "Ba\xEFonnette"
-      objectReference: {fileID: 0}
-    - target: {fileID: 911585694002126282, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
@@ -1334,11 +1349,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 911585694002126282, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 14061769}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b9bddcfddf7b81659e6752acb0adcbd, type: 3}
 --- !u!1 &2130114217
 GameObject:
@@ -1353,7 +1364,7 @@ GameObject:
   - component: {fileID: 2130114222}
   m_Layer: 0
   m_Name: Unit
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1389,7 +1400,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130114217}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 12.96, y: 1.155, z: 3.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1415,7 +1426,13 @@ MonoBehaviour:
   defense: 80
   spitituality: 0
   mobility: 7
-  inventories: []
+  inventories:
+  - item: {fileID: 635492435}
+    isUsed: 1
+  - item: {fileID: 2029709921}
+    isUsed: 0
+  - item: {fileID: 14061764}
+    isUsed: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1427,3 +1444,4 @@ SceneRoots:
   - {fileID: 2130114221}
   - {fileID: 848526670}
   - {fileID: 381844384}
+  - {fileID: 412967946}

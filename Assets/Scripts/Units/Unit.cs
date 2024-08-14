@@ -28,6 +28,7 @@ namespace Units {
         public bool isWasMoved { get; set; } // unit actions controller
         private bool isDead; 
         private bool isCanAttack;
+        public bool IsCanAttack { get => isCanAttack; }
 
         void Awake()
         {
