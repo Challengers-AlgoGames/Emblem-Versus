@@ -28,4 +28,11 @@ public class InputHandler : MonoBehaviour
             unitActionsUIController.ShowUnitPossibleActionsUI();
         }
     }
+
+    public void OnMoveCamera(InputAction.CallbackContext context)
+    {
+        if(!context.started) return;
+        
+        Debug.Log("Move camera");
+    }
 }
