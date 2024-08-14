@@ -3,12 +3,6 @@ using Units;
 using System;
 
 namespace UnitUI {
-    public enum UnitAction
-    {
-        ATTACK,
-        SWITCH_WEAPON,
-        WAIT
-    }
     public class UnitActionsUIController : MonoBehaviour
     {
         [SerializeField] private GameObject unitObj;
