@@ -24,7 +24,7 @@ public class Unit : MonoBehaviour
     /* states */
     private const float ATTACK_MULTIPLIER = 1.5f;
     private int currendWeaponIndex = -1;
-    private bool isHaveMoved; // unit actions controller
+    private bool isWasMoved; // unit actions controller
     private bool isDead; 
     private bool isCanAttack;
 
@@ -56,7 +56,7 @@ public class Unit : MonoBehaviour
 
     public void DoNothing() 
     {
-        isHaveMoved = true;
+        isWasMoved = true;
     }
 
     public float Attack() 
@@ -79,7 +79,6 @@ public class Unit : MonoBehaviour
 
             case WeaponCategory.MELEE_WEAPON:
                 hitRate = usedWeapon.Acuracy + attack;
-                
                 if(criticalHit <= 0.2f)
                     hitRate *= ATTACK_MULTIPLIER;
                 break;
@@ -101,7 +100,7 @@ public class Unit : MonoBehaviour
     {
         inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
         currendWeaponIndex =  _index; // save new used weapon index
-        isHaveMoved = true;
+        isWasMoved = true;
     }
 
     public void TakeDamages(float _inflictedDamages)
