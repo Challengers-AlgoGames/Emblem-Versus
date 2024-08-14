@@ -2,37 +2,38 @@ using System;
 using UnityEngine;
 using Units;
 
-public class Army : MonoBehaviour
-{
-    public event Action OnArmyWasMoved;
+namespace GamePlay {
+    public class Army : MonoBehaviour
+    {
+        public event Action OnArmyWasMoved; // Broadcastable event
 
-    public Unit[] units;
+        public Unit[] army; // Units
 
+        void Update()
+        {
+            bool armyWasMove = VerifyArmyWasMove();
+            if(armyWasMove)
+            {
+                OnArmyWasMoved?.Invoke();
+                ResetArmyMoveState();
+            }
+        }
 
-    // void Update()
-    // {
-    //     bool armyWasMove = VerifyArmyWasMove();
-    //     if(armyWasMove)
-    //     {
-    //         OnArmyWasMoved?.Invoke();
-    //         ResetArmyMoveState();
-    //     }
-    // }
+        bool VerifyArmyWasMove()
+        {
+            foreach (var unit in army)
+            {
+                if(unit.isWasMoved == false) return false;
+            }
+            return true;
+        }
 
-    // bool VerifyArmyWasMove()
-    // {
-    //     foreach (var unit in units)
-    //     {
-    //         if(unit.isHaveMove == false) return false;
-    //     }
-    //     return true;
-    // }
-
-    // void ResetArmyMoveState()
-    // {
-    //     foreach (var unit in units)
-    //     {
-    //         unit.isHaveMove = false;
-    //     }
-    // }
+        void ResetArmyMoveState()
+        {
+            foreach (var unit in army)
+            {
+                unit.isWasMoved = false;
+            }
+        }
+    }
 }
