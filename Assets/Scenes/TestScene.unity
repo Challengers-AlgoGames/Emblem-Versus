@@ -134,6 +134,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2103486097}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &14061769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14061764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waponName: Bayonet
+  range: 1
+  acuracy: 2
+  category: 1
+  type: 1
+  attribute: 3
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,7 +546,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 911585694002126282, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 635492440}
   m_SourcePrefab: {fileID: 100100000, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885, type: 3}
 --- !u!1 &508773196
 GameObject:
@@ -635,6 +657,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 436765232}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &635492440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635492435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waponName: Revolver Model 1873
+  range: 70
+  acuracy: 50
+  category: 0
+  type: 1
+  attribute: 0
 --- !u!1 &805765008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1153,7 +1193,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 911585694002126282, guid: e528ccacd497380fe848fb9e50111cf5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2029709926}
   m_SourcePrefab: {fileID: 100100000, guid: e528ccacd497380fe848fb9e50111cf5, type: 3}
 --- !u!1 &2029709921 stripped
 GameObject:
@@ -1167,6 +1211,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1473331927}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2029709926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029709921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waponName: Fat Gun Model 1874
+  range: 2
+  acuracy: 80
+  category: 0
+  type: 0
+  attribute: 0
 --- !u!1 &2066208733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,7 +1274,7 @@ PrefabInstance:
     - target: {fileID: 911585694002126282, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
       propertyPath: m_Name
-      value: Baillonette
+      value: "Ba\xEFonnette"
       objectReference: {fileID: 0}
     - target: {fileID: 911585694002126282, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
@@ -1272,7 +1334,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 911585694002126282, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 14061769}
   m_SourcePrefab: {fileID: 100100000, guid: 2b9bddcfddf7b81659e6752acb0adcbd, type: 3}
 --- !u!1 &2130114217
 GameObject:
@@ -1349,13 +1415,7 @@ MonoBehaviour:
   defense: 80
   spitituality: 0
   mobility: 7
-  weapons:
-  - weapon: {fileID: 635492435}
-    isUsed: 1
-  - weapon: {fileID: 2029709921}
-    isUsed: 0
-  - weapon: {fileID: 14061764}
-    isUsed: 0
+  inventories: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

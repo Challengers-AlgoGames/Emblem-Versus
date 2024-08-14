@@ -1,19 +1,18 @@
 using UnityEngine;
 
-
-namespace Weapons
-{
-	public abstract class Weapon: MonoBehaviour
+namespace Weapons {
+	public class Weapon: MonoBehaviour
 	{
-		[SerializeField] protected string title;
-		[SerializeField] protected int range;
-		[SerializeField] protected int maxCharges;
-		[SerializeField] protected Attribute effect;
-		[SerializeField] protected SpecialAttribute specialEffect;
+		[SerializeField] private string waponName;
+		[SerializeField] private int range; // portée
+		[SerializeField] private int acuracy; // weapon atk
+		public int Acuracy { get => acuracy; }
 
-		protected int leftCharges;
-		public int LeftCharges { get => leftCharges; }
+		[SerializeField] private WeaponCategory category;
+		public WeaponCategory Category { get => category; }
 
-		public abstract void ChargeWeapon();
+		[SerializeField] private WeaponType type;
+		[SerializeField] private WeaponAttribute attribute;
+		
 	}
 }
