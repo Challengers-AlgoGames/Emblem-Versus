@@ -5,7 +5,7 @@ using System;
 namespace UnitUI {
     public class UnitActionsUIController : MonoBehaviour
     {
-        [SerializeField] private GameObject unitObj;
+        [SerializeField] private GameObject unitObj; // ui owner
 
         [Serializable] 
         public struct UnitActionUI {
@@ -13,13 +13,14 @@ namespace UnitUI {
             public UnitAction action;
         };
 
-        [SerializeField] private UnitActionUI[] unitActionsUI;
+        [SerializeField] private UnitActionUI[] unitActionsUI; // actions buttons showable
 
-        private Unit unit;
-        private bool uiIsActive;
+        private Unit unit; // unit script
+        private bool uiIsActive; // ui state
 
         void Awake()
         {
+            /* Deactive all ui */
             foreach (UnitActionUI item in unitActionsUI)
             {
                 item.button.SetActive(false);
@@ -28,11 +29,12 @@ namespace UnitUI {
 
         void Start()
         {
-            unit = unitObj.GetComponent<Unit>();
+            unit = unitObj.GetComponent<Unit>(); // get gived unit script for futur use
         }
 
         public void ShowUnitPossibleActionsUI()
         {
+            /* Deactive UI if active */
             if(uiIsActive)
             {
                 foreach (UnitActionUI item in unitActionsUI) {
@@ -44,6 +46,7 @@ namespace UnitUI {
                 return;
             }
 
+            /* Active UI if deactivate */
             foreach (UnitActionUI item in unitActionsUI) {
                 if(item.action == UnitAction.ATTACK)
                 {
