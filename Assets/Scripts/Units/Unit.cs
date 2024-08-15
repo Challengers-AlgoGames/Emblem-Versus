@@ -17,9 +17,10 @@ namespace Units {
         /* states */
         private const float ATTACK_MULTIPLIER = 1.5f;
         private int currendWeaponIndex = -1;
-        public bool isWasMoved { get; set; } // unit actions controller
+        [SerializeField] private bool isWasMoved; // unit actions controller
+        public bool IsWasMoved { get => isWasMoved; }
         private bool isDead; 
-        private bool isCanAttack;
+        [SerializeField] private bool isCanAttack;
         public bool IsCanAttack { get => isCanAttack; }
 
         void Awake()
@@ -34,13 +35,6 @@ namespace Units {
             }
         }
 
-        void Start()
-        {
-            // for tests
-            // isCanAttack = true;
-            Debug.Log("is was moved " + isWasMoved);
-        }
-
         void Update()
         {
             // active used weapon to hiararchy
@@ -53,12 +47,16 @@ namespace Units {
                 isDead = true;
         }
 
+        public void ResetWasMovedState()
+        {
+            isWasMoved = false;
+        }
+
         public void Move() {}
 
         public void Wait() 
         {
             isWasMoved = true;
-            Debug.Log("is was moved " + isWasMoved);
         }
 
         public void Attack()
@@ -103,10 +101,20 @@ namespace Units {
             return hitRate;
         }
 
-        public void SwitchWeapon(int _index)
+        public void SwitchWeapon(string _name)
         {
-            inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
-            currendWeaponIndex =  _index; // save new used weapon index
+            Debug.Log(_name);
+            for (int i = 0; i < inventories.Length; i++)
+            {
+                if(inventories[i].item.gameObject.name.ToLower() == _name.ToLower()) {
+                    inventories[currendWeaponIndex].isUsed = false;
+                    inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
+
+                    inventories[i].isUsed = false;
+                    currendWeaponIndex =  i; // save new used weapon index
+                }
+            }
+            
             isWasMoved = true;
         }
 

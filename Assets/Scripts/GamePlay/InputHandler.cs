@@ -27,7 +27,7 @@ namespace GamePlay
             if(hit.collider.gameObject.CompareTag("Unit"))
             {
                 UnitActionsUIController unitActionsUIController = hit.collider.gameObject.GetComponent<UnitActionsUIController>();
-                unitActionsUIController.ShowUnitPossibleActionsUI();
+                unitActionsUIController.ShowUnitActionsMenu();
             }
         }
     }   

@@ -23,7 +23,7 @@ namespace GamePlay {
         {
             foreach (var unit in army)
             {
-                if(unit.isWasMoved == false) return false;
+                if(unit.IsWasMoved == false) return false;
             }
             return true;
         }
@@ -32,7 +32,7 @@ namespace GamePlay {
         {
             foreach (var unit in army)
             {
-                unit.isWasMoved = false;
+                unit.ResetWasMovedState();
             }
         }
     }

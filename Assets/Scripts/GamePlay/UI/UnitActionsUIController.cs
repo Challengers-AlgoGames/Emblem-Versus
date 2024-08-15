@@ -17,31 +17,32 @@ namespace GamePlay.UIs {
             {UnitAction.WAIT, "Wait"}
         };
 
-        private Unit unit; // unit script
-        private bool actionButttonIsActive; // ui state
+        private Unit unit; // unit component
+        private bool uiIsActive; // ui state
 
-        void Start()
+        void Awake()
         {
             unit = owner.GetComponent<Unit>(); // get gived unit script for futur use
         }
 
-        public void ShowUnitPossibleActionsUI()
+        /* Main */
+        public void ShowUnitActionsMenu()
         {
-            /* Destroy if instantiated */
-            if(actionButttonIsActive)
+            if(unit.IsWasMoved) return; // can't do anathyng if unit was moved
+
+            /* Destroy if active */
+            if(uiIsActive)
             {
-                foreach (Transform child in buttonsContainer)
-                {
-                    Destroy(child.gameObject);
-                }
-                actionButttonIsActive = false;
+                ClearUIElements();
+                UpdateUIState();
                 return;
             }
 
-            /* Active if not instantiated */
+            /* Active if not active */
             for (int i = 0; i < unitActionsUI.Length; i++) {
                 GameObject newButton = Instantiate(buttonPrefab, buttonsContainer);
-
+                
+                // Show Menu on UI
                 switch (unitActionsUI[i])
                 {
                     case UnitAction.ATTACK:
@@ -65,22 +66,63 @@ namespace GamePlay.UIs {
                         break;
                 }
             }
-            actionButttonIsActive = true;
+            UpdateUIState();
+        }
+
+        /* Main childs */
+        void ShowSwitchWeaponMenu()
+        {
+            Inventory[] weapons = unit.Weapons;
+            for (int i = 0; i < weapons.Length; i++)
+            {
+                GameObject newButton = Instantiate(buttonPrefab, buttonsContainer);
+                newButton.GetComponentInChildren<Text>().text = weapons[i].isUsed ? weapons[i].item.gameObject.name+"(*)" : weapons[i].item.gameObject.name;
+                newButton.GetComponent<Button>().onClick.AddListener(() => OnWeaponButtonClicked(newButton));
+            }
+        }
+
+        /* Events Actions */
+        void OnWeaponButtonClicked(GameObject button)
+        {
+            string weaponName = button.GetComponentInChildren<Text>().text.Replace("(*)", "");
+            unit.SwitchWeapon(weaponName);
+
+            ClearUIElements();
+            UpdateUIState();
         }
 
         void OnAttackButtonClicked() 
         {
-            Debug.Log("Attack !");
+            ClearUIElements();
+            // ShowWeaponsButton();
         }
 
         void OnSwitchWeaponButtonClicked() 
         {
-            Debug.Log("SwitchWeapon !");
+            ClearUIElements();
+            ShowSwitchWeaponMenu();
         }
 
         void OnWaitButtonClicked() 
         {
-            Debug.Log("Wait !");
+            unit.Wait();
+            ClearUIElements();
+            UpdateUIState();
+        }
+
+        /* Support Methods */
+        void ClearUIElements()
+        {
+
+            foreach (Transform child in buttonsContainer)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        void UpdateUIState()
+        {
+            uiIsActive = !uiIsActive;
         }
     }
 }

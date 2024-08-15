@@ -606,7 +606,7 @@ PrefabInstance:
     - target: {fileID: 911585694002126282, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
       propertyPath: m_Name
-      value: Revolver
+      value: Revolver Model 1873
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
@@ -1354,7 +1354,7 @@ PrefabInstance:
     - target: {fileID: 911585694002126282, guid: e528ccacd497380fe848fb9e50111cf5,
         type: 3}
       propertyPath: m_Name
-      value: Fusil
+      value: Fat Gun Model 1874
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: e528ccacd497380fe848fb9e50111cf5,
         type: 3}
@@ -1468,7 +1468,7 @@ PrefabInstance:
     - target: {fileID: 911585694002126282, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
       propertyPath: m_Name
-      value: "Ba\xEFonnette"
+      value: Bayonet
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
