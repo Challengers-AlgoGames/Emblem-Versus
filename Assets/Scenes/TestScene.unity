@@ -1702,7 +1702,7 @@ MonoBehaviour:
   controllerButtonPrefab: {fileID: 3837107265560305869, guid: 528f861d01a0d2cc2ab8be81e77a5022,
     type: 3}
   menuControllerContainer: {fileID: 802870183}
-  unitActionsUI: 000000000100000002000000
+  unitActionsUI: 0000000001000000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

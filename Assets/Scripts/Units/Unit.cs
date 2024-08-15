@@ -59,15 +59,10 @@ namespace Units {
             isWasMoved = true;
         }
 
-        public void Attack()
-        {
-            Debug.Log("Attack");
-        }
-
         public float CalculateHit() 
         {
             float hitRate = 0f;
-            float criticalHit = UnityEngine.Random.Range(0f, 1f);
+            float criticalHit = Random.Range(0f, 1f);
 
             // access current weapon onject attached Weapon script
             Weapon usedWeapon = inventories[currendWeaponIndex].item.GetComponent<Weapon>();
@@ -101,12 +96,12 @@ namespace Units {
             return hitRate;
         }
 
-        public void SwitchWeapon(string _name)
+        public void Attack(string _usedWeaponName)
         {
-            Debug.Log(_name);
+            Debug.Log(_usedWeaponName);
             for (int i = 0; i < inventories.Length; i++)
             {
-                if(inventories[i].item.gameObject.name.ToLower() == _name.ToLower()) {
+                if(inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower()) {
                     inventories[currendWeaponIndex].isUsed = false;
                     inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
 

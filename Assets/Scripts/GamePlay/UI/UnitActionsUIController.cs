@@ -14,7 +14,6 @@ namespace GamePlay.UIs {
         [SerializeField] private UnitAction[] unitActionsUI; // actions menu showable
         private Dictionary<UnitAction, string> unitActionsText = new Dictionary<UnitAction, string>() {
             {UnitAction.ATTACK, "Attack"},
-            {UnitAction.SWITCH_WEAPON, "Switch Weapon"},
             {UnitAction.WAIT, "Wait"}
         };
 
@@ -45,17 +44,14 @@ namespace GamePlay.UIs {
                 switch (unitActionsUI[i])
                 {
                     case UnitAction.ATTACK:
-                        if(unit.IsCanAttack)
-                        {
-                            newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.ATTACK];
+                        newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.ATTACK];
+                        
+                        if(unit.IsCanAttack) {
                             newButton.GetComponent<Button>().onClick.AddListener(() => OnAttackButtonClicked());
                         } else {
-                            Destroy(newButton);
+                            // Can't attack sing
+                            newButton.GetComponent<Image>().color = Color.gray;
                         }
-                        break;
-                    case UnitAction.SWITCH_WEAPON:
-                        newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.SWITCH_WEAPON];
-                        newButton.GetComponent<Button>().onClick.AddListener(() => OnSwitchWeaponButtonClicked());
                         break;
                     case UnitAction.WAIT:
                         newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.WAIT];
@@ -71,13 +67,13 @@ namespace GamePlay.UIs {
         }
 
         /* Main childs */
-        void ShowSwitchWeaponMenu()
+        void ShowChoiseWeaponMenu()
         {
             Inventory[] weapons = unit.Weapons;
             for (int i = 0; i < weapons.Length; i++)
             {
                 GameObject newMenuElement = Instantiate(buttonPrefab, menuContainer);
-                newMenuElement.GetComponentInChildren<Text>().text = weapons[i].isUsed ? weapons[i].item.gameObject.name+"(*)" : weapons[i].item.gameObject.name;
+                newMenuElement.GetComponentInChildren<Text>().text = weapons[i].item.gameObject.name;
                 newMenuElement.GetComponent<Button>().onClick.AddListener(() => OnWeaponButtonClicked(newMenuElement));
             }
             ShowBackButton();
@@ -114,8 +110,8 @@ namespace GamePlay.UIs {
         /* Events Actions */
         void OnWeaponButtonClicked(GameObject button)
         {
-            string weaponName = button.GetComponentInChildren<Text>().text.Replace("(*)", "");
-            unit.SwitchWeapon(weaponName);
+            string toUsedWeaponName = button.GetComponentInChildren<Text>().text;
+            unit.Attack(toUsedWeaponName);
 
             ClearMenuUIElements();
             ClearMenuControllerUI();
@@ -126,14 +122,7 @@ namespace GamePlay.UIs {
         {
             ClearMenuUIElements();
             ClearMenuControllerUI();
-            // ShowWeaponsButton();
-        }
-
-        void OnSwitchWeaponButtonClicked() 
-        {
-            ClearMenuUIElements();
-            ClearMenuControllerUI();
-            ShowSwitchWeaponMenu();
+            ShowChoiseWeaponMenu();
         }
 
         void OnWaitButtonClicked() 
