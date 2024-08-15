@@ -559,10 +559,18 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents:
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ee3f94fb-db24-4881-875a-50b902facac5
+    m_ActionName: gamePlay/leftClick[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6d1454a7-10d1-4449-ac04-4d42a3dc46d5
+    m_ActionName: GamePlay/MoveCamera[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 412967948}
-        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
-        m_MethodName: OnClick
+        m_TargetAssemblyTypeName: GamePlay.InputHandler, Assembly-CSharp
+        m_MethodName: OnRightClick
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -572,12 +580,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: ee3f94fb-db24-4881-875a-50b902facac5
-    m_ActionName: gamePlay/leftClick[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 6d1454a7-10d1-4449-ac04-4d42a3dc46d5
-    m_ActionName: GamePlay/MoveCamera[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionId: d2d20eb8-b50d-460d-9e70-3cd745324955
+    m_ActionName: GamePlay/RightClick[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePlay

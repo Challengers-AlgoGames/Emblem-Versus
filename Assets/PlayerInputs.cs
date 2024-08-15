@@ -28,9 +28,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             ""id"": ""ae81e16a-5864-4bb4-b4e1-41319a0a4d34"",
             ""actions"": [
                 {
-                    ""name"": ""Click"",
+                    ""name"": ""LeftClick"",
                     ""type"": ""Button"",
                     ""id"": ""ee3f94fb-db24-4881-875a-50b902facac5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""d2d20eb8-b50d-460d-9e70-3cd745324955"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -54,7 +63,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Click"",
+                    ""action"": ""LeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -112,6 +121,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""MoveCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d55098de-fa3a-4484-b353-a8a1fb2eb907"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -120,7 +140,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
 }");
         // GamePlay
         m_GamePlay = asset.FindActionMap("GamePlay", throwIfNotFound: true);
-        m_GamePlay_Click = m_GamePlay.FindAction("Click", throwIfNotFound: true);
+        m_GamePlay_LeftClick = m_GamePlay.FindAction("LeftClick", throwIfNotFound: true);
+        m_GamePlay_RightClick = m_GamePlay.FindAction("RightClick", throwIfNotFound: true);
         m_GamePlay_MoveCamera = m_GamePlay.FindAction("MoveCamera", throwIfNotFound: true);
     }
 
@@ -183,13 +204,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     // GamePlay
     private readonly InputActionMap m_GamePlay;
     private List<IGamePlayActions> m_GamePlayActionsCallbackInterfaces = new List<IGamePlayActions>();
-    private readonly InputAction m_GamePlay_Click;
+    private readonly InputAction m_GamePlay_LeftClick;
+    private readonly InputAction m_GamePlay_RightClick;
     private readonly InputAction m_GamePlay_MoveCamera;
     public struct GamePlayActions
     {
         private @PlayerInputs m_Wrapper;
         public GamePlayActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Click => m_Wrapper.m_GamePlay_Click;
+        public InputAction @LeftClick => m_Wrapper.m_GamePlay_LeftClick;
+        public InputAction @RightClick => m_Wrapper.m_GamePlay_RightClick;
         public InputAction @MoveCamera => m_Wrapper.m_GamePlay_MoveCamera;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
@@ -200,9 +223,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GamePlayActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GamePlayActionsCallbackInterfaces.Add(instance);
-            @Click.started += instance.OnClick;
-            @Click.performed += instance.OnClick;
-            @Click.canceled += instance.OnClick;
+            @LeftClick.started += instance.OnLeftClick;
+            @LeftClick.performed += instance.OnLeftClick;
+            @LeftClick.canceled += instance.OnLeftClick;
+            @RightClick.started += instance.OnRightClick;
+            @RightClick.performed += instance.OnRightClick;
+            @RightClick.canceled += instance.OnRightClick;
             @MoveCamera.started += instance.OnMoveCamera;
             @MoveCamera.performed += instance.OnMoveCamera;
             @MoveCamera.canceled += instance.OnMoveCamera;
@@ -210,9 +236,12 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IGamePlayActions instance)
         {
-            @Click.started -= instance.OnClick;
-            @Click.performed -= instance.OnClick;
-            @Click.canceled -= instance.OnClick;
+            @LeftClick.started -= instance.OnLeftClick;
+            @LeftClick.performed -= instance.OnLeftClick;
+            @LeftClick.canceled -= instance.OnLeftClick;
+            @RightClick.started -= instance.OnRightClick;
+            @RightClick.performed -= instance.OnRightClick;
+            @RightClick.canceled -= instance.OnRightClick;
             @MoveCamera.started -= instance.OnMoveCamera;
             @MoveCamera.performed -= instance.OnMoveCamera;
             @MoveCamera.canceled -= instance.OnMoveCamera;
@@ -235,7 +264,8 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     public GamePlayActions @GamePlay => new GamePlayActions(this);
     public interface IGamePlayActions
     {
-        void OnClick(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
         void OnMoveCamera(InputAction.CallbackContext context);
     }
 }

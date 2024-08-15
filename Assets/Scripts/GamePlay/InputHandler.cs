@@ -13,7 +13,7 @@ namespace GamePlay
             _mainCamera = Camera.main;
         }
 
-        public void OnClick(InputAction.CallbackContext context)
+        public void OnRightClick(InputAction.CallbackContext context)
         {
             if(!context.started) return;
 
