@@ -42,6 +42,13 @@ namespace Units {
             }
         }
 
+        void Start()
+        {
+            // for tests
+            // isCanAttack = true;
+            Debug.Log("is was moved " + isWasMoved);
+        }
+
         void Update()
         {
             // active used weapon to hiararchy
@@ -56,12 +63,18 @@ namespace Units {
 
         public void Move() {}
 
-        public void DoNothing() 
+        public void Wait() 
         {
             isWasMoved = true;
+            Debug.Log("is was moved " + isWasMoved);
         }
 
-        public float Attack() 
+        public void Attack()
+        {
+            Debug.Log("Attack");
+        }
+
+        public float CalculateHit() 
         {
             float hitRate = 0f;
             float criticalHit = UnityEngine.Random.Range(0f, 1f);

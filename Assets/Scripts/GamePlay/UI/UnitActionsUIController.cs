@@ -1,62 +1,84 @@
 using UnityEngine;
 using Units;
-using System;
+using UnityEngine.UI;
+using System.Collections.Generic;
 
 namespace UnitUI {
     public class UnitActionsUIController : MonoBehaviour
     {
-        [SerializeField] private GameObject unitObj; // ui owner
+        [SerializeField] private GameObject owner; // ui owner
+        [SerializeField] private GameObject buttonPrefab;
+        [SerializeField] private Transform buttonsContainer;
 
-        [Serializable] 
-        public struct UnitActionUI {
-            public GameObject button;
-            public UnitAction action;
+        [SerializeField] private UnitAction[] unitActionsUI; // actions buttons showable
+        private Dictionary<UnitAction, string> unitActionsText = new Dictionary<UnitAction, string>() {
+            {UnitAction.ATTACK, "Attack"},
+            {UnitAction.SWITCH_WEAPON, "Switch Weapon"},
+            {UnitAction.WAIT, "Wait"}
         };
 
-        [SerializeField] private UnitActionUI[] unitActionsUI; // actions buttons showable
-
         private Unit unit; // unit script
-        private bool uiIsActive; // ui state
-
-        void Awake()
-        {
-            /* Deactive all ui */
-            foreach (UnitActionUI item in unitActionsUI)
-            {
-                item.button.SetActive(false);
-            }
-        }
+        private bool actionButttonIsActive; // ui state
 
         void Start()
         {
-            unit = unitObj.GetComponent<Unit>(); // get gived unit script for futur use
+            unit = owner.GetComponent<Unit>(); // get gived unit script for futur use
         }
 
         public void ShowUnitPossibleActionsUI()
         {
-            /* Deactive UI if active */
-            if(uiIsActive)
+            /* Destroy if instantiated */
+            if(actionButttonIsActive)
             {
-                foreach (UnitActionUI item in unitActionsUI) {
-                    item.button.SetActive(false);
+                foreach (Transform child in buttonsContainer)
+                {
+                    Destroy(child.gameObject);
                 }
-
-                uiIsActive = false;
-
+                actionButttonIsActive = false;
                 return;
             }
 
-            /* Active UI if deactivate */
-            foreach (UnitActionUI item in unitActionsUI) {
-                if(item.action == UnitAction.ATTACK)
-                {
-                    if(unit.IsCanAttack) item.button.SetActive(true);
-                } else {
-                    item.button.SetActive(true);
-                }
+            /* Active if not instantiated */
+            for (int i = 0; i < unitActionsUI.Length; i++) {
+                GameObject newButton = Instantiate(buttonPrefab, buttonsContainer);
 
-                uiIsActive = true;
+                switch (unitActionsUI[i])
+                {
+                    case UnitAction.ATTACK:
+                        if(unit.IsCanAttack)
+                        {
+                            newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.ATTACK];
+                            newButton.GetComponent<Button>().onClick.AddListener(() => OnAttackButtonClicked());
+                        }
+                        break;
+                    case UnitAction.SWITCH_WEAPON:
+                        newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.SWITCH_WEAPON];
+                        newButton.GetComponent<Button>().onClick.AddListener(() => OnSwitchWeaponButtonClicked());
+                        break;
+                    case UnitAction.WAIT:
+                        newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.WAIT];
+                        newButton.GetComponent<Button>().onClick.AddListener(() => OnWaitButtonClicked());
+                        break;
+                    default:
+                        break;
+                }
             }
+            actionButttonIsActive = true;
+        }
+
+        void OnAttackButtonClicked() 
+        {
+            Debug.Log("Attack !");
+        }
+
+        void OnSwitchWeaponButtonClicked() 
+        {
+            Debug.Log("SwitchWeapon !");
+        }
+
+        void OnWaitButtonClicked() 
+        {
+            Debug.Log("Wait !");
         }
     }
 }
