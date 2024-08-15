@@ -8,9 +8,10 @@ namespace GamePlay.UIs {
     {
         [SerializeField] private GameObject owner; // ui owner
         [SerializeField] private GameObject buttonPrefab;
-        [SerializeField] private Transform buttonsContainer;
-
-        [SerializeField] private UnitAction[] unitActionsUI; // actions buttons showable
+        [SerializeField] private Transform menuContainer;
+        [SerializeField] private GameObject controllerButtonPrefab;
+        [SerializeField] private Transform menuControllerContainer;
+        [SerializeField] private UnitAction[] unitActionsUI; // actions menu showable
         private Dictionary<UnitAction, string> unitActionsText = new Dictionary<UnitAction, string>() {
             {UnitAction.ATTACK, "Attack"},
             {UnitAction.SWITCH_WEAPON, "Switch Weapon"},
@@ -33,14 +34,12 @@ namespace GamePlay.UIs {
             /* Destroy if active */
             if(uiIsActive)
             {
-                ClearUIElements();
-                UpdateUIState();
                 return;
             }
 
             /* Active if not active */
             for (int i = 0; i < unitActionsUI.Length; i++) {
-                GameObject newButton = Instantiate(buttonPrefab, buttonsContainer);
+                GameObject newButton = Instantiate(buttonPrefab, menuContainer);
                 
                 // Show Menu on UI
                 switch (unitActionsUI[i])
@@ -66,6 +65,8 @@ namespace GamePlay.UIs {
                         break;
                 }
             }
+
+            ShowCloseButton();
             UpdateUIState();
         }
 
@@ -75,10 +76,39 @@ namespace GamePlay.UIs {
             Inventory[] weapons = unit.Weapons;
             for (int i = 0; i < weapons.Length; i++)
             {
-                GameObject newButton = Instantiate(buttonPrefab, buttonsContainer);
-                newButton.GetComponentInChildren<Text>().text = weapons[i].isUsed ? weapons[i].item.gameObject.name+"(*)" : weapons[i].item.gameObject.name;
-                newButton.GetComponent<Button>().onClick.AddListener(() => OnWeaponButtonClicked(newButton));
+                GameObject newMenuElement = Instantiate(buttonPrefab, menuContainer);
+                newMenuElement.GetComponentInChildren<Text>().text = weapons[i].isUsed ? weapons[i].item.gameObject.name+"(*)" : weapons[i].item.gameObject.name;
+                newMenuElement.GetComponent<Button>().onClick.AddListener(() => OnWeaponButtonClicked(newMenuElement));
             }
+            ShowBackButton();
+        }
+
+        void ShowBackButton()
+        {
+            foreach (Transform child in menuControllerContainer)
+            {
+                Destroy(child.gameObject);
+            }
+            
+            GameObject backButton = Instantiate(controllerButtonPrefab, menuControllerContainer);
+            backButton.GetComponentInChildren<Text>().text = "Back";
+            backButton.GetComponent<Button>().onClick.AddListener(() => {
+                ClearMenuUIElements();
+                UpdateUIState(); // reset to false
+                ClearMenuControllerUI();
+                ShowUnitActionsMenu();
+            });
+        }
+
+        void ShowCloseButton()
+        {
+            GameObject closeButton = Instantiate(controllerButtonPrefab, menuControllerContainer);
+            closeButton.GetComponentInChildren<Text>().text = "Close";
+            closeButton.GetComponent<Button>().onClick.AddListener(() => {
+                ClearMenuUIElements();
+                ClearMenuControllerUI();
+                UpdateUIState();
+            });
         }
 
         /* Events Actions */
@@ -87,35 +117,45 @@ namespace GamePlay.UIs {
             string weaponName = button.GetComponentInChildren<Text>().text.Replace("(*)", "");
             unit.SwitchWeapon(weaponName);
 
-            ClearUIElements();
+            ClearMenuUIElements();
+            ClearMenuControllerUI();
             UpdateUIState();
         }
 
         void OnAttackButtonClicked() 
         {
-            ClearUIElements();
+            ClearMenuUIElements();
+            ClearMenuControllerUI();
             // ShowWeaponsButton();
         }
 
         void OnSwitchWeaponButtonClicked() 
         {
-            ClearUIElements();
+            ClearMenuUIElements();
+            ClearMenuControllerUI();
             ShowSwitchWeaponMenu();
         }
 
         void OnWaitButtonClicked() 
         {
             unit.Wait();
-            ClearUIElements();
+            ClearMenuUIElements();
+            ClearMenuControllerUI();
             UpdateUIState();
         }
 
         /* Support Methods */
-        void ClearUIElements()
+        void ClearMenuUIElements()
         {
 
-            foreach (Transform child in buttonsContainer)
-            {
+            foreach (Transform child in menuContainer) {
+                Destroy(child.gameObject);
+            }
+        }
+
+        void ClearMenuControllerUI()
+        {
+            foreach (Transform child in menuControllerContainer) {
                 Destroy(child.gameObject);
             }
         }
