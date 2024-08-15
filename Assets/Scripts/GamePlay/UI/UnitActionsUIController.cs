@@ -49,6 +49,8 @@ namespace UnitUI {
                         {
                             newButton.GetComponentInChildren<Text>().text = unitActionsText[UnitAction.ATTACK];
                             newButton.GetComponent<Button>().onClick.AddListener(() => OnAttackButtonClicked());
+                        } else {
+                            Destroy(newButton);
                         }
                         break;
                     case UnitAction.SWITCH_WEAPON:
