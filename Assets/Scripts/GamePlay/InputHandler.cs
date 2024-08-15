@@ -23,12 +23,12 @@ namespace GamePlay
 
             if(!hit.collider) return; // the hit haven't collider
 
-            // check if hit is a unit
-            if(hit.collider.gameObject.CompareTag("Unit"))
-            {
-                UnitActionsUIController unitActionsUIController = hit.collider.gameObject.GetComponent<UnitActionsUIController>();
-                unitActionsUIController.ShowUnitActionsMenu();
-            }
+            // check if hit is a unit   
+            if(!hit.collider.gameObject.CompareTag("Unit")) return;
+            
+            UnitActionsUIController unitActionsUIController = hit.collider.gameObject.GetComponent<UnitActionsUIController>();
+            unitActionsUIController.ShowUnitActionsMenu();
+            
         }
     }   
 }

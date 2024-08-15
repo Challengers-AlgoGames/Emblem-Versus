@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Units;
 
-namespace GamePlay {
+namespace GamePlay.Board {
     public class Army : MonoBehaviour
     {
         public event Action OnArmyWasMoved; // Broadcastable event
@@ -21,8 +21,7 @@ namespace GamePlay {
 
         bool VerifyArmyWasMove()
         {
-            foreach (var unit in army)
-            {
+            foreach (var unit in army) {
                 if(unit.IsWasMoved == false) return false;
             }
             return true;
@@ -30,8 +29,7 @@ namespace GamePlay {
 
         void ResetArmyMoveState()
         {
-            foreach (var unit in army)
-            {
+            foreach (var unit in army) {
                 unit.ResetWasMovedState();
             }
         }

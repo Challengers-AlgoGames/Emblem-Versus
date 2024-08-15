@@ -1,4 +1,4 @@
-namespace GamePlay {
+namespace GamePlay.Board {
     public enum Commander
     {
         PLAYER_1,
