@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Weapons;
 
@@ -12,15 +11,8 @@ namespace Units {
         [SerializeField] private int defense;
         [SerializeField] private int spitituality;
         [SerializeField] private int mobility; 
-
-        /* inventory */
-        [Serializable]
-        public struct Inventory
-        {
-            public GameObject item;
-            public bool isUsed;
-        }
         [SerializeField] private Inventory[] inventories;
+        public Inventory[] Weapons { get => inventories; }
 
         /* states */
         private const float ATTACK_MULTIPLIER = 1.5f;

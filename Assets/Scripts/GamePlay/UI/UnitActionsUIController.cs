@@ -3,7 +3,7 @@ using Units;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace UnitUI {
+namespace GamePlay.UIs {
     public class UnitActionsUIController : MonoBehaviour
     {
         [SerializeField] private GameObject owner; // ui owner
