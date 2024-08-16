@@ -26,8 +26,8 @@ namespace GamePlay
             // check if hit is a unit   
             if(!hit.collider.gameObject.CompareTag("Unit")) return;
             
-            UnitActionsUIController unitActionsUIController = hit.collider.gameObject.GetComponent<UnitActionsUIController>();
-            unitActionsUIController.ShowUnitActionsMenu();
+            UnitUIController unitUIController = hit.collider.gameObject.GetComponent<UnitUIController>();
+            unitUIController.ShowUnitActionsMenu();
             
         }
     }   

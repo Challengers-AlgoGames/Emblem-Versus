@@ -5,9 +5,9 @@ namespace Tools {
     {
         [SerializeField] private GameObject tilePrefab;
         [SerializeField] private Transform container;
-        [SerializeField] private int levelWidth;
-        [SerializeField] private int levelHeight;
-        [SerializeField] private int tileScale;
+        [SerializeField] private int levelWidth = 10;
+        [SerializeField] private int levelHeight = 10;
+        [SerializeField] private int tileScale = 3;
 
 
         void Start()

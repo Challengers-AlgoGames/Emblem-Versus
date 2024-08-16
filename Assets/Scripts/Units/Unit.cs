@@ -98,7 +98,6 @@ namespace Units {
 
         public void Attack(string _usedWeaponName)
         {
-            Debug.Log(_usedWeaponName);
             for (int i = 0; i < inventories.Length; i++)
             {
                 if(inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower()) {
@@ -109,7 +108,6 @@ namespace Units {
                     currendWeaponIndex =  i; // save new used weapon index
                 }
             }
-            
             isWasMoved = true;
         }
 

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace GamePlay.UIs {
-    public class UnitActionsUIController : MonoBehaviour
+    public class UnitUIController : MonoBehaviour
     {
         [SerializeField] private GameObject owner; // ui owner
         [SerializeField] private GameObject buttonPrefab;
