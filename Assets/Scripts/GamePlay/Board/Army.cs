@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Units;
 
-namespace GamePlay.Board {
+namespace GamePlay {
     public class Army : MonoBehaviour
     {
         public event Action OnArmyWasMoved; // Broadcastable event

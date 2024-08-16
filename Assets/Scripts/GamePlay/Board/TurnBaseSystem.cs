@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace GamePlay.Board
+namespace GamePlay
 {
     public class TurnBaseSystem : MonoBehaviour
     {
