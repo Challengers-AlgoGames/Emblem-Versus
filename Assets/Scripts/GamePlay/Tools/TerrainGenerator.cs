@@ -7,8 +7,10 @@ namespace Tools {
     public class TerrainGenerator : MonoBehaviour
     {
         [SerializeField] private GameObject tilePrefab;
-        [SerializeField] private int width;
-        [SerializeField] private int height;
+        [SerializeField] private int levelWidth;
+        [SerializeField] private int LevelHeight;
+        [SerializeField] private int tileScale;
+
 
         void Start()
         {
@@ -17,17 +19,15 @@ namespace Tools {
 
         void GenerateTerrain()
         {
-            for (int x = 0; x < width; x++)
+            for(int x = 0; x < levelWidth; x++)
             {
-                for (int z = 0; z < height; z++)
+                for(int z = 1; z < LevelHeight; z++)
                 {
-                    // Position de la cellule dans la Tilemap
-                    Vector3Int tilePosition = new Vector3Int(x, 0, z);
-
-                    // Placer la tuile à la position générée
+                    Vector3Int tilePosition = new Vector3Int(x * tileScale, 0, z * tileScale);
                     Instantiate(tilePrefab, tilePosition, Quaternion.identity);
                 }
             }
+            
         }
     }
 }
