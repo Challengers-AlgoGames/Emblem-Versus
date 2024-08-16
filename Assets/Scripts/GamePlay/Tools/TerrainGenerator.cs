@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Tools {
     public class TerrainGenerator : MonoBehaviour
     {
         [SerializeField] private GameObject tilePrefab;
+        [SerializeField] private Transform container;
         [SerializeField] private int levelWidth;
-        [SerializeField] private int LevelHeight;
+        [SerializeField] private int levelHeight;
         [SerializeField] private int tileScale;
 
 
@@ -21,11 +19,13 @@ namespace Tools {
         {
             for(int x = 0; x < levelWidth; x++)
             {
-                for(int z = 1; z < LevelHeight; z++)
+                for(int z = 1; z < levelHeight; z++)
                 {
                     Vector3Int tilePosition = new Vector3Int(x * tileScale, 0, z * tileScale);
-                    Instantiate(tilePrefab, tilePosition, Quaternion.identity);
+                    GameObject newTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
+                    newTile.transform.parent = container;
                 }
+
             }
             
         }
