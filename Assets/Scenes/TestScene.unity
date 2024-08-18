@@ -599,7 +599,19 @@ MonoBehaviour:
     m_ActionId: 6430e02a-0ab6-412c-ab13-5ff5282ae52c
     m_ActionName: GamePlay/ReloadScene[/Keyboard/r]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 412967948}
+        m_TargetAssemblyTypeName: GamePlay.InputHandler, Assembly-CSharp
+        m_MethodName: OnEscape
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: b0ee7b70-1667-4ed9-a08a-6d06339aec84
     m_ActionName: GamePlay/Escape[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
