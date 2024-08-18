@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using GamePlay.UIs;
 using System;
 using Units;
+using UnityEngine.SceneManagement;
 
 namespace GamePlay
 {
@@ -81,6 +81,17 @@ namespace GamePlay
             Vector3 cellulWorldPosition = hit.collider.transform.position;
 
             OnDisplayUnitMoveRange?.Invoke(unit, cellulWorldPosition);
+        }
+
+        public void OnReloadScene(InputAction.CallbackContext context)
+        {
+            if(!context.started) 
+            {
+                return;
+            }
+            
+            Scene scene = SceneManager.GetActiveScene(); 
+            SceneManager.LoadSceneAsync(scene.buildIndex);
         }
     }   
 }

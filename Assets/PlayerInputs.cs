@@ -53,6 +53,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ReloadScene"",
+                    ""type"": ""Button"",
+                    ""id"": ""6430e02a-0ab6-412c-ab13-5ff5282ae52c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11e7295c-c692-4677-b325-46f036ca8f4d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ReloadScene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_GamePlay_LeftClick = m_GamePlay.FindAction("LeftClick", throwIfNotFound: true);
         m_GamePlay_RightClick = m_GamePlay.FindAction("RightClick", throwIfNotFound: true);
         m_GamePlay_MoveCamera = m_GamePlay.FindAction("MoveCamera", throwIfNotFound: true);
+        m_GamePlay_ReloadScene = m_GamePlay.FindAction("ReloadScene", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_GamePlay_LeftClick;
     private readonly InputAction m_GamePlay_RightClick;
     private readonly InputAction m_GamePlay_MoveCamera;
+    private readonly InputAction m_GamePlay_ReloadScene;
     public struct GamePlayActions
     {
         private @PlayerInputs m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @LeftClick => m_Wrapper.m_GamePlay_LeftClick;
         public InputAction @RightClick => m_Wrapper.m_GamePlay_RightClick;
         public InputAction @MoveCamera => m_Wrapper.m_GamePlay_MoveCamera;
+        public InputAction @ReloadScene => m_Wrapper.m_GamePlay_ReloadScene;
         public InputActionMap Get() { return m_Wrapper.m_GamePlay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @MoveCamera.started += instance.OnMoveCamera;
             @MoveCamera.performed += instance.OnMoveCamera;
             @MoveCamera.canceled += instance.OnMoveCamera;
+            @ReloadScene.started += instance.OnReloadScene;
+            @ReloadScene.performed += instance.OnReloadScene;
+            @ReloadScene.canceled += instance.OnReloadScene;
         }
 
         private void UnregisterCallbacks(IGamePlayActions instance)
@@ -245,6 +271,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @MoveCamera.started -= instance.OnMoveCamera;
             @MoveCamera.performed -= instance.OnMoveCamera;
             @MoveCamera.canceled -= instance.OnMoveCamera;
+            @ReloadScene.started -= instance.OnReloadScene;
+            @ReloadScene.performed -= instance.OnReloadScene;
+            @ReloadScene.canceled -= instance.OnReloadScene;
         }
 
         public void RemoveCallbacks(IGamePlayActions instance)
@@ -267,5 +296,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
         void OnMoveCamera(InputAction.CallbackContext context);
+        void OnReloadScene(InputAction.CallbackContext context);
     }
 }

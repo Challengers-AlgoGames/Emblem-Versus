@@ -11,6 +11,7 @@ namespace Units {
         [SerializeField] private int defense;
         [SerializeField] private int spitituality;
         [SerializeField] private int mobility; 
+        public int Mobility { get => mobility; }
         [SerializeField] private Inventory[] inventories;
         public Inventory[] Weapons { get => inventories; }
 
@@ -38,9 +39,12 @@ namespace Units {
         void Update()
         {
             // active used weapon to hiararchy
-            GameObject currentWeapon = inventories[currendWeaponIndex].item;
-            if(!currentWeapon.activeInHierarchy)
-                currentWeapon.SetActive(true);
+            if(currendWeaponIndex != -1) 
+            {
+                GameObject currentWeapon = inventories[currendWeaponIndex].item;
+                if(!currentWeapon.activeInHierarchy)
+                    currentWeapon.SetActive(true);
+            }
             
             // change unit state to dead
             if(health == 0f)

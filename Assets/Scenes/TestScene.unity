@@ -582,6 +582,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: d2d20eb8-b50d-460d-9e70-3cd745324955
     m_ActionName: GamePlay/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 412967948}
+        m_TargetAssemblyTypeName: GamePlay.InputHandler, Assembly-CSharp
+        m_MethodName: OnReloadScene
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 6430e02a-0ab6-412c-ab13-5ff5282ae52c
+    m_ActionName: GamePlay/ReloadScene[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePlay
@@ -607,6 +623,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1560281307}
     m_Modifications:
+    - target: {fileID: 91374767575767321, guid: f8a5f6a214186d3bca28414ee9d6c480,
+        type: 3}
+      propertyPath: mobility
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 91374767575767321, guid: f8a5f6a214186d3bca28414ee9d6c480,
+        type: 3}
+      propertyPath: isWasMoved
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 91374767575767321, guid: f8a5f6a214186d3bca28414ee9d6c480,
+        type: 3}
+      propertyPath: inventories.Array.data[0].isUsed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3046076117787989058, guid: f8a5f6a214186d3bca28414ee9d6c480,
         type: 3}
       propertyPath: m_Name
@@ -1164,8 +1195,8 @@ MonoBehaviour:
   tilePrefab: {fileID: 2105858911259631019, guid: 44ea2b7b5e3ec55348bd8fd56b00c9a5,
     type: 3}
   container: {fileID: 1526520074}
-  levelWidth: 10
-  levelHeight: 10
+  levelWidth: 20
+  levelHeight: 20
   tileScale: 3
 --- !u!114 &1661547949
 MonoBehaviour:
@@ -1197,6 +1228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSystem: {fileID: 1661547949}
+  scale: 3
 --- !u!1 &1843663472
 GameObject:
   m_ObjectHideFlags: 0
