@@ -61,7 +61,7 @@ namespace GamePlay
 
             if(tile == null) return;
 
-            tilemap.SetTile(currentPosition, null);
+            RemoveTile(currentPosition);
             tilemap.SetTile(newPosition, tile);
 
             currentTilePosition = newPosition;
@@ -71,6 +71,11 @@ namespace GamePlay
         {
             Tile newTile = tile;
             tilemap.SetTile(_tilePosition, newTile);
+        }
+
+        public void RemoveTile(Vector3Int _tilePosition)
+        {
+            tilemap.SetTile(_tilePosition, null);
         }
 
         public Vector3Int ConvertWorldToCellPosition(Vector3 _worldPosition)
