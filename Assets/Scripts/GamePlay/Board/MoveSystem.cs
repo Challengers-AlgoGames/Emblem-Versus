@@ -6,15 +6,15 @@ using UnityEngine;
 namespace GamePlay {
     public class MoveSystem : MonoBehaviour
     {
+        private Action<Unit,Vector3> handleDisplayMoveRange;
+        private Action<Vector3> handleMoveUnit;
+        private List<Vector3Int> activeTilesPosition;
+
         [SerializeField] private TileSystem tileSystem;
 
         [Tooltip("Tiles scale. Support only square tiles")]
         [SerializeField] private float scale = 3f;
 
-        private Action<Unit,Vector3> handleDisplayMoveRange;
-        private Action<Vector3> handleMoveUnit;
-
-        private List<Vector3Int> activeTilesPosition;
         private Unit unit;
 
         void Awake()
@@ -29,8 +29,7 @@ namespace GamePlay {
 
             InputHandler.OnDisplayUnitMoveRange += handleDisplayMoveRange;
             InputHandler.OnMoveUnit += handleMoveUnit;
-            InputHandler.OnResetUnitMove += ResetUnitMove;
-            InputHandler.OnClearUI += ClearAtiveTiles;
+            InputHandler.OnClearUI += ClearActiveTiles;
         }
 
         void Start()
@@ -38,7 +37,7 @@ namespace GamePlay {
             activeTilesPosition = new List<Vector3Int>();
         }
 
-        void ClearAtiveTiles()
+        void ClearActiveTiles()
         {
             if(activeTilesPosition == null) return; // Do nothing if not active tiles
 
@@ -53,12 +52,13 @@ namespace GamePlay {
 
         void MoveUnit(Vector3 _targetPosition)
         {
-            Debug.Log("Move to: " + _targetPosition);
-        }
+            // check if in possible new position
+            int indexInActiveTilePosition = activeTilesPosition.FindIndex(position => position == tileSystem.ConvertWorldToCellPosition(_targetPosition));
 
-        void ResetUnitMove()
-        {
-            Debug.Log("Move canceled");
+            if(indexInActiveTilePosition == -1) return;
+
+            Vector3 newPosition = _targetPosition; // keep y position
+            unit.Move(newPosition);
         }
 
         void ClearActiveTilePositionData()
@@ -67,44 +67,57 @@ namespace GamePlay {
             unit = null;
         }
 
-        void DisplayMoveRange(Unit _unit, Vector3 _unitCellulPosition)
+        void DisplayMoveRange(Unit _unit, Vector3 _unitPosition)
         {
             unit = _unit;
 
             if(unit.IsWasMoved) return; // dont show if unit was moved
 
             int unitMobility = unit.Mobility;
-            for(int line = 0; line <= unitMobility; line++) // line
+
+            for(int line = 0; line <= unitMobility + 1; line++) 
             {
-                // positionnnements
-                Vector3 lineVector = _unitCellulPosition + new Vector3(0, 0, (unitMobility - line) * scale);
+                // lines
+                Vector3 topLineVector = _unitPosition + new Vector3(0, 0, (unitMobility + 1 - line) * scale);
+                Vector3 bottomLineVector = _unitPosition + new Vector3(0, 0, (-unitMobility - 1 + line) * scale);
                 
-                // left col
-                for(int col = 0; col < line ; col++) // left col
+                // left cols
+                for(int col = 0; col < line ; col++)
                 {
                     Vector3 colVector = new Vector3(-col * scale, 0, 0);
 
-                    Vector3 cellVectorPosition = lineVector + colVector;
+                    Vector3 cellTopVectorPosition = topLineVector + colVector;
+                    Vector3 cellBottomVectorPosition = bottomLineVector + colVector;
 
-                    Vector3Int tilePosition = tileSystem.ConvertWorldToCellPosition(cellVectorPosition);
-                    tileSystem.SetTile(tilePosition);
+                    Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
+                    Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
+                    
+                    tileSystem.SetTile(topTilePosition);
+                    tileSystem.SetTile(bottomTilePosition);
 
-                    activeTilesPosition.Add(tilePosition); // save active tile in memory
+                    // save active tile in memory
+                    activeTilesPosition.Add(topTilePosition); 
+                    activeTilesPosition.Add(bottomTilePosition); 
                 }
 
-                // right col
+                // right cols
                 for(int col = 0; col < line ; col++)
                 {
                     Vector3 colVector = new Vector3(col * scale, 0, 0);
 
-                    Vector3 cellVectorPosition = lineVector + colVector;
+                    Vector3 cellTopVectorPosition = topLineVector + colVector;
+                    Vector3 cellBottomVectorPosition = bottomLineVector + colVector;
 
-                    Vector3Int tilePosition = tileSystem.ConvertWorldToCellPosition(cellVectorPosition);
-                    tileSystem.SetTile(tilePosition);
-
-                   activeTilesPosition.Add(tilePosition); // save active tile in memory
+                    Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
+                    Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
+                    
+                    tileSystem.SetTile(topTilePosition);
+                    tileSystem.SetTile(bottomTilePosition);
+                    
+                    // save active tile in memory
+                    activeTilesPosition.Add(topTilePosition); 
+                    activeTilesPosition.Add(bottomTilePosition); 
                 }
-
             }
         }
 
@@ -112,7 +125,7 @@ namespace GamePlay {
         {
             InputHandler.OnDisplayUnitMoveRange -= handleDisplayMoveRange;
             InputHandler.OnMoveUnit -= handleMoveUnit;
-            InputHandler.OnClearUI -= ClearAtiveTiles;
+            InputHandler.OnClearUI -= ClearActiveTiles;
         }
     }
 }

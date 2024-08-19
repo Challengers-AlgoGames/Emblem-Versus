@@ -1,11 +1,16 @@
+using GamePlay;
 using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
     
-    void Start()
+    void Awake()
     {
-        
+    }
+
+    void DisplayEscapeHelpe()
+    {
+
     }
     
     void Update()

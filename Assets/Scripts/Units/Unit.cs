@@ -56,7 +56,11 @@ namespace Units {
             isWasMoved = false;
         }
 
-        public void Move() {}
+        public void Move(Vector3 _target) 
+        {
+            transform.position = new Vector3(_target.x, transform.position.y, _target.z);
+            isWasMoved = true;
+        }
 
         public void Wait() 
         {
