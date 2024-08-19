@@ -641,18 +641,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 91374767575767321, guid: f8a5f6a214186d3bca28414ee9d6c480,
         type: 3}
-      propertyPath: mobility
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 91374767575767321, guid: f8a5f6a214186d3bca28414ee9d6c480,
-        type: 3}
-      propertyPath: isWasMoved
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 91374767575767321, guid: f8a5f6a214186d3bca28414ee9d6c480,
-        type: 3}
-      propertyPath: inventories.Array.data[0].isUsed
-      value: 0
+      propertyPath: inventories.Array.data[0].item
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3046076117787989058, guid: f8a5f6a214186d3bca28414ee9d6c480,
         type: 3}

@@ -39,12 +39,12 @@ namespace Units {
         void Update()
         {
             // active used weapon to hiararchy
-            if(currendWeaponIndex != -1) 
-            {
-                GameObject currentWeapon = inventories[currendWeaponIndex].item;
-                if(!currentWeapon.activeInHierarchy)
-                    currentWeapon.SetActive(true);
-            }
+            // if(currendWeaponIndex != -1) 
+            // {
+            //     GameObject currentWeapon = inventories[currendWeaponIndex].item;
+            //     if(!currentWeapon.activeInHierarchy)
+            //         currentWeapon.SetActive(true);
+            // }
             
             // change unit state to dead
             if(health == 0f)
@@ -58,7 +58,8 @@ namespace Units {
 
         public void Move(Vector3 _target) 
         {
-            transform.position = new Vector3(_target.x, transform.position.y, _target.z);
+            Vector3 newPosition = new Vector3(_target.x, transform.position.y, _target.z);
+            transform.position = newPosition;
             isWasMoved = true;
         }
 
@@ -108,9 +109,10 @@ namespace Units {
         {
             for (int i = 0; i < inventories.Length; i++)
             {
-                if(inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower()) {
+                if(inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower()) 
+                {
                     inventories[currendWeaponIndex].isUsed = false;
-                    inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
+                    //inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
 
                     inventories[i].isUsed = false;
                     currendWeaponIndex =  i; // save new used weapon index
