@@ -9,10 +9,17 @@ namespace GamePlay
 
     public class InputHandler : MonoBehaviour
     {
-        public static event Action OnDisplayUnitActions;
+        /* unit events */
+        public static event Action<Unit> OnDisplayUnitActions;
         public static event Action<Unit, Vector3> OnDisplayUnitMoveRange;
         public static event Action<Vector3> OnMoveUnit;
+
+        /* ui events */
         public static event Action OnClearUI;
+
+        /* camera events */
+        public static event Action<Vector3> OnZoomOut;
+        public static event Action OnUnZoom;
 
         private Camera _mainCamera;
         private LeftClickInputMode leftClickMode;
@@ -63,7 +70,9 @@ namespace GamePlay
                 return;
             }
             
-            OnDisplayUnitActions?.Invoke();  
+            Unit unit = hit.collider.gameObject.GetComponent<Unit>();
+
+            OnDisplayUnitActions?.Invoke(unit);
         }
 
         public void OnLeftClick(InputAction.CallbackContext context)
@@ -100,7 +109,10 @@ namespace GamePlay
                         return;
                     }
 
+                    OnZoomOut?.Invoke(hit.collider.transform.position);
+
                     OnDisplayUnitMoveRange?.Invoke(unit, hit.collider.transform.position);
+                    
 
                     SetLeftClickMode(LeftClickInputMode.LISTEN_GROUND_CLICK);
                 
@@ -114,6 +126,9 @@ namespace GamePlay
 
                     // finalise action
                     OnClearUI?.Invoke();
+
+                    OnUnZoom?.Invoke();
+
                     SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
 
                     break;
@@ -131,6 +146,8 @@ namespace GamePlay
             }
 
             OnClearUI?.Invoke();
+            OnUnZoom?.Invoke();
+            
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
         }
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
@@ -6,29 +5,17 @@ using UnityEngine;
 namespace GamePlay {
     public class MoveSystem : MonoBehaviour
     {
-        private Action<Unit,Vector3> handleDisplayMoveRange;
-        private Action<Vector3> handleMoveUnit;
-        private List<Vector3Int> activeTilesPosition;
-
         [SerializeField] private TileSystem tileSystem;
-
         [Tooltip("Tiles scale. Support only square tiles")]
         [SerializeField] private float scale = 3f;
 
         private Unit unit;
+        private List<Vector3Int> activeTilesPosition;
 
         void Awake()
         {
-            handleDisplayMoveRange = (unit, cellulPosition) => {
-                DisplayMoveRange(unit, cellulPosition);
-            };
-
-            handleMoveUnit = (targetPosition) => {
-                MoveUnit(targetPosition);
-            };
-
-            InputHandler.OnDisplayUnitMoveRange += handleDisplayMoveRange;
-            InputHandler.OnMoveUnit += handleMoveUnit;
+            InputHandler.OnDisplayUnitMoveRange += DisplayMoveRange;
+            InputHandler.OnMoveUnit += MoveUnit;
             InputHandler.OnClearUI += ClearActiveTiles;
         }
 
@@ -123,8 +110,8 @@ namespace GamePlay {
 
         void OnDestroy()
         {
-            InputHandler.OnDisplayUnitMoveRange -= handleDisplayMoveRange;
-            InputHandler.OnMoveUnit -= handleMoveUnit;
+            InputHandler.OnDisplayUnitMoveRange -= DisplayMoveRange;
+            InputHandler.OnMoveUnit -= MoveUnit;
             InputHandler.OnClearUI -= ClearActiveTiles;
         }
     }

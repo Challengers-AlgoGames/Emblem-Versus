@@ -22,7 +22,7 @@ namespace GamePlay.UIs {
 
         void Awake()
         {
-            InputHandler.OnDisplayUnitActions += DisplayUnitActionsMenu;
+            //InputHandler.OnDisplayUnitActions += DisplayUnitActionsMenu;
 
             unit = owner.GetComponent<Unit>(); // get gived unit script for futur use
         }
@@ -158,7 +158,7 @@ namespace GamePlay.UIs {
 
         void OnDestroy()
         {
-            InputHandler.OnDisplayUnitActions -= DisplayUnitActionsMenu;
+            //InputHandler.OnDisplayUnitActions -= DisplayUnitActionsMenu;
         }
     }
 }
