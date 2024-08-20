@@ -5,7 +5,7 @@ namespace GamePlay
 {
     public class TileSystem : MonoBehaviour
     {
-        [SerializeField] private Tilemap tilemap;
+        public Tilemap tilemap;
         [SerializeField] private Tile tile;
         [SerializeField] private Color tileColor;
 
