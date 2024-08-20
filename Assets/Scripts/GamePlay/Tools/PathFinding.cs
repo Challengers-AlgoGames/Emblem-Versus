@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using GamePlay;
 using UnityEngine;
 
-namespace GamePlay
+namespace Tools
 {
     public class PathfindingAStar : MonoBehaviour
     {
