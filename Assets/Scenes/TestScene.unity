@@ -737,8 +737,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23a0ee8a3a08186409df8f614868ec37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  tileSystem: {fileID: 1661547949}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,6 +1126,7 @@ MonoBehaviour:
   tileColor: {r: 21, g: 88, b: 197, a: 100}
   tilePosition: {x: 0, y: 0, z: 0}
   testMode: 0
+  cellPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &1661547950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,7 +1141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileSystem: {fileID: 1661547949}
   scale: 3
-  pathfinding: {fileID: 1688832915}
+  pathfindingAStar: {fileID: 1688832915}
 --- !u!1 &1688832912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,7 +1187,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSystem: {fileID: 1661547949}
-  diagonalCost: 1.4
 --- !u!1 &1843663472
 GameObject:
   m_ObjectHideFlags: 0

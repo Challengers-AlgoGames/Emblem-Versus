@@ -5,7 +5,7 @@ namespace GamePlay
 {
     public class PathfindingAStar : MonoBehaviour
     {
-        private TileSystem tileSystem;
+        [SerializeField] private TileSystem tileSystem;
 
         void Start()
         {
@@ -61,6 +61,7 @@ namespace GamePlay
 
         private List<Vector3Int> GetNeighbors(Vector3Int current)
         {
+            // mur
             List<Vector3Int> neighbors = new List<Vector3Int>();
             Vector3Int[] directions = new Vector3Int[] {
                 Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down

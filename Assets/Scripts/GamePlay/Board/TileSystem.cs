@@ -17,13 +17,6 @@ namespace GamePlay
         private Tile tileTest;
         public Vector3Int cellPosition;
 
-        void Start()
-        {
-            Vector3Int cellPosition = new Vector3Int(1, 0, 0); // Modifiez cette position pour tester
-            Vector3 worldPosition = ConvertCellToWorldPosition(cellPosition);
-            Debug.Log("Cell Position: " + cellPosition);
-            Debug.Log("World Position: " + worldPosition);
-        }
         void Update()
         {
             if (testMode && tileTest == null)
@@ -58,12 +51,6 @@ namespace GamePlay
 
         }
 
-        void Test(Vector3Int cellPosition)
-        {
-            Vector3 worldPosition = ConvertCellToWorldPosition(cellPosition);
-            Debug.Log("Cell Position: " + cellPosition);
-            Debug.Log("World Position: " + worldPosition);
-        }
         void SetTileColor(Vector3Int tilePosition, Color color)
         {
             tilemap.SetTileFlags(tilePosition, TileFlags.None);

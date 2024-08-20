@@ -19,7 +19,6 @@ namespace GamePlay
         [SerializeField] private PathfindingAStar pathfindingAStar;
 
         private Unit unit;
-        private UnitMovement unitMovement;
 
         void Awake()
         {
