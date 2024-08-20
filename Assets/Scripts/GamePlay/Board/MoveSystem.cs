@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
@@ -22,7 +23,6 @@ namespace GamePlay
         public static event Action OnClearActiveTile;
 
         private Unit unit;
-        private List<Vector3Int> activeTilesPosition;
 
         void Awake()
         {
@@ -98,7 +98,7 @@ namespace GamePlay
 
                 yield return new WaitForSeconds((float)0.5);
             }
-            unit.Wait();
+            //unit.Wait();
             yield return null;
         }
 
