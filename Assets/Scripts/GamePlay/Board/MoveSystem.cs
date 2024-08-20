@@ -11,8 +11,8 @@ namespace GamePlay {
         [SerializeField] private float scale = 3f;
 
         /* camera events */
-        public static event Action<Vector3> OnZoomOut;
-        public static event Action OnUnZoom;
+        public static event Action<Vector3> OnDisplayMoveRange;
+        public static event Action OnClearActiveTile;
 
         private Unit unit;
         private List<Vector3Int> activeTilesPosition;
@@ -38,7 +38,7 @@ namespace GamePlay {
                 tileSystem.RemoveTile(position);
             }
             ClearActiveTilePositionData();
-            OnUnZoom?.Invoke();
+            OnClearActiveTile?.Invoke();
         }
 
         void MoveUnit(Vector3 _targetPosition)
@@ -110,7 +110,7 @@ namespace GamePlay {
                     activeTilesPosition.Add(bottomTilePosition); 
                 }
             }
-            OnZoomOut?.Invoke(_unitPosition);
+            OnDisplayMoveRange?.Invoke(_unitPosition);
         }
 
         void OnDestroy()

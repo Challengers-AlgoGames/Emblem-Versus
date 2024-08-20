@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace GamePlay.Cameras
@@ -9,8 +10,12 @@ namespace GamePlay.Cameras
         UNZOOM,
         MOVE
     }
+    /* Dependences : MoveSystem */
     public class CameraController : MonoBehaviour
     {
+        public static event Action OnZoomOut;
+        public static event Action OnUnZoom;
+
         [SerializeField] private float speed = 5f;
         [SerializeField] private float smoothSpeed = 0.125f;
 
@@ -29,8 +34,8 @@ namespace GamePlay.Cameras
             playerInputs = new PlayerInputs();
             playerInputs.GamePlay.MoveCamera.Enable(); 
 
-            MoveSystem.OnZoomOut += OnZoomOut;
-            MoveSystem.OnUnZoom += OnUnZoom;
+            MoveSystem.OnDisplayMoveRange += ZoomOut;
+            MoveSystem.OnClearActiveTile += UnZoom;
         }
 
         void Start()
@@ -82,8 +87,7 @@ namespace GamePlay.Cameras
         Vector3 SmoothMove(Vector3 target, Vector3 offset)
         {
             Vector3 desiredPosition = target + offset;
-            Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-            return smoothPosition;
+            return Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
         }
 
         Quaternion SmoothRotation(Quaternion target)
@@ -91,23 +95,25 @@ namespace GamePlay.Cameras
             return Quaternion.Lerp(transform.rotation, target, smoothSpeed);
         }
 
-        void OnZoomOut(Vector3 target)
+        void ZoomOut(Vector3 target)
         {
             zoomTarget = target;
             positionBeforZoom = transform.position;
             rotationBeforZoom = transform.rotation;
             cameraMode = CameraMode.ZOOM_OUT;
+            OnZoomOut?.Invoke();
         }
 
-        void OnUnZoom()
+        void UnZoom()
         {
             cameraMode = CameraMode.UNZOOM;
+            OnUnZoom?.Invoke();
         }
 
         void OnDestroy()
         {
-            MoveSystem.OnZoomOut -= OnZoomOut;
-            MoveSystem.OnUnZoom-= OnUnZoom;
+            MoveSystem.OnDisplayMoveRange -= ZoomOut;
+            MoveSystem.OnClearActiveTile-= UnZoom;
         }
     }
 }
