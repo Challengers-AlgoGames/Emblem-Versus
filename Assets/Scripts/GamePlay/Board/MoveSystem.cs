@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
@@ -8,11 +7,6 @@ namespace GamePlay
 {
     public class MoveSystem : MonoBehaviour
     {
-
-        private Action<Unit, Vector3> handleDisplayMoveRange;
-        private Action<Vector3> handleMoveUnit;
-        private List<Vector3Int> activeTilesPosition;
-
         [SerializeField] private TileSystem tileSystem;
         [Tooltip("Tiles scale. Support only square tiles")]
         [SerializeField] private float scale = 3f;
@@ -23,19 +17,10 @@ namespace GamePlay
         public static event Action OnClearActiveTile;
 
         private Unit unit;
+        private List<Vector3Int> activeTilesPosition;
 
         void Awake()
         {
-            handleDisplayMoveRange = (unit, cellulPosition) =>
-            {
-                DisplayMoveRange(unit, cellulPosition);
-            };
-
-            handleMoveUnit = (targetPosition) =>
-            {
-                MoveUnit(targetPosition);
-            };
-
             InputHandler.OnDisplayUnitMoveRange += DisplayMoveRange;
             InputHandler.OnMoveUnit += MoveUnit;
             InputHandler.OnClearUI += ClearActiveTiles;
@@ -70,7 +55,15 @@ namespace GamePlay
             // Si le chemin contient des points, démarrer le déplacement le long du chemin
             if (path.Count > 0)
             {
-                StartCoroutine(MoveUnitAlongPath(path));
+                path.RemoveAt(0); // Retirer la position initiale du chemin
+
+                List<Vector3> worldPath = new List<Vector3>();
+                foreach (Vector3Int point in path)
+                {
+                    worldPath.Add(tileSystem.ConvertCellToWorldPosition(point));
+                }
+
+                unit.Move(worldPath);
             }
             else
             {
@@ -78,35 +71,9 @@ namespace GamePlay
             }
         }
 
-
-        IEnumerator MoveUnitAlongPath(List<Vector3Int> path)
-        {
-            if (path == null || path.Count == 0)
-            {
-                yield break; // Sortir si le chemin est vide
-            }
-
-            // Retirer la position initiale du chemin
-            if (path.Count > 0)
-            {
-                path.RemoveAt(0);
-            }
-            foreach (Vector3Int point in path)
-            {
-                Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(point);
-                unit.Move(targetPosition);
-
-                yield return new WaitForSeconds((float)0.5);
-            }
-            //unit.Wait();
-            yield return null;
-        }
-
         void ClearActiveTilePositionData()
         {
             activeTilesPosition = new List<Vector3Int>();
-
-            //unit = null; non null bug
         }
 
         void DisplayMoveRange(Unit _unit, Vector3 _unitPosition)
