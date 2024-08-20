@@ -1,7 +1,8 @@
 using UnityEngine;
 using Weapons;
 
-namespace Units {
+namespace Units
+{
     public class Unit : MonoBehaviour
     {
         /* Units infos */
@@ -10,7 +11,7 @@ namespace Units {
         [SerializeField] private int attack;
         [SerializeField] private int defense;
         [SerializeField] private int spitituality;
-        [SerializeField] private int mobility; 
+        [SerializeField] private int mobility;
         public int Mobility { get => mobility; }
         [SerializeField] private Inventory[] inventories;
         public Inventory[] Weapons { get => inventories; }
@@ -20,15 +21,21 @@ namespace Units {
         private int currendWeaponIndex = -1;
         [SerializeField] private bool isWasMoved; // unit actions controller
         public bool IsWasMoved { get => isWasMoved; }
-        private bool isDead; 
+        private bool isDead;
         [SerializeField] private bool isCanAttack;
         public bool IsCanAttack { get => isCanAttack; }
+
+        /* Mouvement variable */
+        public float moveSpeed = 5f;
+        private Vector3 targetPosition; // Position cible de l'unité
+        public bool IsMoving { get; set; }// Indicateur pour savoir si l'unité est en mouvement
 
         void Awake()
         {
             // save unity used wapon index for last use
-            for(int i = 0; i < inventories.Length; i++) {
-                if(inventories[i].isUsed)
+            for (int i = 0; i < inventories.Length; i++)
+            {
+                if (inventories[i].isUsed)
                 {
                     currendWeaponIndex = i;
                     break;
@@ -45,10 +52,25 @@ namespace Units {
             //     if(!currentWeapon.activeInHierarchy)
             //         currentWeapon.SetActive(true);
             // }
-            
+
             // change unit state to dead
-            if(health == 0f)
+            if (health == 0f)
                 isDead = true;
+
+            /* Mouve */
+            if (IsMoving)
+            {
+                // Move the unit towards the target position
+                float step = moveSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+
+                // Stop movement if the unit has reached the target position
+                if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
+                {
+                    transform.position = targetPosition;
+                    IsMoving = false;
+                }
+            }
         }
 
         public void ResetWasMovedState()
@@ -56,19 +78,19 @@ namespace Units {
             isWasMoved = false;
         }
 
-        public void Move(Vector3 _target) 
+        public void Move(Vector3 _target)
         {
-            Vector3 newPosition = new Vector3(_target.x, transform.position.y, _target.z);
-            transform.position = newPosition;
+            // Create a new position while keeping the current height
+            targetPosition = new Vector3(_target.x, transform.position.y, _target.z);
             isWasMoved = true;
         }
 
-        public void Wait() 
+        public void Wait()
         {
             isWasMoved = true;
         }
 
-        public float CalculateHit() 
+        public float CalculateHit()
         {
             float hitRate = 0f;
             float criticalHit = Random.Range(0f, 1f);
@@ -78,23 +100,23 @@ namespace Units {
 
             // Apply apropriate hit calulation
             WeaponCategory weaponCategory = usedWeapon.Category;
-            switch(weaponCategory)
+            switch (weaponCategory)
             {
                 case WeaponCategory.FIRE_WEAPON:
                     hitRate = usedWeapon.Acuracy;
-                    if(criticalHit <= 0.2f)
+                    if (criticalHit <= 0.2f)
                         hitRate *= ATTACK_MULTIPLIER;
                     break;
 
                 case WeaponCategory.MELEE_WEAPON:
                     hitRate = usedWeapon.Acuracy + attack;
-                    if(criticalHit <= 0.2f)
+                    if (criticalHit <= 0.2f)
                         hitRate *= ATTACK_MULTIPLIER;
                     break;
 
                 case WeaponCategory.SPIRITUAL_WEAPON:
                     hitRate = usedWeapon.Acuracy + spitituality;
-                    if(criticalHit <= 0.2f)
+                    if (criticalHit <= 0.2f)
                         hitRate *= ATTACK_MULTIPLIER;
                     break;
 
@@ -109,13 +131,13 @@ namespace Units {
         {
             for (int i = 0; i < inventories.Length; i++)
             {
-                if(inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower()) 
+                if (inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower())
                 {
                     inventories[currendWeaponIndex].isUsed = false;
                     //inventories[currendWeaponIndex].item.SetActive(false); // deactive last weapon to hiararchy
 
                     inventories[i].isUsed = false;
-                    currendWeaponIndex =  i; // save new used weapon index
+                    currendWeaponIndex = i; // save new used weapon index
                 }
             }
             isWasMoved = true;

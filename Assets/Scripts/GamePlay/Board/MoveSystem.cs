@@ -7,6 +7,7 @@ namespace GamePlay
 {
     public class MoveSystem : MonoBehaviour
     {
+
         private Action<Unit, Vector3> handleDisplayMoveRange;
         private Action<Vector3> handleMoveUnit;
         private List<Vector3Int> activeTilesPosition;
@@ -14,6 +15,7 @@ namespace GamePlay
         [SerializeField] private TileSystem tileSystem;
         [Tooltip("Tiles scale. Support only square tiles")]
         [SerializeField] private float scale = 3f;
+        [SerializeField] private PathfindingAStar pathfindingAStar;
 
         /* camera events */
         public static event Action<Vector3> OnDisplayMoveRange;
@@ -24,6 +26,16 @@ namespace GamePlay
 
         void Awake()
         {
+            handleDisplayMoveRange = (unit, cellulPosition) =>
+            {
+                DisplayMoveRange(unit, cellulPosition);
+            };
+
+            handleMoveUnit = (targetPosition) =>
+            {
+                MoveUnit(targetPosition);
+            };
+
             InputHandler.OnDisplayUnitMoveRange += DisplayMoveRange;
             InputHandler.OnMoveUnit += MoveUnit;
             InputHandler.OnClearUI += ClearActiveTiles;
@@ -48,19 +60,53 @@ namespace GamePlay
 
         void MoveUnit(Vector3 _targetPosition)
         {
-            // check if in possible new position
-            int indexInActiveTilePosition = activeTilesPosition.FindIndex(position => position == tileSystem.ConvertWorldToCellPosition(_targetPosition));
+            // Convertir les positions de l'unité et de la cible en coordonnées de cellules
+            Vector3Int start = tileSystem.ConvertWorldToCellPosition(unit.transform.position);
+            Vector3Int end = tileSystem.ConvertWorldToCellPosition(_targetPosition);
 
-            if (indexInActiveTilePosition == -1) return;
+            // Trouver le chemin en utilisant A*
+            List<Vector3Int> path = pathfindingAStar.FindPath(start, end);
 
-            Vector3 newPosition = _targetPosition; // keep y position
-            unit.Move(newPosition);
+            // Si le chemin contient des points, démarrer le déplacement le long du chemin
+            if (path.Count > 0)
+            {
+                StartCoroutine(MoveUnitAlongPath(path));
+            }
+            else
+            {
+                Debug.Log("No path found.");
+            }
+        }
+
+
+        IEnumerator MoveUnitAlongPath(List<Vector3Int> path)
+        {
+            if (path == null || path.Count == 0)
+            {
+                yield break; // Sortir si le chemin est vide
+            }
+
+            // Retirer la position initiale du chemin
+            if (path.Count > 0)
+            {
+                path.RemoveAt(0);
+            }
+            foreach (Vector3Int point in path)
+            {
+                Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(point);
+                unit.Move(targetPosition);
+
+                yield return new WaitForSeconds((float)0.5);
+            }
+            unit.Wait();
+            yield return null;
         }
 
         void ClearActiveTilePositionData()
         {
             activeTilesPosition = new List<Vector3Int>();
-            unit = null;
+
+            //unit = null; non null bug
         }
 
         void DisplayMoveRange(Unit _unit, Vector3 _unitPosition)

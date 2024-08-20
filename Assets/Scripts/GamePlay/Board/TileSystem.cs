@@ -18,7 +18,7 @@ namespace GamePlay
 
         void Update()
         {
-            if(testMode && tileTest == null)
+            if (testMode && tileTest == null)
             {
                 tileTest = tile;
                 tilemap.SetTile(tilePosition, tileTest);
@@ -28,25 +28,25 @@ namespace GamePlay
                 currentTileColor = tileColor; //
             }
 
-            if(testMode && tileTest != null)
+            if (testMode && tileTest != null)
             {
-                 if(currentTilePosition != tilePosition)
-                { 
+                if (currentTilePosition != tilePosition)
+                {
                     MoveTile(currentTilePosition, tilePosition);
                 }
 
-                if(currentTileColor != tileColor)
+                if (currentTileColor != tileColor)
                 {
                     SetTileColor(currentTilePosition, tileColor);
                 }
-            } 
+            }
 
-            if(!testMode && tileTest != null)
+            if (!testMode && tileTest != null)
             {
                 tilemap.SetTile(currentTilePosition, null);
                 tileTest = null;
                 currentTilePosition = Vector3Int.zero;
-            }     
+            }
         }
 
         void SetTileColor(Vector3Int tilePosition, Color color)
@@ -59,7 +59,7 @@ namespace GamePlay
         {
             TileBase tile = tilemap.GetTile(currentPosition);
 
-            if(tile == null) return;
+            if (tile == null) return;
 
             RemoveTile(currentPosition);
             tilemap.SetTile(newPosition, tile);
@@ -81,6 +81,13 @@ namespace GamePlay
         public Vector3Int ConvertWorldToCellPosition(Vector3 _worldPosition)
         {
             return tilemap.WorldToCell(_worldPosition);
+        }
+        public Vector3 ConvertCellToWorldPosition(Vector3Int cellPosition)
+        {
+            // Convertit la position de la cellule en position dans le monde
+            Vector3 worldPosition = tilemap.GetCellCenterWorld(cellPosition);
+
+            return worldPosition;
         }
     }
 }
