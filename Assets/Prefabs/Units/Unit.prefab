@@ -111,10 +111,10 @@ MonoBehaviour:
   attack: 70
   defense: 80
   spitituality: 0
-  mobility: 7
+  mobility: 5
   inventories:
   - item: {fileID: 2864936512062320122}
-    isUsed: 1
+    isUsed: 0
   - item: {fileID: 8285945630035727880}
     isUsed: 0
   - item: {fileID: 3661492045433871362}
@@ -352,8 +352,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7417657659015377769}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.34000015, y: 0, z: -0.42999983}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -437,20 +437,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: Revolver Model 1873
       objectReference: {fileID: 0}
+    - target: {fileID: 6762069130915573138, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
+        type: 3}
+      propertyPath: maxRange
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6762069130915573138, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
+        type: 3}
+      propertyPath: minRange
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.78
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 1d6b1b1fbb0f31a138e9f9f0c0fe1885,
         type: 3}
@@ -520,7 +530,7 @@ PrefabInstance:
     - target: {fileID: 6773851860489836248, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.616
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
@@ -530,7 +540,7 @@ PrefabInstance:
     - target: {fileID: 6773851860489836248, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
         type: 3}
@@ -566,6 +576,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7737443800871728276, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
+        type: 3}
+      propertyPath: maxRange
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7737443800871728276, guid: 2b9bddcfddf7b81659e6752acb0adcbd,
+        type: 3}
+      propertyPath: minRange
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -600,7 +620,7 @@ PrefabInstance:
     - target: {fileID: 6773851860489836248, guid: e528ccacd497380fe848fb9e50111cf5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.007
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6773851860489836248, guid: e528ccacd497380fe848fb9e50111cf5,
         type: 3}
@@ -646,6 +666,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758844065113240793, guid: e528ccacd497380fe848fb9e50111cf5,
+        type: 3}
+      propertyPath: maxRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7758844065113240793, guid: e528ccacd497380fe848fb9e50111cf5,
+        type: 3}
+      propertyPath: minRange
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

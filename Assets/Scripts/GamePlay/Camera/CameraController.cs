@@ -2,15 +2,19 @@ using UnityEngine;
 
 namespace GamePlay.Cameras
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class CameraController : MonoBehaviour
     {
-        [SerializeField] private float speed;
+        [SerializeField] private float speed = 5f;
         private PlayerInputs playerInputs;
         private Rigidbody rb;
 
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            rb.useGravity = false;
+            rb.freezeRotation = true;
+            rb.constraints = RigidbodyConstraints.FreezePositionY;
 
             playerInputs = new PlayerInputs();
             playerInputs.GamePlay.MoveCamera.Enable(); 

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace GamePlay.UIs {
-    public class UnitActionsUIController : MonoBehaviour
+    public class UnitUIController : MonoBehaviour
     {
         [SerializeField] private GameObject owner; // ui owner
         [SerializeField] private GameObject buttonPrefab;
@@ -22,11 +22,13 @@ namespace GamePlay.UIs {
 
         void Awake()
         {
+            InputHandler.OnDisplayUnitActions += DisplayUnitActionsMenu;
+
             unit = owner.GetComponent<Unit>(); // get gived unit script for futur use
         }
 
         /* Main */
-        public void ShowUnitActionsMenu()
+        public void DisplayUnitActionsMenu()
         {
             if(unit.IsWasMoved) return; // can't do anathyng if unit was moved
 
@@ -62,7 +64,7 @@ namespace GamePlay.UIs {
                 }
             }
 
-            ShowCloseButton();
+            DisplayCloseButton();
             UpdateUIState();
         }
 
@@ -76,10 +78,10 @@ namespace GamePlay.UIs {
                 newMenuElement.GetComponentInChildren<Text>().text = weapons[i].item.gameObject.name;
                 newMenuElement.GetComponent<Button>().onClick.AddListener(() => OnWeaponButtonClicked(newMenuElement));
             }
-            ShowBackButton();
+            DisplayBackButton();
         }
 
-        void ShowBackButton()
+        void DisplayBackButton()
         {
             foreach (Transform child in menuControllerContainer)
             {
@@ -92,11 +94,11 @@ namespace GamePlay.UIs {
                 ClearMenuUIElements();
                 UpdateUIState(); // reset to false
                 ClearMenuControllerUI();
-                ShowUnitActionsMenu();
+                DisplayUnitActionsMenu();
             });
         }
 
-        void ShowCloseButton()
+        void DisplayCloseButton()
         {
             GameObject closeButton = Instantiate(controllerButtonPrefab, menuControllerContainer);
             closeButton.GetComponentInChildren<Text>().text = "Close";
@@ -152,6 +154,11 @@ namespace GamePlay.UIs {
         void UpdateUIState()
         {
             uiIsActive = !uiIsActive;
+        }
+
+        void OnDestroy()
+        {
+            InputHandler.OnDisplayUnitActions -= DisplayUnitActionsMenu;
         }
     }
 }

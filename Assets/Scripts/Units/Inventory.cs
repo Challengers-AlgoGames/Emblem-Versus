@@ -1,11 +1,11 @@
 using System;
-using UnityEngine;
+using Weapons;
 
 namespace Units {
         [Serializable]
         public struct Inventory
         {
-            public GameObject item;
+            public Weapon item;
             public bool isUsed;
         }
 }

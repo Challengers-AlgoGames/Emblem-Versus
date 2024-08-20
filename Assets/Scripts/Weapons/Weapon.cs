@@ -4,7 +4,8 @@ namespace Weapons {
 	public class Weapon: MonoBehaviour
 	{
 		[SerializeField] private string waponName;
-		[SerializeField] private int range; // portée
+		[SerializeField] private int maxRange; // portée
+		[SerializeField] private int minRange;
 		[SerializeField] private int acuracy; // weapon atk
 		public int Acuracy { get => acuracy; }
 
