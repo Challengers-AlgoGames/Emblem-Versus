@@ -6,6 +6,7 @@ namespace GamePlay.Cameras
     {
         ZOOM_OUT,
         ZOOM_IN,
+        UNZOOM,
         MOVE
     }
     public class CameraController : MonoBehaviour
@@ -14,21 +15,22 @@ namespace GamePlay.Cameras
         [SerializeField] private float smoothSpeed = 0.125f;
 
         [Header("Zoom out")]
-        [SerializeField] private Quaternion ZoomOutAngle = Quaternion.Euler(62,0,0);
-        [SerializeField] private Vector3 ZoomOutOffset = new Vector3 (0, 21, -16);
+        [SerializeField] private Quaternion zoomOutAngle = Quaternion.Euler(62,0,0);
+        [SerializeField] private Vector3 zoomOutOffset = new Vector3 (0, 21, -16);
 
         private PlayerInputs playerInputs;
         private CameraMode cameraMode;
         private Vector3 zoomTarget;
-        private Transform lastCoordinates;
+        private Vector3 positionBeforZoom;
+        private Quaternion rotationBeforZoom;
 
         void Awake()
         {
             playerInputs = new PlayerInputs();
             playerInputs.GamePlay.MoveCamera.Enable(); 
 
-            InputHandler.OnZoomOut += OnZoomOut;
-            InputHandler.OnUnZoom += OnUnZoom;
+            MoveSystem.OnZoomOut += OnZoomOut;
+            MoveSystem.OnUnZoom += OnUnZoom;
         }
 
         void Start()
@@ -41,34 +43,41 @@ namespace GamePlay.Cameras
             switch(cameraMode)
             {
                 case CameraMode.MOVE:
-
-                    if(lastCoordinates != null && lastCoordinates != transform)
+                    Vector2 inputVector = playerInputs.GamePlay.MoveCamera.ReadValue<Vector2>();
+                    if(inputVector != Vector2.zero)
                     {
-                        transform.position = SmoothMove(lastCoordinates.position, Vector3.zero);
-                        transform.rotation = lastCoordinates.rotation;
-                    } 
-                    else 
-                    {
-                        Vector2 inputVector = playerInputs.GamePlay.MoveCamera.ReadValue<Vector2>();
-                        if(inputVector != Vector2.zero)
-                        {
-                            Vector3 movementVector = new Vector3(inputVector.x, 0, inputVector.y);
-                            transform.position += movementVector * Time.fixedDeltaTime * speed;
-                        }
+                        Vector3 movementVector = new Vector3(inputVector.x, 0, inputVector.y);
+                        transform.position += movementVector * Time.fixedDeltaTime * speed;
                     }
-
                     break;
+
                 case CameraMode.ZOOM_OUT:
-                    transform.position = SmoothMove(zoomTarget, ZoomOutOffset);
-                    transform.rotation =  ZoomOutAngle;
+                    transform.position = SmoothMove(zoomTarget, zoomOutOffset);
+                    transform.rotation = SmoothRotation(zoomOutAngle);
+                    // Check if we have reached the zoomed out position
+                    if (Vector3.Distance(transform.position, zoomTarget + zoomOutOffset) < 0.01f)
+                    {
+                        cameraMode = CameraMode.MOVE;
+                    }
+                    break;
+
+                case CameraMode.UNZOOM:
+                    positionBeforZoom.x = transform.position.x;
+                    transform.position = SmoothMove(positionBeforZoom, Vector3.zero);
+                    transform.rotation = SmoothRotation(rotationBeforZoom);
+                    // Check if we have returned to the original position
+                    if (Vector3.Distance(transform.position, positionBeforZoom) < 0.01f &&
+                        Quaternion.Angle(transform.rotation, rotationBeforZoom) < 1f)
+                    {
+                        cameraMode = CameraMode.MOVE;
+                    }
                     break;
 
                 default:
                     break;
-
             }
-            
         }
+
 
         Vector3 SmoothMove(Vector3 target, Vector3 offset)
         {
@@ -77,23 +86,28 @@ namespace GamePlay.Cameras
             return smoothPosition;
         }
 
+        Quaternion SmoothRotation(Quaternion target)
+        {
+            return Quaternion.Lerp(transform.rotation, target, smoothSpeed);
+        }
+
         void OnZoomOut(Vector3 target)
         {
             zoomTarget = target;
-            lastCoordinates = transform;
+            positionBeforZoom = transform.position;
+            rotationBeforZoom = transform.rotation;
             cameraMode = CameraMode.ZOOM_OUT;
         }
 
         void OnUnZoom()
         {
-            cameraMode = CameraMode.MOVE;
-            print("ici");
+            cameraMode = CameraMode.UNZOOM;
         }
 
         void OnDestroy()
         {
-            InputHandler.OnZoomOut -= OnZoomOut;
-            InputHandler.OnUnZoom-= OnUnZoom;
+            MoveSystem.OnZoomOut -= OnZoomOut;
+            MoveSystem.OnUnZoom-= OnUnZoom;
         }
     }
 }

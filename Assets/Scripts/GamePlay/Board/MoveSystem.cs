@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
@@ -8,6 +9,10 @@ namespace GamePlay {
         [SerializeField] private TileSystem tileSystem;
         [Tooltip("Tiles scale. Support only square tiles")]
         [SerializeField] private float scale = 3f;
+
+        /* camera events */
+        public static event Action<Vector3> OnZoomOut;
+        public static event Action OnUnZoom;
 
         private Unit unit;
         private List<Vector3Int> activeTilesPosition;
@@ -27,14 +32,13 @@ namespace GamePlay {
         void ClearActiveTiles()
         {
             if(activeTilesPosition == null) return; // Do nothing if not active tiles
-
             // Remove active tiles
             foreach (Vector3Int position in activeTilesPosition)
             {
                 tileSystem.RemoveTile(position);
             }
-            
             ClearActiveTilePositionData();
+            OnUnZoom?.Invoke();
         }
 
         void MoveUnit(Vector3 _targetPosition)
@@ -106,6 +110,7 @@ namespace GamePlay {
                     activeTilesPosition.Add(bottomTilePosition); 
                 }
             }
+            OnZoomOut?.Invoke(_unitPosition);
         }
 
         void OnDestroy()

@@ -17,10 +17,6 @@ namespace GamePlay
         /* ui events */
         public static event Action OnClearUI;
 
-        /* camera events */
-        public static event Action<Vector3> OnZoomOut;
-        public static event Action OnUnZoom;
-
         private Camera _mainCamera;
         private LeftClickInputMode leftClickMode;
 
@@ -93,11 +89,8 @@ namespace GamePlay
             switch (leftClickMode)
             {
                 case LeftClickInputMode.LISTEN_UNIT_CLICK: // display unit moveRange
-
                     if(!hit.collider.gameObject.CompareTag("Unit")) return;
-
                     Unit unit = hit.collider.gameObject.GetComponent<Unit>();
-                    
                     //Take Ground tile gameobjet
                     Physics.Raycast(hit.collider.transform.position, Vector3.down, out hit);
                     if(!hit.collider)
@@ -108,29 +101,16 @@ namespace GamePlay
                     {
                         return;
                     }
-
-                    OnZoomOut?.Invoke(hit.collider.transform.position);
-
                     OnDisplayUnitMoveRange?.Invoke(unit, hit.collider.transform.position);
-                    
-
                     SetLeftClickMode(LeftClickInputMode.LISTEN_GROUND_CLICK);
-                
                     break;
 
                 case LeftClickInputMode.LISTEN_GROUND_CLICK: // Manage unit move
-
                     if(!hit.collider.gameObject.CompareTag("Ground")) return;
-
                     OnMoveUnit?.Invoke(hit.collider.transform.position);
-
                     // finalise action
                     OnClearUI?.Invoke();
-
-                    OnUnZoom?.Invoke();
-
                     SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
-
                     break;
 
                 default:
@@ -144,10 +124,7 @@ namespace GamePlay
             {
                 return;
             }
-
             OnClearUI?.Invoke();
-            OnUnZoom?.Invoke();
-            
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
         }
 
