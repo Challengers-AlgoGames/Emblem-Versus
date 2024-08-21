@@ -21,11 +21,13 @@ namespace Units
         /* States */
         private const float ATTACK_MULTIPLIER = 1.5f;
         private int currentWeaponIndex = -1;
-        [SerializeField] private bool isWasMoved;  // Indicateur d'action de l'unité
+        [SerializeField] private bool isWasMoved;
         public bool IsWasMoved { get => isWasMoved; }
         private bool isDead;
         [SerializeField] private bool isCanAttack;
         public bool IsCanAttack { get => isCanAttack; }
+        [SerializeField] private Commander commander;
+        public Commander Commander {get => commander; }
 
         /* Movement variables */
         public float moveSpeed = 5f;
@@ -54,7 +56,7 @@ namespace Units
 
         void FixedUpdate()
         {
-            // Move
+            // Ne déplace l'unité que si elle n'a pas encore été déplacée
             if (!isWasMoved && movePath != null && movePath.Count > 0 && !IsMoving)
             {
                 StartCoroutine(PerformMove());
@@ -68,6 +70,12 @@ namespace Units
 
         public void Move(List<Vector3> _path)
         {
+            if (isWasMoved)
+            {
+                Debug.LogWarning("This unit has already moved and cannot move again.");
+                return;
+            }
+            
             movePath = _path;
         }
 
@@ -81,7 +89,7 @@ namespace Units
                 Vector3 targetPosition = new Vector3(point.x, transform.position.y, point.z);
                 
                 float journey = 0f;
-                float duration = Vector3.Distance(startPosition, targetPosition) / moveSpeed;  // Durée en fonction de la distance
+                float duration = Vector3.Distance(startPosition, targetPosition) / moveSpeed;
 
                 while (journey <= duration)
                 {
@@ -93,6 +101,7 @@ namespace Units
 
             IsMoving = false;
             isWasMoved = true; // update move state
+            movePath = null;  // Réinitialisation du chemin après le mouvement
         }
 
         public void Wait()

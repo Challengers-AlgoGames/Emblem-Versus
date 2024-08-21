@@ -17,22 +17,24 @@ namespace GamePlay
         public static event Action<Vector3> OnDisplayMoveRange;
         public static event Action OnClearActiveTile;
 
-        private Unit unit;
         private List<Vector3Int> activeTilesPosition;
 
         void Awake()
         {
-            InputHandler.OnDisplayUnitMoveRange += DisplayMoveRange;
-            InputHandler.OnMoveUnit += MoveUnit;
-            InputHandler.OnClearUI += ClearActiveTiles;
+            GameManager.OnGameStated += OnGameStated;
         }
 
-        void Start()
+        void OnDestroy()
+        {
+            GameManager.OnGameStated -= OnGameStated;
+        }
+
+        void OnGameStated()
         {
             activeTilesPosition = new List<Vector3Int>();
         }
 
-        void ClearActiveTiles()
+        public void ClearActiveTiles()
         {
             if (activeTilesPosition == null) return; // Do nothing if not active tiles
             // Remove active tiles
@@ -44,10 +46,10 @@ namespace GamePlay
             OnClearActiveTile?.Invoke();
         }
 
-        void MoveUnit(Vector3 _targetPosition)
+        public void MoveUnit(Unit _unit, Vector3 _targetPosition)
         {
             // Convertir les positions de l'unité et de la cible en coordonnées de cellules
-            Vector3Int start = tileSystem.ConvertWorldToCellPosition(unit.transform.position);
+            Vector3Int start = tileSystem.ConvertWorldToCellPosition(_unit.transform.position);
             Vector3Int end = tileSystem.ConvertWorldToCellPosition(_targetPosition);
 
             // Trouver le chemin en utilisant A*
@@ -63,8 +65,8 @@ namespace GamePlay
                 {
                     worldPath.Add(tileSystem.ConvertCellToWorldPosition(point));
                 }
-
-                unit.Move(worldPath);
+                
+                _unit.Move(worldPath);
             }
             else
             {
@@ -77,19 +79,13 @@ namespace GamePlay
             activeTilesPosition = new List<Vector3Int>();
         }
 
-        void DisplayMoveRange(Unit _unit, Vector3 _unitPosition)
+        public void DisplayMoveRange(int _unitMobility, Vector3 _unitGroundCellPosition)
         {
-            unit = _unit;
-
-            if (unit.IsWasMoved) return; // dont show if unit was moved
-
-            int unitMobility = unit.Mobility;
-
-            for (int line = 0; line <= unitMobility + 1; line++)
+            for (int line = 0; line <= _unitMobility + 1; line++)
             {
                 // lines
-                Vector3 topLineVector = _unitPosition + new Vector3(0, 0, (unitMobility + 1 - line) * scale);
-                Vector3 bottomLineVector = _unitPosition + new Vector3(0, 0, (-unitMobility - 1 + line) * scale);
+                Vector3 topLineVector = _unitGroundCellPosition + new Vector3(0, 0, (_unitMobility + 1 - line) * scale);
+                Vector3 bottomLineVector = _unitGroundCellPosition + new Vector3(0, 0, (-_unitMobility - 1 + line) * scale);
 
                 // left cols
                 for (int col = 0; col < line; col++)
@@ -129,14 +125,7 @@ namespace GamePlay
                     activeTilesPosition.Add(bottomTilePosition);
                 }
             }
-            OnDisplayMoveRange?.Invoke(_unitPosition);
-        }
-
-        void OnDestroy()
-        {
-            InputHandler.OnDisplayUnitMoveRange -= DisplayMoveRange;
-            InputHandler.OnMoveUnit -= MoveUnit;
-            InputHandler.OnClearUI -= ClearActiveTiles;
+            OnDisplayMoveRange?.Invoke(_unitGroundCellPosition);
         }
     }
 }

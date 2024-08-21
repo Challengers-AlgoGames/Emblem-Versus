@@ -10,12 +10,7 @@ namespace Tools {
         [SerializeField] private int tileScale = 3;
 
 
-        void Start()
-        {
-            GenerateTerrain();
-        }
-
-        void GenerateTerrain()
+        public void GenerateTerrain()
         {
             for(int x = 0; x < levelWidth; x++)
             {
@@ -25,7 +20,6 @@ namespace Tools {
                     GameObject newTile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
                     newTile.transform.parent = container;
                 }
-
             }
             
         }

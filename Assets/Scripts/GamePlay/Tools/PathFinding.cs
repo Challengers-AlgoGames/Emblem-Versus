@@ -8,7 +8,17 @@ namespace Tools
     {
         private TileSystem tileSystem;
 
-        void Start()
+        void Awake()
+        {
+            GameManager.OnGameStated += OnGameStated;
+        }
+
+        void OnDestroy()
+        {
+            GameManager.OnGameStated -= OnGameStated;
+        }
+
+        void OnGameStated()
         {
             tileSystem = FindObjectOfType<TileSystem>();
         }
