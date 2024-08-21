@@ -9,9 +9,12 @@ namespace GamePlay
 
     public class InputHandler : MonoBehaviour
     {
-        public static event Action OnDisplayUnitActions;
+        /* unit events */
+        public static event Action<Unit> OnDisplayUnitActions;
         public static event Action<Unit, Vector3> OnDisplayUnitMoveRange;
         public static event Action<Vector3> OnMoveUnit;
+
+        /* ui events */
         public static event Action OnClearUI;
 
         private Camera _mainCamera;
@@ -63,7 +66,9 @@ namespace GamePlay
                 return;
             }
             
-            OnDisplayUnitActions?.Invoke();  
+            Unit unit = hit.collider.gameObject.GetComponent<Unit>();
+
+            OnDisplayUnitActions?.Invoke(unit);
         }
 
         public void OnLeftClick(InputAction.CallbackContext context)
@@ -84,11 +89,8 @@ namespace GamePlay
             switch (leftClickMode)
             {
                 case LeftClickInputMode.LISTEN_UNIT_CLICK: // display unit moveRange
-
                     if(!hit.collider.gameObject.CompareTag("Unit")) return;
-
                     Unit unit = hit.collider.gameObject.GetComponent<Unit>();
-                    
                     //Take Ground tile gameobjet
                     Physics.Raycast(hit.collider.transform.position, Vector3.down, out hit);
                     if(!hit.collider)
@@ -99,23 +101,16 @@ namespace GamePlay
                     {
                         return;
                     }
-
                     OnDisplayUnitMoveRange?.Invoke(unit, hit.collider.transform.position);
-
                     SetLeftClickMode(LeftClickInputMode.LISTEN_GROUND_CLICK);
-                
                     break;
 
                 case LeftClickInputMode.LISTEN_GROUND_CLICK: // Manage unit move
-
                     if(!hit.collider.gameObject.CompareTag("Ground")) return;
-
                     OnMoveUnit?.Invoke(hit.collider.transform.position);
-
                     // finalise action
                     OnClearUI?.Invoke();
                     SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
-
                     break;
 
                 default:
@@ -129,7 +124,6 @@ namespace GamePlay
             {
                 return;
             }
-
             OnClearUI?.Invoke();
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
         }

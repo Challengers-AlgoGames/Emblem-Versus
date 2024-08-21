@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Weapons;
 
@@ -5,7 +7,7 @@ namespace Units
 {
     public class Unit : MonoBehaviour
     {
-        /* Units infos */
+        /* Unit attributes */
         [SerializeField] private string title;
         [SerializeField] private float health;
         [SerializeField] private int attack;
@@ -16,21 +18,23 @@ namespace Units
         [SerializeField] private Inventory[] inventories;
         public Inventory[] Weapons { get => inventories; }
 
-        /* states */
+        /* States */
         private const float ATTACK_MULTIPLIER = 1.5f;
         private int currentWeaponIndex = -1;
-        [SerializeField] private bool isWasMoved; // unit actions controller
+        [SerializeField] private bool isWasMoved;  // Indicateur d'action de l'unité
         public bool IsWasMoved { get => isWasMoved; }
         private bool isDead;
         [SerializeField] private bool isCanAttack;
         public bool IsCanAttack { get => isCanAttack; }
-        public float moveSpeed = 5f; // Vitesse de déplacement
-        private Vector3 targetPosition; // Position cible de l'unité
-        public bool IsMoving { get; set; }// Indicateur pour savoir si l'unité est en mouvement
+
+        /* Movement variables */
+        public float moveSpeed = 5f;
+        private List<Vector3> movePath;
+        public bool IsMoving { get; set; }
 
         void Awake()
         {
-            // Save the index of the used weapon for the last use
+            // Load current weapon index
             for (int i = 0; i < inventories.Length; i++)
             {
                 if (inventories[i].isUsed)
@@ -43,26 +47,17 @@ namespace Units
 
         void Update()
         {
-            // Change unit state to dead
-            if (health <= 0f)
-            {
+            // Death state update
+            if (health == 0f)
                 isDead = true;
-                IsMoving = false;
-                return;
-            }
+        }
 
-            if (IsMoving)
+        void FixedUpdate()
+        {
+            // Move
+            if (!isWasMoved && movePath != null && movePath.Count > 0 && !IsMoving)
             {
-                // Move the unit towards the target position
-                float step = moveSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
-
-                // Stop movement if the unit has reached the target position
-                if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
-                {
-                    transform.position = targetPosition;
-                    IsMoving = false;
-                }
+                StartCoroutine(PerformMove());
             }
         }
 
@@ -71,17 +66,38 @@ namespace Units
             isWasMoved = false;
         }
 
-        public void Move(Vector3 _target)
+        public void Move(List<Vector3> _path)
         {
-            // Create a new position while keeping the current height
-            targetPosition = new Vector3(_target.x, transform.position.y, _target.z);
+            movePath = _path;
+        }
+
+        IEnumerator PerformMove()
+        {
             IsMoving = true;
+
+            foreach (Vector3 point in movePath)
+            {
+                Vector3 startPosition = transform.position;
+                Vector3 targetPosition = new Vector3(point.x, transform.position.y, point.z);
+
+                float journey = 0f;
+                float duration = Vector3.Distance(startPosition, targetPosition) / moveSpeed;  // Durée en fonction de la distance
+
+                while (journey <= duration)
+                {
+                    journey += Time.deltaTime;
+                    transform.position = Vector3.Lerp(startPosition, targetPosition, journey / duration);
+                    yield return null;
+                }
+            }
+
+            IsMoving = false;
+            isWasMoved = true; // update move state
         }
 
         public void Wait()
         {
             isWasMoved = true;
-            IsMoving = false;
         }
 
         public float CalculateHit()
@@ -89,22 +105,10 @@ namespace Units
             float hitRate = 0f;
             float criticalHit = Random.Range(0f, 1f);
 
-            // Access the current weapon object and its Weapon script
-            if (currentWeaponIndex < 0 || currentWeaponIndex >= inventories.Length)
-            {
-                Debug.LogError("Current weapon index is out of bounds.");
-                return hitRate;
-            }
-
+            // Accès à l'objet Weapon attaché à l'arme courante
             Weapon usedWeapon = inventories[currentWeaponIndex].item.GetComponent<Weapon>();
 
-            if (usedWeapon == null)
-            {
-                Debug.LogError("Weapon component not found on the current weapon.");
-                return hitRate;
-            }
-
-            // Apply appropriate hit calculation
+            // Calcul du taux de réussite en fonction de la catégorie de l'arme
             WeaponCategory weaponCategory = usedWeapon.Category;
             switch (weaponCategory)
             {
@@ -127,7 +131,6 @@ namespace Units
                     break;
 
                 default:
-                    Debug.LogWarning("Unknown weapon category.");
                     break;
             }
 
@@ -138,26 +141,20 @@ namespace Units
         {
             for (int i = 0; i < inventories.Length; i++)
             {
-                if (inventories[i].item.gameObject.name.Equals(_usedWeaponName, System.StringComparison.OrdinalIgnoreCase))
+                if (inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower())
                 {
-                    if (currentWeaponIndex >= 0 && currentWeaponIndex < inventories.Length)
-                    {
-                        inventories[currentWeaponIndex].isUsed = false;
-                    }
+                    inventories[currentWeaponIndex].isUsed = false;
 
                     inventories[i].isUsed = true;
-                    currentWeaponIndex = i; // Save new used weapon index
-                    isWasMoved = true;
-                    return;
+                    currentWeaponIndex = i;  // Sauvegarde du nouvel index de l'arme utilisée
                 }
             }
-
-            Debug.LogWarning("Weapon not found: " + _usedWeaponName);
+            isWasMoved = true;
         }
 
         public void TakeDamages(float _inflictedDamages)
         {
-            health = Mathf.Max(health - _inflictedDamages, 0f); // Apply damage
+            health = Mathf.Max(health - _inflictedDamages, 0f); // Prend les dégâts
         }
     }
 }

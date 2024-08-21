@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4135917938579618865}
   - component: {fileID: 6920119644568894249}
   - component: {fileID: 1554206202661492089}
+  - component: {fileID: -250199496990138855}
   m_Layer: 0
-  m_Name: NoWalkable
-  m_TagString: Ground
+  m_Name: Water
+  m_TagString: NoWalkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4e9b9a1b844e52a6c87e50f4bca390e2, type: 2}
+  - {fileID: 2100000, guid: 1cb608a6f5d8e0d4bbfb7d80ab1d2ade, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,3 +106,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-250199496990138855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105858911259631019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ab687a51dbf0848b18a0c93463111b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isWalkable: 0

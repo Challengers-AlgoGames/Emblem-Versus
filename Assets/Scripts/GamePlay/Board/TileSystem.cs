@@ -15,7 +15,6 @@ namespace GamePlay
         private Vector3Int currentTilePosition;
         private Color currentTileColor;
         private Tile tileTest;
-        public Vector3Int cellPosition;
 
         void Update()
         {
@@ -48,7 +47,6 @@ namespace GamePlay
                 tileTest = null;
                 currentTilePosition = Vector3Int.zero;
             }
-
         }
 
         void SetTileColor(Vector3Int tilePosition, Color color)

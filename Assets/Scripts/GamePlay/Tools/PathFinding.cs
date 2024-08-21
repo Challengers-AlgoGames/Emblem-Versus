@@ -1,15 +1,20 @@
 using System.Collections.Generic;
+using GamePlay;
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace GamePlay
+namespace Tools
 {
     public class PathfindingAStar : MonoBehaviour
     {
-        [SerializeField] private TileSystem tileSystem;
+        public TileSystem tileSystem;
+        private Ground ground;
+
 
         void Start()
         {
             tileSystem = FindObjectOfType<TileSystem>();
+            ground = FindObjectOfType<Ground>();
         }
 
         public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
@@ -61,16 +66,15 @@ namespace GamePlay
 
         private List<Vector3Int> GetNeighbors(Vector3Int current)
         {
-            // mur
             List<Vector3Int> neighbors = new List<Vector3Int>();
             Vector3Int[] directions = new Vector3Int[] {
-                Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down
-            };
+        Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down
+    };
 
             foreach (Vector3Int direction in directions)
             {
                 Vector3Int neighbor = current + direction;
-                if (IsTileActive(neighbor))
+                if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
                 {
                     neighbors.Add(neighbor);
                 }
@@ -81,8 +85,13 @@ namespace GamePlay
 
         private bool IsTileActive(Vector3Int position)
         {
-            // Assuming that if the tile exists, it is active. Adjust as needed.
             return tileSystem.tilemap.GetTile(position) != null;
+        }
+        private bool IsTileWalkable(Vector3Int position)
+        {
+            Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
+            GameObject hitObject = ground.GetObjectAtPosition(targetPosition);
+            return hitObject != null && ground.IsWalkable(hitObject);
         }
 
         private float Heuristic(Vector3Int a, Vector3Int b)
