@@ -26,8 +26,10 @@ namespace Tools
         public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
         {
             List<Vector3Int> path = new List<Vector3Int>();
+            
             HashSet<Vector3Int> openSet = new HashSet<Vector3Int>();
             HashSet<Vector3Int> closedSet = new HashSet<Vector3Int>();
+            
             Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>();
             Dictionary<Vector3Int, float> gScore = new Dictionary<Vector3Int, float>();
             Dictionary<Vector3Int, float> fScore = new Dictionary<Vector3Int, float>();
@@ -81,11 +83,7 @@ namespace Tools
             foreach (Vector3Int direction in directions)
             {
                 Vector3Int neighbor = current + direction;
-                // if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
-                // {
-                //     neighbors.Add(neighbor);
-                // }
-                if (IsTileActive(neighbor))
+                if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
                 {
                     neighbors.Add(neighbor);
                 }
@@ -96,16 +94,14 @@ namespace Tools
 
         private bool IsTileActive(Vector3Int position)
         {
-            // Assuming that if the tile exists, it is active. Adjust as needed.
             return tileSystem.tilemap.GetTile(position) != null;
         }
         
-        // private bool IsTileWalkable(Vector3Int position)
-        // {
-        //     Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
-        //     GameObject hitObject = ground.GetObjectAtPosition(targetPosition);
-        //     return hitObject != null && ground.IsWalkable(hitObject);
-        // }
+        private bool IsTileWalkable(Vector3Int position)
+        {
+            Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
+            return Ground.VerifieWalkability(targetPosition);
+        }
 
         private float Heuristic(Vector3Int a, Vector3Int b)
         {

@@ -34,44 +34,29 @@ namespace GamePlay
             activeTilesPosition = new List<Vector3Int>();
         }
 
-        bool VerifieGoundWalkability(Vector3 position)
-        {
-            Vector3 rayStartPosition = new Vector3(position.x, 4f, position.z);
-            Vector3 rayDirection = Vector3.down;
-
-            if (Physics.Raycast(rayStartPosition, rayDirection, out RaycastHit hit))
-            {
-                if (hit.collider.CompareTag("Ground")) return true;
-            }
-
-            return false;
-        }
-
         public void ClearActiveTiles()
         {
-            if (activeTilesPosition == null) return; // Do nothing if not active tiles
-            // Remove active tiles
+            if (activeTilesPosition == null) return;
+
             foreach (Vector3Int position in activeTilesPosition)
             {
                 tileSystem.RemoveTile(position);
             }
+
             activeTilesPosition = new List<Vector3Int>();
             OnClearActiveTile?.Invoke();
         }
 
         public void MoveUnit(Unit _unit, Vector3 _targetPosition)
         {
-            // Convertir les positions de l'unité et de la cible en coordonnées de cellules
             Vector3Int start = tileSystem.ConvertWorldToCellPosition(_unit.transform.position);
             Vector3Int end = tileSystem.ConvertWorldToCellPosition(_targetPosition);
 
-            // Trouver le chemin en utilisant A*
             List<Vector3Int> path = pathfindingAStar.FindPath(start, end);
 
-            // Si le chemin contient des points, démarrer le déplacement le long du chemin
             if (path.Count > 0)
             {
-                path.RemoveAt(0); // Retirer la position initiale du chemin
+                path.RemoveAt(0);
 
                 List<Vector3> worldPath = new List<Vector3>();
                 foreach (Vector3Int point in path)
@@ -103,14 +88,14 @@ namespace GamePlay
                     Vector3 cellTopVectorPosition = topLineVector + colVector;
                     Vector3 cellBottomVectorPosition = bottomLineVector + colVector;
                     
-                    if(VerifieGoundWalkability(cellTopVectorPosition)) // check if walkale
+                    if(Ground.VerifieWalkability(cellTopVectorPosition))
                     {
                         Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
                         tileSystem.SetTile(topTilePosition);
                         activeTilesPosition.Add(topTilePosition);
                     }
 
-                    if(VerifieGoundWalkability(cellBottomVectorPosition))
+                    if(Ground.VerifieWalkability(cellBottomVectorPosition))
                     {
                         Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
                         tileSystem.SetTile(bottomTilePosition);
@@ -126,14 +111,14 @@ namespace GamePlay
                     Vector3 cellTopVectorPosition = topLineVector + colVector;
                     Vector3 cellBottomVectorPosition = bottomLineVector + colVector;
 
-                    if(VerifieGoundWalkability(cellTopVectorPosition))
+                    if(Ground.VerifieWalkability(cellTopVectorPosition))
                     {
                         Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
                         tileSystem.SetTile(topTilePosition);
                         activeTilesPosition.Add(topTilePosition);
                     }
 
-                    if(VerifieGoundWalkability(cellBottomVectorPosition))
+                    if(Ground.VerifieWalkability(cellBottomVectorPosition))
                     {
                         Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
                         tileSystem.SetTile(bottomTilePosition);
