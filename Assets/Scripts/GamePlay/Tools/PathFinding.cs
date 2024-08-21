@@ -81,7 +81,7 @@ namespace Tools
             foreach (Vector3Int direction in directions)
             {
                 Vector3Int neighbor = current + direction;
-                if (IsTileActive(neighbor))
+                if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
                 {
                     neighbors.Add(neighbor);
                 }
@@ -94,6 +94,12 @@ namespace Tools
         {
             // Assuming that if the tile exists, it is active. Adjust as needed.
             return tileSystem.tilemap.GetTile(position) != null;
+        }
+        private bool IsTileWalkable(Vector3Int position)
+        {
+            Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
+            GameObject hitObject = ground.GetObjectAtPosition(targetPosition);
+            return hitObject != null && ground.IsWalkable(hitObject);
         }
 
         private float Heuristic(Vector3Int a, Vector3Int b)
