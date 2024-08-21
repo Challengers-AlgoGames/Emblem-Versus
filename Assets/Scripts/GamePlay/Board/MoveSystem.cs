@@ -34,6 +34,19 @@ namespace GamePlay
             activeTilesPosition = new List<Vector3Int>();
         }
 
+        bool VerifieGoundWalkability(Vector3 position)
+        {
+            Vector3 rayStartPosition = new Vector3(position.x, 4f, position.z);
+            Vector3 rayDirection = Vector3.down;
+
+            if (Physics.Raycast(rayStartPosition, rayDirection, out RaycastHit hit))
+            {
+                if (hit.collider.CompareTag("Ground")) return true;
+            }
+
+            return false;
+        }
+
         public void ClearActiveTiles()
         {
             if (activeTilesPosition == null) return; // Do nothing if not active tiles
@@ -42,7 +55,7 @@ namespace GamePlay
             {
                 tileSystem.RemoveTile(position);
             }
-            ClearActiveTilePositionData();
+            activeTilesPosition = new List<Vector3Int>();
             OnClearActiveTile?.Invoke();
         }
 
@@ -74,11 +87,6 @@ namespace GamePlay
             }
         }
 
-        void ClearActiveTilePositionData()
-        {
-            activeTilesPosition = new List<Vector3Int>();
-        }
-
         public void DisplayMoveRange(int _unitMobility, Vector3 _unitGroundCellPosition)
         {
             for (int line = 0; line <= _unitMobility + 1; line++)
@@ -94,16 +102,20 @@ namespace GamePlay
 
                     Vector3 cellTopVectorPosition = topLineVector + colVector;
                     Vector3 cellBottomVectorPosition = bottomLineVector + colVector;
+                    
+                    if(VerifieGoundWalkability(cellTopVectorPosition)) // check if walkale
+                    {
+                        Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
+                        tileSystem.SetTile(topTilePosition);
+                        activeTilesPosition.Add(topTilePosition);
+                    }
 
-                    Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
-                    Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
-
-                    tileSystem.SetTile(topTilePosition);
-                    tileSystem.SetTile(bottomTilePosition);
-
-                    // save active tile in memory
-                    activeTilesPosition.Add(topTilePosition);
-                    activeTilesPosition.Add(bottomTilePosition);
+                    if(VerifieGoundWalkability(cellBottomVectorPosition))
+                    {
+                        Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
+                        tileSystem.SetTile(bottomTilePosition);
+                        activeTilesPosition.Add(bottomTilePosition);
+                    }
                 }
 
                 // right cols
@@ -114,17 +126,22 @@ namespace GamePlay
                     Vector3 cellTopVectorPosition = topLineVector + colVector;
                     Vector3 cellBottomVectorPosition = bottomLineVector + colVector;
 
-                    Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
-                    Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
+                    if(VerifieGoundWalkability(cellTopVectorPosition))
+                    {
+                        Vector3Int topTilePosition = tileSystem.ConvertWorldToCellPosition(cellTopVectorPosition);
+                        tileSystem.SetTile(topTilePosition);
+                        activeTilesPosition.Add(topTilePosition);
+                    }
 
-                    tileSystem.SetTile(topTilePosition);
-                    tileSystem.SetTile(bottomTilePosition);
-
-                    // save active tile in memory
-                    activeTilesPosition.Add(topTilePosition);
-                    activeTilesPosition.Add(bottomTilePosition);
+                    if(VerifieGoundWalkability(cellBottomVectorPosition))
+                    {
+                        Vector3Int bottomTilePosition = tileSystem.ConvertWorldToCellPosition(cellBottomVectorPosition);
+                        tileSystem.SetTile(bottomTilePosition);
+                        activeTilesPosition.Add(bottomTilePosition);
+                    }
                 }
             }
+
             OnDisplayMoveRange?.Invoke(_unitGroundCellPosition);
         }
     }

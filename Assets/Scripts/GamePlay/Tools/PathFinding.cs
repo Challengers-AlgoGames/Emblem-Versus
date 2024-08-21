@@ -99,6 +99,7 @@ namespace Tools
             // Assuming that if the tile exists, it is active. Adjust as needed.
             return tileSystem.tilemap.GetTile(position) != null;
         }
+        
         // private bool IsTileWalkable(Vector3Int position)
         // {
         //     Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
