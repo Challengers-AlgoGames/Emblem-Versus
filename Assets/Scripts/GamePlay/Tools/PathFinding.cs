@@ -70,8 +70,9 @@ namespace Tools
             return path;
         }
 
-        List<Vector3Int> GetNeighbors(Vector3Int current)
+        private List<Vector3Int> GetNeighbors(Vector3Int current)
         {
+            // mur
             List<Vector3Int> neighbors = new List<Vector3Int>();
             Vector3Int[] directions = new Vector3Int[] {
                 Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down
@@ -89,25 +90,19 @@ namespace Tools
             return neighbors;
         }
 
-        bool IsTileActive(Vector3Int position)
+        private bool IsTileActive(Vector3Int position)
         {
+            // Assuming that if the tile exists, it is active. Adjust as needed.
             return tileSystem.tilemap.GetTile(position) != null;
         }
 
-        // bool IsTileWalkable(Vector3Int position)
-        // {
-        //     Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
-        //     GameObject hitObject = ground.GetObjectAtPosition(targetPosition);
-        //     return hitObject != null && ground.IsWalkable(hitObject);
-        // }
-
-        float Heuristic(Vector3Int a, Vector3Int b)
+        private float Heuristic(Vector3Int a, Vector3Int b)
         {
             // Use Manhattan distance for heuristic
             return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
         }
 
-        Vector3Int GetLowestFScore(HashSet<Vector3Int> openSet, Dictionary<Vector3Int, float> fScore)
+        private Vector3Int GetLowestFScore(HashSet<Vector3Int> openSet, Dictionary<Vector3Int, float> fScore)
         {
             Vector3Int lowest = new Vector3Int();
             float lowestScore = float.MaxValue;
@@ -125,7 +120,7 @@ namespace Tools
             return lowest;
         }
 
-        List<Vector3Int> ReconstructPath(Dictionary<Vector3Int, Vector3Int> cameFrom, Vector3Int current)
+        private List<Vector3Int> ReconstructPath(Dictionary<Vector3Int, Vector3Int> cameFrom, Vector3Int current)
         {
             List<Vector3Int> totalPath = new List<Vector3Int> { current };
 
