@@ -18,7 +18,12 @@ namespace GamePlay
 
         void Update()
         {
-            if (testMode && tileTest == null)
+           ManageTest();
+        }
+
+        void ManageTest()
+        {
+             if (testMode && tileTest == null)
             {
                 tileTest = tile;
                 tilemap.SetTile(tilePosition, tileTest);

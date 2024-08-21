@@ -17,17 +17,21 @@ namespace GamePlay.UIs
 
         void Awake()
         {
-           CameraController.OnZoomOut += OnZoomOut;
-           CameraController.OnUnZoom += OnUnZoom;
+            GameManager.OnGameStated += OnGameStated;
+            
+            CameraController.OnZoomOut += OnZoomOut;
+            CameraController.OnUnZoom += OnUnZoom;
         }
 
         void OnDestroy()
         {
+            GameManager.OnGameStated -= OnGameStated;
+
             CameraController.OnZoomOut -= OnZoomOut;
             CameraController.OnUnZoom -= OnUnZoom;
         }
 
-        void Start()
+        public void OnGameStated()
         {
             GameObject leftHelpObj = Instantiate(textPrefab, topLeftContainer);
             topLeftHelpText = leftHelpObj.GetComponent<Text>();

@@ -1,13 +1,24 @@
 using System.Collections.Generic;
+using GamePlay;
 using UnityEngine;
 
-namespace GamePlay
+namespace Tools
 {
     public class PathfindingAStar : MonoBehaviour
     {
         private TileSystem tileSystem;
 
-        void Start()
+        void Awake()
+        {
+            GameManager.OnGameStated += OnGameStated;
+        }
+
+        void OnDestroy()
+        {
+            GameManager.OnGameStated -= OnGameStated;
+        }
+
+        void OnGameStated()
         {
             tileSystem = FindObjectOfType<TileSystem>();
         }
