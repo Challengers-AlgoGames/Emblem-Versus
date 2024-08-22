@@ -1,22 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Ground : MonoBehaviour
 {
-    // Méthode pour lancer un raycast à une position spécifique et obtenir le GameObject touché
-    public GameObject GetObjectAtPosition(Vector3 position)
+    public static bool VerifieWalkability(Vector3 position)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(position, Vector3.down, out hit))
+        Vector3 rayStartPosition = new Vector3(position.x, 4f, position.z);
+        Vector3 rayDirection = Vector3.down;
+
+        if (Physics.Raycast(rayStartPosition, rayDirection, out RaycastHit hit))
         {
-            Debug.Log("Hit object: " + hit.collider.gameObject.name);
-            return hit.collider.gameObject;
+            if (hit.collider.CompareTag("Ground")) return true;
         }
 
-        return null; // Retourne null si aucun objet n'est touché
+        return false;
     }
-
-    // Méthode pour vérifier si un GameObject a le tag "Ground"
-    public bool IsWalkable(GameObject tile) => tile.CompareTag("Ground");
 }

@@ -5,6 +5,8 @@ namespace GamePlay
 {
     public class TurnBaseSystem : MonoBehaviour
     {
+        public static event System.Action<Commander> OnPhaseUpdate;
+
         [SerializeField] private Unit[] manalambaUnits;
         [SerializeField] private Unit[] frenchUnits;
 
@@ -24,6 +26,9 @@ namespace GamePlay
         void OnGameStated()
         {
             phase = DetermineStartPhase();
+
+            OnPhaseUpdate?.Invoke(phase);
+
             print("Starting phase: " + phase);
         }
 
@@ -34,6 +39,7 @@ namespace GamePlay
                 if (AllUnitsMoved())
                 {
                     EndPhase();
+                    OnPhaseUpdate?.Invoke(phase);
                 }
             }
             

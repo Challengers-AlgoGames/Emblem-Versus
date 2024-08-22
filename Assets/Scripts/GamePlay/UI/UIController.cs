@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Diagnostics;
 using GamePlay.Cameras;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,8 +10,13 @@ namespace GamePlay.UIs
     public class UIController : MonoBehaviour
     {
         [SerializeField] private GameObject textPrefab;
+        [SerializeField] private GameObject panelPrefab;
+        [SerializeField] private GameObject buttonPrefab;
+
+        [SerializeField] private Transform unitActionMenuContainer;
         [SerializeField] private Transform topLeftContainer;
         [SerializeField] private Transform bottomContainer;
+        [SerializeField] private Transform phaseNoticeContainer;
 
         private Text topLeftHelpText;
         private Text bottomLeftHelpText;
@@ -18,17 +25,17 @@ namespace GamePlay.UIs
         void Awake()
         {
             GameManager.OnGameStated += OnGameStated;
-            
             CameraController.OnZoomOut += OnZoomOut;
             CameraController.OnUnZoom += OnUnZoom;
+            TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdate;
         }
 
         void OnDestroy()
         {
             GameManager.OnGameStated -= OnGameStated;
-
             CameraController.OnZoomOut -= OnZoomOut;
             CameraController.OnUnZoom -= OnUnZoom;
+            TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdate;
         }
 
         public void OnGameStated()
@@ -38,6 +45,25 @@ namespace GamePlay.UIs
             SetTopLeftText("(Esc) Menu");
 
             DisplayBottomHelp();
+        }
+
+        void OnTurnPhaseUpdate(Units.Commander _phase)
+        {
+            StartCoroutine(DisplayPhaseNotice(_phase, 2.5f));
+        }
+
+        IEnumerator DisplayPhaseNotice(Units.Commander _phase, float time)
+        {
+            GameObject phaseNoticePanel = Instantiate(panelPrefab, phaseNoticeContainer);
+
+            GameObject phaseNoticeTextObj = Instantiate(textPrefab, phaseNoticePanel.transform);
+            phaseNoticeTextObj.GetComponent<Text>().text = "Phase : " + _phase;
+
+            yield return new WaitForSeconds(time);
+
+            foreach (Transform child in phaseNoticeContainer) {
+                Destroy(child.gameObject);
+            }
         }
 
         void OnZoomOut()
