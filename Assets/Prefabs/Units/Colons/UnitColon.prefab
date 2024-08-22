@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7488036713453086372}
   - component: {fileID: 91374767575767321}
   m_Layer: 0
-  m_Name: Unit
+  m_Name: UnitColon
   m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
     isUsed: 0
   isWasMoved: 0
   isCanAttack: 0
-  commander: 1
+  commander: 0
   moveSpeed: 5
 --- !u!1 &5783969024865702766
 GameObject:
@@ -146,7 +146,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: db346e117af7fa5cb8513d7aad5155a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
