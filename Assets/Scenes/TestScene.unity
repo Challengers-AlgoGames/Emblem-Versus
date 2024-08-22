@@ -735,6 +735,42 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7487249453118612986}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &433750200 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5243443594768425414, guid: f8a5f6a214186d3bca28414ee9d6c480,
+    type: 3}
+  m_PrefabInstance: {fileID: 7487249453118612986}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520f905b6e22cdc7bbadac59a99efa60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &738054953 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8285945630035727880, guid: d9cb2906204ed33069988c06aeb99c0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 90096051}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &748359764 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8553290909981941154, guid: d9cb2906204ed33069988c06aeb99c0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 90096051}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9273f0c63659d478493d0f3c9c2df98c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &769837604 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3661492045433871362, guid: d9cb2906204ed33069988c06aeb99c0a,
+    type: 3}
+  m_PrefabInstance: {fileID: 90096051}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,7 +995,7 @@ MonoBehaviour:
   manalambaUnits:
   - {fileID: 90096053}
   frenchUnits:
-  - {fileID: 0}
+  - {fileID: 433750200}
 --- !u!114 &1407073321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1534,7 +1570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textPrefab: {fileID: 8851995232059873334, guid: edb718a760124615d8f827109c1e132f,
     type: 3}
-  panelPrefab: {fileID: 3838855759567487837, guid: ead7296d81ce5566aaa5c4a1af85a89a,
+  panelPrefab: {fileID: 1360956815426616684, guid: cce03fe82411566879724d4c8955f359,
     type: 3}
   buttonPrefab: {fileID: 9061780035419618523, guid: 315989350cbdf430cb69c8e3557ac767,
     type: 3}
@@ -1637,6 +1673,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitColon
       objectReference: {fileID: 0}
+    - target: {fileID: 5243443594768425414, guid: f8a5f6a214186d3bca28414ee9d6c480,
+        type: 3}
+      propertyPath: inventories.Array.data[0].item
+      value: 
+      objectReference: {fileID: 748359764}
+    - target: {fileID: 5243443594768425414, guid: f8a5f6a214186d3bca28414ee9d6c480,
+        type: 3}
+      propertyPath: inventories.Array.data[1].item
+      value: 
+      objectReference: {fileID: 738054953}
+    - target: {fileID: 5243443594768425414, guid: f8a5f6a214186d3bca28414ee9d6c480,
+        type: 3}
+      propertyPath: inventories.Array.data[2].item
+      value: 
+      objectReference: {fileID: 769837604}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 3840671668227535225}
   - component: {fileID: 238939018754824421}
   - component: {fileID: 6068387296114843102}
+  - component: {fileID: 5243443594768425414}
   m_Layer: 0
   m_Name: UnitColon
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4688150302735849600}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.51, y: 1, z: 16.54}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -105,3 +106,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.7, y: 2, z: 2.7}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5243443594768425414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4688150302735849600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520f905b6e22cdc7bbadac59a99efa60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: Cuirassier
+  health: 120
+  attack: 70
+  defense: 80
+  spirituality: 0
+  mobility: 5
+  inventories:
+  - item: {fileID: 0}
+    isUsed: 0
+  - item: {fileID: 0}
+    isUsed: 0
+  - item: {fileID: 0}
+    isUsed: 0
+  isWasMoved: 0
+  isCanAttack: 0
+  commander: 0
+  moveSpeed: 5
