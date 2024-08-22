@@ -82,7 +82,7 @@ MonoBehaviour:
     isUsed: 0
   isWasMoved: 0
   isCanAttack: 0
-  commander: 1
+  commander: 0
   moveSpeed: 5
 --- !u!1 &5783969024865702766
 GameObject:

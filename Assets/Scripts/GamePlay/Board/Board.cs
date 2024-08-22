@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+using Units;
 using UnityEngine;
 
-namespace Tools {
-    public class TerrainGenerator : MonoBehaviour
+namespace GamePlay {
+    public class Board : MonoBehaviour
     {
         [Header("Tiles Prefab")]
         [SerializeField] private GameObject gassTilePrefab;
@@ -20,8 +20,6 @@ namespace Tools {
 
         [Header("Terrain parameters")]
         [SerializeField] private Transform container;
-        [SerializeField] private int levelWidth = 10;
-        [SerializeField] private int levelHeight = 10;
         [SerializeField] private int tileScale = 3;
 
         /* "o" : water, "" : grass, "T" : tree, "t" : deathTree */
@@ -44,7 +42,7 @@ namespace Tools {
             {"", "", "T", "T", "T",  "T",  "",  "",  "",  "T",  "",  "",  "T",  "",  "mdb",  "T", "mdb", "T", "T", "T"},
         };
 
-        public void GenerateTerrain()
+        public void Generate()
         {
             for (int i = 0; i < map.GetLength(0); i++)  // Boucle sur les lignes
             {

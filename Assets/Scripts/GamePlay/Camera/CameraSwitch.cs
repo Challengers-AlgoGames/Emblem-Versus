@@ -1,36 +1,44 @@
 using System;
+using Units;
 using UnityEngine;
 
 namespace GamePlay.Cameras
 {
     public class CameraSwitch : MonoBehaviour
     {
-        public Camera camera1;
-        public Camera camera2;
-        public bool switchcam;
+        public static event Action OnCameraSwitched;
 
-        void Start()
+        [SerializeField] private GameObject camera1;
+        [SerializeField] private GameObject camera2;
+
+        void Awake()
         {
-            // Activer la première caméra et désactiver la seconde au démarrage
-            camera1.enabled = true;
-            camera2.enabled = false;
+            TurnBaseSystem.OnPhaseUpdate += OnPhaseUpdate;
         }
 
-        void Update()
+        void OnDestroy()
         {
-            // Tester la fonction SwitchCameras() lorsque la variable switchcam est true
-            if (switchcam)
+            TurnBaseSystem.OnPhaseUpdate -= OnPhaseUpdate;
+        }
+
+        void OnPhaseUpdate(Commander _phase)
+        {
+            switch (_phase)
             {
-                SwitchCameras();
-                switchcam = false; // Réinitialiser la variable pour éviter de switcher continuellement
+                case Commander.PLAYER_1:
+                    camera1.SetActive(true);
+                    camera2.SetActive(false);
+                    break;
+                case Commander.PLAYER_2:
+                    camera1.SetActive(false);
+                    camera2.SetActive(true);
+                    break;
+                default:
+                    Debug.Log("Not supported");
+                    break;
             }
-        }
 
-        // Fonction pour switcher entre les deux caméras
-        public void SwitchCameras()
-        {
-            camera1.enabled = !camera1.enabled;
-            camera2.enabled = !camera2.enabled;
+            OnCameraSwitched?.Invoke();
         }
     }
 }

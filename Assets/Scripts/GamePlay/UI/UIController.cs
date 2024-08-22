@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using GamePlay.Cameras;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,7 +34,7 @@ namespace GamePlay.UIs
             GameManager.OnGameStated -= OnGameStated;
             CameraController.OnZoomOut -= OnZoomOut;
             CameraController.OnUnZoom -= OnUnZoom;
-            TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdate;
+            TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdate;
         }
 
         public void OnGameStated()
