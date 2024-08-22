@@ -1,11 +1,13 @@
 using Units;
 using UnityEngine;
+using GamePlay.Cameras;
 
 namespace GamePlay
 {
     public class TurnBaseSystem : MonoBehaviour
     {
         public static event System.Action<Commander> OnPhaseUpdate;
+        public CameraSwitch cameraSwitch;
 
         [SerializeField] private Unit[] manalambaUnits;
         [SerializeField] private Unit[] frenchUnits;
@@ -34,7 +36,7 @@ namespace GamePlay
 
         void Update()
         {
-            if(phase != Commander.NULL)
+            if (phase != Commander.NULL)
             {
                 if (AllUnitsMoved())
                 {
@@ -42,13 +44,13 @@ namespace GamePlay
                     OnPhaseUpdate?.Invoke(phase);
                 }
             }
-            
+
         }
 
         bool AllUnitsMoved()
         {
             Unit[] currentArmy = (phase == Commander.PLAYER_1) ? manalambaUnits : frenchUnits;
-            
+
             foreach (Unit unit in currentArmy)
             {
                 if (!unit.IsWasMoved)
@@ -63,6 +65,8 @@ namespace GamePlay
             ResetArmyMove(currentArmy);
             phase = (phase == Commander.PLAYER_1) ? Commander.PLAYER_2 : Commander.PLAYER_1;
             print("New phase: " + phase);
+            cameraSwitch.SwitchCameras();
+
         }
 
         void ResetArmyMove(Unit[] army)
