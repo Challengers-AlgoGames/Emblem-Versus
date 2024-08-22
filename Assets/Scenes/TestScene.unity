@@ -1234,8 +1234,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 347f247900e5fb1459be8c71fff63874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 2105858911259631019, guid: 44ea2b7b5e3ec55348bd8fd56b00c9a5,
+  gassTilePrefab: {fileID: 2105858911259631019, guid: 44ea2b7b5e3ec55348bd8fd56b00c9a5,
     type: 3}
+  waterTilePrefab: {fileID: 2105858911259631019, guid: c8071ddf46ccbde7a81964e6d40f1751,
+    type: 3}
+  forestTilePrefab: {fileID: 2105858911259631019, guid: 23fe8a95f1c803b69a10841d7894fc28,
+    type: 3}
+  deathForestTilePrefab: {fileID: 2105858911259631019, guid: 823b567a99f050b9fbb8d008455697a7,
+    type: 3}
+  cuirassierPrefab: {fileID: 0}
+  hyssardPrefab: {fileID: 0}
+  infanryPrefab: {fileID: 0}
+  mpandefaZanatsipikaPrefab: {fileID: 0}
+  mpanaoAdyPrefab: {fileID: 0}
+  mpandatsaBaratraPrefab: {fileID: 0}
   container: {fileID: 1526520074}
   levelWidth: 20
   levelHeight: 20
