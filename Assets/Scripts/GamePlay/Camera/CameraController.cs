@@ -14,6 +14,9 @@ namespace GamePlay.Cameras
     
     public class CameraController : MonoBehaviour
     {
+        public static Action OnZoomWasPerformed;
+        public static Action OnUnZoomWasPerformed;
+
         [SerializeField] private float speed = 5f;
         [SerializeField] private float smoothSpeed = 0.125f;
 
@@ -100,6 +103,7 @@ namespace GamePlay.Cameras
                 HasReachedRotation(transform.rotation, zoomAngle))
             {
                 cameraMode = CameraMode.MOVE;
+                OnZoomWasPerformed?.Invoke();
             }
         }
 
@@ -112,6 +116,7 @@ namespace GamePlay.Cameras
                 HasReachedRotation(transform.rotation, rotationBeforZoom))
             {
                 cameraMode = CameraMode.MOVE;
+                OnUnZoomWasPerformed?.Invoke();
             }
         }
 

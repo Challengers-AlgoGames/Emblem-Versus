@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GamePlay.Cameras;
+using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,7 +63,6 @@ namespace GamePlay.UIs
         public void DisplayMainTips()
         {
             ClearContainer(bottomContainer);
-            
             ClearContainer(unitActionMenuContainer);
 
             string[] helpTexts = {
@@ -96,19 +96,21 @@ namespace GamePlay.UIs
             }
         }
 
-        public Dictionary<string, Button> DisplayUnitActions()
+        public Dictionary<UnitAction, Button> DisplayUnitActions()
         {
-            Dictionary<string, Button> buttons = new Dictionary<string, Button>();
+            Dictionary<UnitAction, Button> buttons = new Dictionary<UnitAction, Button>();
 
             GameObject actionButton;
                 
             actionButton = Instantiate(buttonPrefab, unitActionMenuContainer);
-            actionButton.GetComponentInChildren<Text>().text = "Attack";
-            buttons.Add("attack", actionButton.GetComponent<Button>());
+            actionButton.name = UnitAction.ATTACK.ToString();
+            actionButton.GetComponentInChildren<Text>().text = UnitAction.ATTACK.ToString();
+            buttons.Add(UnitAction.ATTACK, actionButton.GetComponent<Button>());
 
             actionButton = Instantiate(buttonPrefab, unitActionMenuContainer);
-            actionButton.GetComponentInChildren<Text>().text = "Wait";
-            buttons.Add("wait", actionButton.GetComponent<Button>());
+            actionButton.name = UnitAction.WAIT.ToString();
+            actionButton.GetComponentInChildren<Text>().text = UnitAction.WAIT.ToString();
+            buttons.Add(UnitAction.WAIT, actionButton.GetComponent<Button>());
 
             return buttons;
         }
