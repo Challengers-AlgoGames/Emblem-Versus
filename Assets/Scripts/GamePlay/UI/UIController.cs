@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using GamePlay.Cameras;
 using UnityEngine;
@@ -39,16 +40,22 @@ namespace GamePlay.UIs
 
         public void OnGameStated()
         {
-            GameObject leftHelpObj = Instantiate(textPrefab, topLeftContainer);
-            topLeftHelpText = leftHelpObj.GetComponent<Text>();
-            SetTopLeftText("(Esc) Menu");
-
-            DisplayBottomHelp();
+            string[] helpTexts = {
+                "(Left click to unit) Move", 
+                "(Right click to unit) Action"
+            };
+            SetBottomHelpTexts(helpTexts);
         }
 
         void OnTurnPhaseUpdate(Units.Commander _phase)
         {
             StartCoroutine(DisplayPhaseNotice(_phase, 2.5f));
+
+            ClearContainer(topLeftContainer);
+
+            GameObject leftHelpObj = Instantiate(textPrefab, topLeftContainer);
+            topLeftHelpText = leftHelpObj.GetComponent<Text>();
+            SetTopLeftText(_phase.ToString());
         }
 
         IEnumerator DisplayPhaseNotice(Units.Commander _phase, float time)
@@ -60,21 +67,28 @@ namespace GamePlay.UIs
 
             yield return new WaitForSeconds(time);
 
-            foreach (Transform child in phaseNoticeContainer) {
-                Destroy(child.gameObject);
-            }
+            ClearContainer(phaseNoticeContainer);
         }
 
         void OnZoomOut()
         {
-            SetTopLeftText("(Esc) Cancel");
-            DestroyBottomHelp();
+            ClearContainer(bottomContainer);
+
+            string[] helpTexts = {"(Esc) Cancel"};
+
+            
+            SetBottomHelpTexts(helpTexts);
         }
 
         void OnUnZoom()
         {
-            SetTopLeftText("(Esc) Menu");
-            DisplayBottomHelp();
+            ClearContainer(bottomContainer);
+
+            string[] helpTexts = {
+                "(Left click to unit) Move", 
+                "(Right click to unit) Action"
+            };
+            SetBottomHelpTexts(helpTexts);
         }
 
         void SetTopLeftText(string text)
@@ -82,21 +96,21 @@ namespace GamePlay.UIs
             topLeftHelpText.text = text;
         }
 
-        void DisplayBottomHelp()
+        void SetBottomHelpTexts(string[] texts)
         {
-            GameObject leftBottomHelpObj = Instantiate(textPrefab, bottomContainer);
-            bottomLeftHelpText = leftBottomHelpObj.GetComponent<Text>();
-            bottomLeftHelpText.text = "(Left click to unit) Move";
+            GameObject bottomHelpObj;
 
-            GameObject rightBottomHelpObj = Instantiate(textPrefab, bottomContainer);
-            bottomRighttHelpText = rightBottomHelpObj.GetComponent<Text>();
-            bottomRighttHelpText.text = "(Right click to unit) Actions";
+            foreach (string text in texts)
+            {
+                bottomHelpObj = Instantiate(textPrefab, bottomContainer);
+                bottomLeftHelpText = bottomHelpObj.GetComponent<Text>();
+                bottomLeftHelpText.text = text;
+            }
         }
 
-        void DestroyBottomHelp()
+        void ClearContainer(Transform container)
         {
-            // Destroy bottom texts
-            foreach (Transform child in bottomContainer) {
+            foreach (Transform child in container) {
                 Destroy(child.gameObject);
             }
         }
