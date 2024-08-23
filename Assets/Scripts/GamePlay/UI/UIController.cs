@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using GamePlay.Cameras;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,7 @@ namespace GamePlay.UIs
             StartCoroutine(DisplayPhaseNotice(_phase, 2.5f));
 
             ClearContainer(topLeftContainer);
+            ClearContainer(unitActionMenuContainer);
 
             GameObject leftHelpObj = Instantiate(textPrefab, topLeftContainer);
             topLeftHelpText = leftHelpObj.GetComponent<Text>();
@@ -60,6 +62,8 @@ namespace GamePlay.UIs
         public void DisplayMainTips()
         {
             ClearContainer(bottomContainer);
+            
+            ClearContainer(unitActionMenuContainer);
 
             string[] helpTexts = {
                 "(Left click to unit) Move", 
@@ -92,9 +96,21 @@ namespace GamePlay.UIs
             }
         }
 
-        public void DisplayUnitActions(Units.Unit _unit)
+        public Dictionary<string, Button> DisplayUnitActions()
         {
+            Dictionary<string, Button> buttons = new Dictionary<string, Button>();
 
+            GameObject actionButton;
+                
+            actionButton = Instantiate(buttonPrefab, unitActionMenuContainer);
+            actionButton.GetComponentInChildren<Text>().text = "Attack";
+            buttons.Add("attack", actionButton.GetComponent<Button>());
+
+            actionButton = Instantiate(buttonPrefab, unitActionMenuContainer);
+            actionButton.GetComponentInChildren<Text>().text = "Wait";
+            buttons.Add("wait", actionButton.GetComponent<Button>());
+
+            return buttons;
         }
 
     }

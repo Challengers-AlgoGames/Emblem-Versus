@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using GamePlay.Cameras;
 using GamePlay.UIs;
 using Units;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GamePlay {
     public class GameManager : MonoBehaviour
@@ -49,8 +51,8 @@ namespace GamePlay {
         void OnTurnPhaseUpdated(Commander _phase)
         {
             currentCameraController = cameraManager.SwitchCamera(_phase);
-            uIController.DisplayPhaseNotice(_phase);
             inputHandler.Actualise();
+            uIController.DisplayPhaseNotice(_phase);
         }
 
         void OnLeftClickModeListenUnitClick(Unit _unit, Vector3 _unitGroundCellPosition)
@@ -62,7 +64,17 @@ namespace GamePlay {
             currentCameraController.ZoomOut(_unit.transform.position);
             uIController.DisplayUnZoomTips();
 
-            uIController.DisplayUnitActions(_unit);
+            Dictionary<string, Button> actionsButtons = uIController.DisplayUnitActions();
+
+            actionsButtons["attack"].onClick.AddListener(() => {
+                Debug.Log("attack");
+            });
+
+            actionsButtons["wait"].onClick.AddListener(() => {
+                Debug.Log("attack");
+            });
+
+            Debug.Log("done");
         }
 
         void OnLeftClickModeListenGroundClick(Vector3 _targetPosition)

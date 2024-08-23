@@ -26,12 +26,13 @@ namespace GamePlay
 
         public void Active()
         {
-            _mainCamera = Camera.main;
+            Actualise();
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
         }
 
         public void Actualise()
         {
+            Debug.Log("actualise");
             _mainCamera = Camera.main;
         }
 
@@ -51,8 +52,6 @@ namespace GamePlay
             {
                 return;
             }
-
-            print("Click");
 
             RaycastHit hit;
             Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out hit);
