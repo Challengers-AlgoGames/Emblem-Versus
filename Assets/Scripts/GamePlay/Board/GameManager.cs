@@ -34,9 +34,8 @@ namespace GamePlay {
 
         void Awake()
         {
-
+            Unit.OnWasMoved += OnUnitWasMoved;
             TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdated;
-
             CameraController.OnUnZoomWasPerformed += OnCameraUnZoomWasPerformed;
 
             InputHandler.OnDisplayUnitActions += OnDisplayUnitActions;
@@ -47,8 +46,8 @@ namespace GamePlay {
 
         void OnDestroy()
         {
+            Unit.OnWasMoved -= OnUnitWasMoved;
             TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdated;
-
             CameraController.OnUnZoomWasPerformed -= OnCameraUnZoomWasPerformed;
 
             InputHandler.OnEscapeKeyForCancelPressed -= OnEscapeKeyForCancelPressed;
@@ -95,30 +94,6 @@ namespace GamePlay {
             uIController.DisplayPhaseNotice(_phase);
         }
 
-        void OnDisplayUnitActions(Unit _unit)
-        {
-            activeUnit = _unit;
-
-            Dictionary<UnitAction, Button> actionsButtons = uIController.DisplayUnitActions();
-
-            actionsButtons[UnitAction.ATTACK].onClick.AddListener(() => {
-                Debug.Log("attack");
-                OnUnitAttackButtonWasClicked?.Invoke();
-            });
-
-            actionsButtons[UnitAction.WAIT].onClick.AddListener(() => {
-                currentCameraController.UnZoom();
-                uIController.DisplayMainTips();
-                cameraUnZoomJustification = CameraUnZoomJustification.UNIT_WAIT;
-
-                OnUnitWaitButtonWasClicked?.Invoke();
-            });
-
-            moveSystem.ClearActiveTiles();
-            currentCameraController.ZoomOut(_unit.transform.position);
-            uIController.DisplayUnZoomTips();
-        }
-
         void OnLeftClickModeListenUnitClick(Unit _unit, Vector3 _unitGroundCellPosition)
         {
             activeUnit = _unit;
@@ -137,10 +112,7 @@ namespace GamePlay {
                 return;
             }
             moveSystem.MoveUnit(activeUnit, _targetPosition);
-            
             moveSystem.ClearActiveTiles();
-            currentCameraController.UnZoom();
-            cameraUnZoomJustification = CameraUnZoomJustification.UNIT_MOVE;
         }
 
         void OnEscapeKeyForCancelPressed()
@@ -149,6 +121,40 @@ namespace GamePlay {
             currentCameraController.UnZoom();
             uIController.DisplayMainTips();
             cameraUnZoomJustification = CameraUnZoomJustification.NONE;
+        }
+
+        void OnDisplayUnitActions(Unit _unit)
+        {
+            activeUnit = _unit;
+            HadleDisplayUnitActionMenu(activeUnit);
+        }
+
+        void OnUnitWasMoved ()
+        {
+            cameraUnZoomJustification = CameraUnZoomJustification.UNIT_MOVE;
+            HadleDisplayUnitActionMenu(activeUnit);
+        }
+
+        void HadleDisplayUnitActionMenu(Unit unit)
+        {
+
+            Dictionary<UnitAction, Button> actionsButtons = uIController.DisplayUnitActions();
+
+            actionsButtons[UnitAction.ATTACK].onClick.AddListener(() => {
+                Debug.Log("attack");
+                OnUnitAttackButtonWasClicked?.Invoke();
+            });
+
+            actionsButtons[UnitAction.WAIT].onClick.AddListener(() => {
+                currentCameraController.UnZoom();
+                uIController.DisplayMainTips();
+                cameraUnZoomJustification = CameraUnZoomJustification.UNIT_WAIT;
+
+                OnUnitWaitButtonWasClicked?.Invoke();
+            });
+
+            currentCameraController.ZoomOut(unit.transform.position);
+            uIController.DisplayUnZoomTips();
         }
     }
 }

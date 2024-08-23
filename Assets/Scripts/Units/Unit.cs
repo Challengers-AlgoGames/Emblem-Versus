@@ -7,6 +7,8 @@ namespace Units
 {
     public class Unit : MonoBehaviour
     {
+        public static event System.Action OnWasMoved;
+
         /* Unit attributes */
         [SerializeField] private string title;
         [SerializeField] private float health;
@@ -100,8 +102,8 @@ namespace Units
             }
 
             IsMoving = false;
-            isWasMoved = true; // update move state
             movePath = null;  // Réinitialisation du chemin après le mouvement
+            OnWasMoved?.Invoke();
         }
 
         public void Wait()

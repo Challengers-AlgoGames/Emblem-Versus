@@ -31,6 +31,7 @@ namespace GamePlay.Cameras
         private Vector3 zoomTarget;
         private Vector3 positionBeforZoom;
         private Quaternion rotationBeforZoom;
+        private bool isOnZoom;
 
         void Awake()
         {
@@ -116,6 +117,7 @@ namespace GamePlay.Cameras
                 HasReachedRotation(transform.rotation, rotationBeforZoom))
             {
                 cameraMode = CameraMode.MOVE;
+                isOnZoom = false;
                 OnUnZoomWasPerformed?.Invoke();
             }
         }
@@ -143,9 +145,14 @@ namespace GamePlay.Cameras
 
         public void ZoomOut(Vector3 target)
         {
+            if(!isOnZoom)
+            {
+                positionBeforZoom = transform.position;
+                rotationBeforZoom = transform.rotation;
+
+                isOnZoom = true;
+            }
             zoomTarget = target;
-            positionBeforZoom = transform.position;
-            rotationBeforZoom = transform.rotation;
             cameraMode = CameraMode.ZOOM_OUT;
         }
 
