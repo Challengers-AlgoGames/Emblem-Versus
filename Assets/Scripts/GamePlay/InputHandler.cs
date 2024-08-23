@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System;
 using Units;
 using UnityEngine.SceneManagement;
+using GamePlay.Cameras;
 
 namespace GamePlay
 {
@@ -26,13 +27,26 @@ namespace GamePlay
             NONE
         }
 
+        void Awake()
+        {
+            CameraSwitch.OnCameraSwitched += OnCameraSwitched;
+        }
+        
+        void OnDestroy()
+        {
+            CameraSwitch.OnCameraSwitched -= OnCameraSwitched;
+        }
+
         void Start()
         {
             _mainCamera = Camera.main;
-
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
-
             OnReady?.Invoke();
+        }
+
+        void OnCameraSwitched()
+        {
+            _mainCamera = Camera.main;
         }
 
         void SetLeftClickMode(LeftClickInputMode mode)

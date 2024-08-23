@@ -1,5 +1,4 @@
 using System;
-using Tools;
 using Units;
 using UnityEngine;
 
@@ -10,12 +9,13 @@ namespace GamePlay {
 
         [SerializeField] MoveSystem moveSystem;
         [SerializeField] TurnBaseSystem turnBaseSystem;
-        [SerializeField] TerrainGenerator terrainGenerator;
+        [SerializeField] Board board;
 
         private Unit activeUnit;
 
         void Awake()
         {
+            
             InputHandler.OnReady += OnInputHandlerReady;
             InputHandler.OnEscapeKeyForCancelPressed += OnEscapeKeyForCancelPressed;
             InputHandler.OnLeftClickModeListenUnitClick += OnLeftClickModeListenUnitClick;
@@ -32,7 +32,7 @@ namespace GamePlay {
 
         void OnInputHandlerReady()
         {
-            terrainGenerator.GenerateTerrain();
+            board.Generate();
             OnGameStated?.Invoke();
         }
 

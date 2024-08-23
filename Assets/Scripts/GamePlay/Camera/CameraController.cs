@@ -24,6 +24,8 @@ namespace GamePlay.Cameras
         [SerializeField] private Quaternion zoomOutAngle = Quaternion.Euler(62, 0, 0);
         [SerializeField] private Vector3 zoomOutOffset = new Vector3(0, 21, -16);
 
+        [SerializeField] private bool revert;
+
         private PlayerInputs playerInputs;
         private CameraMode cameraMode = CameraMode.NONE;
         private Vector3 zoomTarget;
@@ -79,23 +81,42 @@ namespace GamePlay.Cameras
         void HandleCameraMovement()
         {
             Vector2 inputVector = playerInputs.GamePlay.MoveCamera.ReadValue<Vector2>();
+            
             if (inputVector != Vector2.zero)
             {
                 Vector3 movementVector = new Vector3(inputVector.x, 0, inputVector.y);
+
+                if(revert)
+                {
+                    movementVector.x *= -1;
+                    movementVector.z *= -1;
+                }
+
                 transform.position += movementVector * Time.fixedDeltaTime * speed;
             }
         }
 
         void HandleZoomOut()
         {
-            transform.position = SmoothMove(zoomTarget, zoomOutOffset);
-            transform.rotation = SmoothRotation(zoomOutAngle);
-            if (HasReachedTarget(transform.position, zoomTarget + zoomOutOffset) &&
-                HasReachedRotation(transform.rotation, zoomOutAngle))
+            Vector3 offset = zoomOutOffset;
+            Quaternion zoomAngle = zoomOutAngle;
+
+            if (revert)
+            {
+                offset.z *= -1;
+                zoomAngle = Quaternion.Euler(zoomOutAngle.eulerAngles + new Vector3(0, 180, 0));
+            }
+
+            transform.position = SmoothMove(zoomTarget, offset);
+            transform.rotation = SmoothRotation(zoomAngle);
+
+            if (HasReachedTarget(transform.position, zoomTarget + offset) &&
+                HasReachedRotation(transform.rotation, zoomAngle))
             {
                 cameraMode = CameraMode.MOVE;
             }
         }
+
 
         void HandleUnZoom()
         {

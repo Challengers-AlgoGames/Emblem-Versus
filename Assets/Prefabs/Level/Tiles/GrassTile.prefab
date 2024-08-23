@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4135917938579618865}
   - component: {fileID: 6920119644568894249}
   - component: {fileID: 1554206202661492089}
-  m_Layer: 0
-  m_Name: Tile
+  m_Layer: 6
+  m_Name: GrassTile
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

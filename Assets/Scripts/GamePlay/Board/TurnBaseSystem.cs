@@ -7,7 +7,6 @@ namespace GamePlay
     public class TurnBaseSystem : MonoBehaviour
     {
         public static event System.Action<Commander> OnPhaseUpdate;
-        public CameraSwitch cameraSwitch;
 
         [SerializeField] private Unit[] manalambaUnits;
         [SerializeField] private Unit[] frenchUnits;
@@ -65,7 +64,6 @@ namespace GamePlay
             ResetArmyMove(currentArmy);
             phase = (phase == Commander.PLAYER_1) ? Commander.PLAYER_2 : Commander.PLAYER_1;
             print("New phase: " + phase);
-            cameraSwitch.SwitchCameras();
 
         }
 
