@@ -26,12 +26,14 @@ namespace GamePlay
 
         void Awake()
         {
+            GameManager.OnDisplayUnitActionAborded += OnDisplayUnitActionAborded;
             GameManager.OnUnitAttackButtonWasClicked += OnUnitAttackButtonWasClicked;
             GameManager.OnUnitWaitButtonWasClicked += OnUnitWaitButtonWasClicked;
         }
 
         void OnDestroy()
         {
+            GameManager.OnDisplayUnitActionAborded -= OnDisplayUnitActionAborded;
             GameManager.OnUnitAttackButtonWasClicked -= OnUnitAttackButtonWasClicked;
             GameManager.OnUnitWaitButtonWasClicked -= OnUnitWaitButtonWasClicked;
         }
@@ -46,6 +48,11 @@ namespace GamePlay
         public void Actualise()
         {
             _mainCamera = Camera.main;
+        }
+
+        void OnDisplayUnitActionAborded()
+        {
+            SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
         }
 
         void OnUnitAttackButtonWasClicked()
@@ -88,6 +95,7 @@ namespace GamePlay
 
             RaycastHit hit;
             Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out hit);
+
             if(hit.collider)
             {    
                 switch (leftClickMode)

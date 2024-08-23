@@ -19,6 +19,7 @@ namespace GamePlay {
     {
         public static Action OnUnitAttackButtonWasClicked;
         public static Action OnUnitWaitButtonWasClicked;
+        public static Action OnDisplayUnitActionAborded;
 
         [SerializeField] MoveSystem moveSystem;
         [SerializeField] InputHandler inputHandler;
@@ -50,6 +51,7 @@ namespace GamePlay {
             TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdated;
             CameraController.OnUnZoomWasPerformed -= OnCameraUnZoomWasPerformed;
 
+            InputHandler.OnDisplayUnitActions -= OnDisplayUnitActions;
             InputHandler.OnEscapeKeyForCancelPressed -= OnEscapeKeyForCancelPressed;
             InputHandler.OnLeftClickModeListenUnitClick -= OnLeftClickModeListenUnitClick;
             InputHandler.OnLeftClickModeListenGroundClick -= OnLeftClickModeListenGroundClick;
@@ -108,9 +110,8 @@ namespace GamePlay {
         void OnLeftClickModeListenGroundClick(Vector3 _targetPosition)
         {
             if (activeUnit == null || activeUnit.Commander != turnBaseSystem.Phase)
-            {
                 return;
-            }
+
             moveSystem.MoveUnit(activeUnit, _targetPosition);
             moveSystem.ClearActiveTiles();
         }
@@ -125,6 +126,13 @@ namespace GamePlay {
 
         void OnDisplayUnitActions(Unit _unit)
         {
+            if(_unit.Commander != turnBaseSystem.Phase)
+            {
+                OnDisplayUnitActionAborded?.Invoke();
+                return;
+            }
+                
+
             activeUnit = _unit;
             HadleDisplayUnitActionMenu(activeUnit);
         }
@@ -137,7 +145,6 @@ namespace GamePlay {
 
         void HadleDisplayUnitActionMenu(Unit unit)
         {
-
             Dictionary<UnitAction, Button> actionsButtons = uIController.DisplayUnitActions();
 
             actionsButtons[UnitAction.ATTACK].onClick.AddListener(() => {
