@@ -22,32 +22,12 @@ namespace GamePlay.UIs
         private Text bottomLeftHelpText;
         private Text bottomRighttHelpText;
 
-        void Awake()
+        public void Active()
         {
-            GameManager.OnGameStated += OnGameStated;
-            CameraController.OnZoomOut += OnZoomOut;
-            CameraController.OnUnZoom += OnUnZoom;
-            TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdate;
+            DisplayMainTips();
         }
 
-        void OnDestroy()
-        {
-            GameManager.OnGameStated -= OnGameStated;
-            CameraController.OnZoomOut -= OnZoomOut;
-            CameraController.OnUnZoom -= OnUnZoom;
-            TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdate;
-        }
-
-        public void OnGameStated()
-        {
-            string[] helpTexts = {
-                "(Left click to unit) Move", 
-                "(Right click to unit) Action"
-            };
-            SetBottomHelpTexts(helpTexts);
-        }
-
-        void OnTurnPhaseUpdate(Units.Commander _phase)
+        public void DisplayPhaseNotice(Units.Commander _phase)
         {
             StartCoroutine(DisplayPhaseNotice(_phase, 2.5f));
 
@@ -70,17 +50,14 @@ namespace GamePlay.UIs
             ClearContainer(phaseNoticeContainer);
         }
 
-        void OnZoomOut()
+        public void DisplayUnZoomTips()
         {
             ClearContainer(bottomContainer);
-
             string[] helpTexts = {"(Esc) Cancel"};
-
-            
             SetBottomHelpTexts(helpTexts);
         }
 
-        void OnUnZoom()
+        public void DisplayMainTips()
         {
             ClearContainer(bottomContainer);
 
@@ -113,6 +90,11 @@ namespace GamePlay.UIs
             foreach (Transform child in container) {
                 Destroy(child.gameObject);
             }
+        }
+
+        public void DisplayUnitActions(Units.Unit _unit)
+        {
+
         }
 
     }

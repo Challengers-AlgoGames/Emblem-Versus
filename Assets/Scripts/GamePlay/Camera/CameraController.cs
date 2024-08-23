@@ -14,9 +14,6 @@ namespace GamePlay.Cameras
     
     public class CameraController : MonoBehaviour
     {
-        public static event Action OnZoomOut;
-        public static event Action OnUnZoom;
-
         [SerializeField] private float speed = 5f;
         [SerializeField] private float smoothSpeed = 0.125f;
 
@@ -36,20 +33,9 @@ namespace GamePlay.Cameras
         {
             playerInputs = new PlayerInputs();
             playerInputs.GamePlay.MoveCamera.Enable();
-
-            GameManager.OnGameStated += OnGameStated;
-            MoveSystem.OnDisplayMoveRange += ZoomOut;
-            MoveSystem.OnClearActiveTile += UnZoom;
         }
 
-        void OnDestroy()
-        {
-            GameManager.OnGameStated -= OnGameStated;
-            MoveSystem.OnDisplayMoveRange -= ZoomOut;
-            MoveSystem.OnClearActiveTile -= UnZoom;
-        }
-
-        public void OnGameStated()
+        void Start()
         {
             cameraMode = CameraMode.MOVE;
             rotationBeforZoom = transform.rotation;
@@ -150,19 +136,17 @@ namespace GamePlay.Cameras
             return Quaternion.Angle(current, target) < 1f;
         }
 
-        void ZoomOut(Vector3 target)
+        public void ZoomOut(Vector3 target)
         {
             zoomTarget = target;
             positionBeforZoom = transform.position;
-            rotationBeforZoom = transform.rotation; // Correction pour capturer la rotation avant le zoom
+            rotationBeforZoom = transform.rotation;
             cameraMode = CameraMode.ZOOM_OUT;
-            OnZoomOut?.Invoke();
         }
 
-        void UnZoom()
+        public void UnZoom()
         {
             cameraMode = CameraMode.UNZOOM;
-            OnUnZoom?.Invoke();
         }
     }
 }

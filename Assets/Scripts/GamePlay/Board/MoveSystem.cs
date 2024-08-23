@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Tools;
 using Units;
@@ -13,23 +12,9 @@ namespace GamePlay
         [SerializeField] private float scale = 3f;
         [SerializeField] private PathfindingAStar pathfindingAStar;
 
-        /* camera events */
-        public static event Action<Vector3> OnDisplayMoveRange;
-        public static event Action OnClearActiveTile;
-
         private List<Vector3Int> activeTilesPosition;
 
-        void Awake()
-        {
-            GameManager.OnGameStated += OnGameStated;
-        }
-
-        void OnDestroy()
-        {
-            GameManager.OnGameStated -= OnGameStated;
-        }
-
-        void OnGameStated()
+        public void Active()
         {
             activeTilesPosition = new List<Vector3Int>();
         }
@@ -44,7 +29,6 @@ namespace GamePlay
             }
 
             activeTilesPosition = new List<Vector3Int>();
-            OnClearActiveTile?.Invoke();
         }
 
         public void MoveUnit(Unit _unit, Vector3 _targetPosition)
@@ -126,8 +110,6 @@ namespace GamePlay
                     }
                 }
             }
-
-            OnDisplayMoveRange?.Invoke(_unitGroundCellPosition);
         }
     }
 }

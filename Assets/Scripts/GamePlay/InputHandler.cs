@@ -10,10 +10,7 @@ namespace GamePlay
 
     public class InputHandler : MonoBehaviour
     {
-        public static event Action OnReady;
-
         /* unit events */
-        public static event Action<Unit> OnDisplayUnitActions;
         public static event Action<Unit, Vector3> OnLeftClickModeListenUnitClick;
         public static event Action<Vector3> OnLeftClickModeListenGroundClick;
         public static event Action OnEscapeKeyForCancelPressed;
@@ -27,24 +24,13 @@ namespace GamePlay
             NONE
         }
 
-        void Awake()
-        {
-            CameraSwitch.OnCameraSwitched += OnCameraSwitched;
-        }
-        
-        void OnDestroy()
-        {
-            CameraSwitch.OnCameraSwitched -= OnCameraSwitched;
-        }
-
-        void Start()
+        public void Active()
         {
             _mainCamera = Camera.main;
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
-            OnReady?.Invoke();
         }
 
-        void OnCameraSwitched()
+        public void Actualise()
         {
             _mainCamera = Camera.main;
         }
@@ -54,37 +40,9 @@ namespace GamePlay
             leftClickMode = mode;
         }
 
-        // Display unit actions
         public void OnRightClick(InputAction.CallbackContext context)
         {
-            if(leftClickMode == LeftClickInputMode.LISTEN_GROUND_CLICK)
-            {
-                return;
-            }
-
-            if(!context.started) 
-            {
-                return;
-            }
-
-            /* Detection */
-            RaycastHit hit;
-            Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out hit);
-
-            if(!hit.collider)
-            {
-                return; // the hit haven't collider
-            }
-
-            // check if hit is a unit   
-            if(!hit.collider.gameObject.CompareTag("Unit"))
-            {
-                return;
-            }
             
-            Unit unit = hit.collider.gameObject.GetComponent<Unit>();
-
-            OnDisplayUnitActions?.Invoke(unit);
         }
 
         public void OnLeftClick(InputAction.CallbackContext context)
@@ -93,6 +51,8 @@ namespace GamePlay
             {
                 return;
             }
+
+            print("Click");
 
             RaycastHit hit;
             Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out hit);
@@ -104,7 +64,7 @@ namespace GamePlay
             
             switch (leftClickMode)
             {
-                case LeftClickInputMode.LISTEN_UNIT_CLICK: // display unit moveRange
+                case LeftClickInputMode.LISTEN_UNIT_CLICK:
                     if(!hit.collider.gameObject.CompareTag("Unit")) return;
                     Unit unit = hit.collider.gameObject.GetComponent<Unit>();
 
@@ -122,7 +82,7 @@ namespace GamePlay
                     SetLeftClickMode(LeftClickInputMode.LISTEN_GROUND_CLICK);
 
                     break;
-                case LeftClickInputMode.LISTEN_GROUND_CLICK: // Manage unit move
+                case LeftClickInputMode.LISTEN_GROUND_CLICK:
                     if(!hit.collider.gameObject.CompareTag("Ground")) return;
 
                     OnLeftClickModeListenGroundClick?.Invoke(hit.collider.transform.position);

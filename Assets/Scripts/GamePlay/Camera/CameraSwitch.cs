@@ -4,41 +4,25 @@ using UnityEngine;
 
 namespace GamePlay.Cameras
 {
-    public class CameraSwitch : MonoBehaviour
+    public class CameraManager : MonoBehaviour
     {
-        public static event Action OnCameraSwitched;
-
         [SerializeField] private GameObject camera1;
         [SerializeField] private GameObject camera2;
 
-        void Awake()
+        public CameraController SwitchCamera(Commander _phase)
         {
-            TurnBaseSystem.OnPhaseUpdate += OnPhaseUpdate;
-        }
-
-        void OnDestroy()
-        {
-            TurnBaseSystem.OnPhaseUpdate -= OnPhaseUpdate;
-        }
-
-        void OnPhaseUpdate(Commander _phase)
-        {
-            switch (_phase)
+            if(_phase == Commander.PLAYER_1)
             {
-                case Commander.PLAYER_1:
-                    camera1.SetActive(true);
-                    camera2.SetActive(false);
-                    break;
-                case Commander.PLAYER_2:
-                    camera1.SetActive(false);
-                    camera2.SetActive(true);
-                    break;
-                default:
-                    Debug.Log("Not supported");
-                    break;
+                camera2.SetActive(false);
+                camera1.SetActive(true);
+
+                return camera1.GetComponent<CameraController>();
             }
 
-            OnCameraSwitched?.Invoke();
+            camera1.SetActive(false);
+            camera2.SetActive(true);
+
+            return camera2.GetComponent<CameraController>();
         }
     }
 }

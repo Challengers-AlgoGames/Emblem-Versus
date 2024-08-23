@@ -1,6 +1,5 @@
 using Units;
 using UnityEngine;
-using GamePlay.Cameras;
 
 namespace GamePlay
 {
@@ -14,17 +13,7 @@ namespace GamePlay
         private Commander phase = Commander.NULL;
         public Commander Phase { get => phase; }
 
-        void Awake()
-        {
-            GameManager.OnGameStated += OnGameStated;
-        }
-
-        void OnDestroy()
-        {
-            GameManager.OnGameStated -= OnGameStated;
-        }
-
-        void OnGameStated()
+        public void Active()
         {
             phase = DetermineStartPhase();
 
