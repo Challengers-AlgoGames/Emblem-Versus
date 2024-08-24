@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GamePlay.Cameras;
+using GamePlay.Sys;
 using GamePlay.UIs;
 using Units;
 using UnityEngine;
@@ -12,14 +13,15 @@ namespace GamePlay {
         public static Action OnUnitAttackButtonWasClicked;
         public static Action OnUnitWaitButtonWasClicked;
         public static Action OnDisplayUnitActionAborded;
-
-        [SerializeField] TileSystem tileSystem;
-        [SerializeField] MoveSystem moveSystem;
+        
+        [SerializeField] Board board;
         [SerializeField] InputHandler inputHandler;
-        [SerializeField] TurnBaseSystem turnBaseSystem;
         [SerializeField] UIController uIController;
         [SerializeField] CameraManager cameraManager;
-        [SerializeField] Board board;
+        [SerializeField] MoveSystem moveSystem;
+        [SerializeField] TileSystem tileSystem;
+        [SerializeField] FightSystem fightSystem;
+        [SerializeField] TurnBaseSystem turnBaseSystem;
 
         private Unit activeUnit;
         private CameraController currentCameraController;
@@ -29,10 +31,10 @@ namespace GamePlay {
             Unit.OnWasMoved += OnUnitWasMoved;
             TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdated;
 
-            InputHandler.OnDisplayUnitActions += OnDisplayUnitActions;
+            InputHandler.OnDisplayUnitActions += DisplayUnitActions;
             InputHandler.OnEscapeKeyForCancelPressed += OnEscapeKeyForCancelPressed;
-            InputHandler.OnLeftClickModeListenUnitClick += OnLeftClickModeListenUnitClick;
-            InputHandler.OnLeftClickModeListenGroundClick += OnLeftClickModeListenGroundClick;
+            InputHandler.OnLeftClickModeListenUnitClick += DisplayUnitMoveRange;
+            InputHandler.OnLeftClickModeListenGroundClick += MoveUnit;
         }
 
         void OnDestroy()
@@ -40,21 +42,21 @@ namespace GamePlay {
             Unit.OnWasMoved -= OnUnitWasMoved;
             TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdated;
 
-            InputHandler.OnDisplayUnitActions -= OnDisplayUnitActions;
+            InputHandler.OnDisplayUnitActions -= DisplayUnitActions;
             InputHandler.OnEscapeKeyForCancelPressed -= OnEscapeKeyForCancelPressed;
-            InputHandler.OnLeftClickModeListenUnitClick -= OnLeftClickModeListenUnitClick;
-            InputHandler.OnLeftClickModeListenGroundClick -= OnLeftClickModeListenGroundClick;
+            InputHandler.OnLeftClickModeListenUnitClick -= DisplayUnitMoveRange;
+            InputHandler.OnLeftClickModeListenGroundClick -= MoveUnit;
         }
 
         void Start()
         {
             board.Generate();
             board.PlaceUnits();
-            Debug.Log("unit placed");
-            tileSystem.Active(board.GetTilemap());
-            moveSystem.Active(board.GetGrid());
-            uIController.Active();
-            turnBaseSystem.Active(board);
+            tileSystem.Activate(board.GetTilemap());
+            moveSystem.Activate(board.GetGrid());
+            fightSystem.Activate(tileSystem,board.GetGrid());
+            uIController.Activate();
+            turnBaseSystem.Activate(board);
         }
 
         void OnTurnPhaseUpdated(Commander _phase)
@@ -64,7 +66,7 @@ namespace GamePlay {
             uIController.DisplayPhaseNotice(_phase);
         }
 
-        void OnLeftClickModeListenUnitClick(Unit _unit, Vector3 _unitGroundCellPosition)
+        void DisplayUnitMoveRange(Unit _unit, Vector3 _unitGroundCellPosition)
         {
             activeUnit = _unit;
 
@@ -75,7 +77,7 @@ namespace GamePlay {
             uIController.DisplayUnZoomTips();
         }
 
-        void OnLeftClickModeListenGroundClick(Vector3 _targetPosition)
+        void MoveUnit(Vector3 _targetPosition)
         {
             if (activeUnit == null || activeUnit.Commander != turnBaseSystem.Phase)
                 return;
@@ -91,7 +93,7 @@ namespace GamePlay {
             uIController.DisplayMainTips();
         }
 
-        void OnDisplayUnitActions(Unit _unit)
+        void DisplayUnitActions(Unit _unit)
         {
             if(_unit.Commander != turnBaseSystem.Phase)
             {
@@ -102,11 +104,13 @@ namespace GamePlay {
 
             activeUnit = _unit;
             HadleDisplayUnitActionMenu(activeUnit);
+            fightSystem.DetectEnemies(activeUnit);
         }
 
-        void OnUnitWasMoved ()
+        void OnUnitWasMoved()
         {
             HadleDisplayUnitActionMenu(activeUnit);
+            fightSystem.DetectEnemies(activeUnit);
         }
 
         void HadleDisplayUnitActionMenu(Unit unit)

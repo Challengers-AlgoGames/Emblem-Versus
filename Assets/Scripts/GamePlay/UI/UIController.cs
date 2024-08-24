@@ -20,7 +20,7 @@ namespace GamePlay.UIs
         private Text topLeftHelpText;
         private Text bottomLeftHelpText;
 
-        public void Active()
+        public void Activate()
         {
             DisplayMainTips();
         }

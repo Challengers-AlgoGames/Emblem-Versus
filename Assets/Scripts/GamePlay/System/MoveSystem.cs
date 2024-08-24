@@ -3,7 +3,7 @@ using Tools;
 using Units;
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Sys
 {
     [RequireComponent(typeof(TileSystem))]
     public class MoveSystem : MonoBehaviour
@@ -13,7 +13,7 @@ namespace GamePlay
         private PathfindingAStar pathfindingAStar;
         private List<Vector3Int> activeTilesPosition;
 
-        public void Active(Grid _grid)
+        public void Activate(Grid _grid)
         {
             gridScale = _grid.cellSize.x;
             tileSystem = GetComponent<TileSystem>();

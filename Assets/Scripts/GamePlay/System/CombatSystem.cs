@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Tools;
-using GamePlay;
+using GamePlay.Sys;
 
 public class CombatSystem : MonoBehaviour
 {

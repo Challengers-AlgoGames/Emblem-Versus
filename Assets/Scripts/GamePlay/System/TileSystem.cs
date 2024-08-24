@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace GamePlay
+namespace GamePlay.Sys
 {
     public class TileSystem : MonoBehaviour
     {
@@ -19,7 +19,7 @@ namespace GamePlay
         private Tilemap tilemap;
         public Tilemap TileMap { get => tilemap; }
 
-        public void Active(Tilemap _tilemap)
+        public void Activate(Tilemap _tilemap)
         {
             tilemap = _tilemap;
         }

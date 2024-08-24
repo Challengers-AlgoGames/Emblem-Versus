@@ -874,13 +874,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e001cb6044373e5879a0c7209dfa619b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSystem: {fileID: 1407073326}
-  moveSystem: {fileID: 1407073324}
+  board: {fileID: 1661547948}
   inputHandler: {fileID: 412967948}
-  turnBaseSystem: {fileID: 1407073327}
   uIController: {fileID: 1987527011}
   cameraManager: {fileID: 2015328593}
-  board: {fileID: 1661547948}
+  moveSystem: {fileID: 1407073324}
+  tileSystem: {fileID: 1407073326}
+  fightSystem: {fileID: 1407073328}
+  turnBaseSystem: {fileID: 1407073327}
 --- !u!1 &1407073319
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,6 +894,7 @@ GameObject:
   - component: {fileID: 1407073326}
   - component: {fileID: 1407073324}
   - component: {fileID: 1407073327}
+  - component: {fileID: 1407073328}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -953,6 +955,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 711545aee2ef2d8a8aabcb605867edb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1407073328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407073319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b547186da620f42939227745ce3bc1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1430063075

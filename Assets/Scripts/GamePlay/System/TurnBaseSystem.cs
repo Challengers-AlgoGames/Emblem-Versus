@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Units;
 using UnityEngine;
 
-namespace GamePlay
+namespace GamePlay.Sys
 {
     public class TurnBaseSystem : MonoBehaviour
     {
@@ -12,7 +12,7 @@ namespace GamePlay
         private Commander phase = Commander.NULL;
         public Commander Phase { get => phase; }
 
-        public void Active(Board _board)
+        public void Activate(Board _board)
         {
             board = _board;
 

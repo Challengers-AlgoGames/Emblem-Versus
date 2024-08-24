@@ -7,13 +7,14 @@ namespace Weapons {
 		[SerializeField] private int maxRange; // portée
 		[SerializeField] private int minRange;
 		[SerializeField] private int acuracy; // weapon atk
-		public int Acuracy { get => acuracy; }
-
 		[SerializeField] private WeaponCategory category;
-		public WeaponCategory Category { get => category; }
-
 		[SerializeField] private WeaponType type;
 		[SerializeField] private WeaponAttribute attribute;
+
+		public int MaxRange { get => maxRange; }
+		public int MinRange { get => minRange; }
+		public int Acuracy { get => acuracy; }
+		public WeaponCategory Category { get => category; }
 		
 	}
 }

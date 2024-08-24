@@ -9,62 +9,39 @@ namespace Units
     {
         public static event System.Action OnWasMoved;
 
-        /* Unit attributes */
         [SerializeField] private string title;
         [SerializeField] private float health;
         [SerializeField] private int attack;
         [SerializeField] private int defense;
         [SerializeField] private int spirituality;
         [SerializeField] private int mobility;
-        public int Mobility { get => mobility; }
-        [SerializeField] private Inventory[] inventories;
-        public Inventory[] Weapons { get => inventories; }
+        [SerializeField] private Weapon weapon;
+        [SerializeField] private Commander commander;
 
-        /* States */
-        private const float ATTACK_MULTIPLIER = 1.5f;
-        private int currentWeaponIndex = -1;
+        [SerializeField] private float moveSpeed = 5f;
+
         [SerializeField] private bool isWasMoved;
         [SerializeField] private bool isCanMove;
-        public bool IsWasMoved { get => isWasMoved; }
-        private bool isDead;
         [SerializeField] private bool isCanAttack;
-        public bool IsCanAttack { get => isCanAttack; }
-        [SerializeField] private Commander commander;
-        public Commander Commander {get => commander; }
 
-        /* Movement variables */
-        public float moveSpeed = 5f;
+        private bool isMoving;
         private List<Vector3> movePath;
-        public bool IsMoving { get; set; }
+        private const float ATTACK_MULTIPLIER = 1.5f;
 
-        void Awake()
-        {
-            // Load current weapon index
-            for (int i = 0; i < inventories.Length; i++)
-            {
-                if (inventories[i].isUsed)
-                {
-                    currentWeaponIndex = i;
-                    break;
-                }
-            }
-        }
+        public bool IsMoving { get => isMoving; }
+        public Weapon Weapon { get => weapon; }
+        public int Mobility { get => mobility; }
+        public bool IsWasMoved { get => isWasMoved; }
+        public bool IsCanAttack { get => isCanAttack; }
+        public Commander Commander {get => commander; }
 
         void Start()
         {
             isCanMove = true;
         }
 
-        void Update()
-        {
-            // Death state update
-            if (health == 0f)
-                isDead = true;
-        }
-
         void FixedUpdate()
         {
-            // Ne déplace l'unité que si elle n'a pas encore été déplacée
             if (!isWasMoved && movePath != null && movePath.Count > 0 && !IsMoving)
             {
                 StartCoroutine(PerformMove());
@@ -90,7 +67,7 @@ namespace Units
 
         IEnumerator PerformMove()
         {
-            IsMoving = true;
+            isMoving = true;
 
             foreach (Vector3 point in movePath)
             {
@@ -108,8 +85,8 @@ namespace Units
                 }
             }
 
-            IsMoving = false;
-            movePath = null;  // Réinitialisation du chemin après le mouvement
+            isMoving = false;
+            movePath = null;
             isCanMove = false;
             OnWasMoved?.Invoke();
         }
@@ -117,6 +94,7 @@ namespace Units
         public void Wait()
         {
             isWasMoved = true;
+            isCanMove = false;
         }
 
         public float CalculateHit()
@@ -124,27 +102,24 @@ namespace Units
             float hitRate = 0f;
             float criticalHit = Random.Range(0f, 1f);
 
-            // Accès à l'objet Weapon attaché à l'arme courante
-            Weapon usedWeapon = inventories[currentWeaponIndex].item.GetComponent<Weapon>();
-
             // Calcul du taux de réussite en fonction de la catégorie de l'arme
-            WeaponCategory weaponCategory = usedWeapon.Category;
+            WeaponCategory weaponCategory = weapon.Category;
             switch (weaponCategory)
             {
                 case WeaponCategory.FIRE_WEAPON:
-                    hitRate = usedWeapon.Acuracy;
+                    hitRate = weapon.Acuracy;
                     if (criticalHit <= 0.2f)
                         hitRate *= ATTACK_MULTIPLIER;
                     break;
 
                 case WeaponCategory.MELEE_WEAPON:
-                    hitRate = usedWeapon.Acuracy + attack;
+                    hitRate = weapon.Acuracy + attack;
                     if (criticalHit <= 0.2f)
                         hitRate *= ATTACK_MULTIPLIER;
                     break;
 
                 case WeaponCategory.SPIRITUAL_WEAPON:
-                    hitRate = usedWeapon.Acuracy + spirituality;
+                    hitRate = weapon.Acuracy + spirituality;
                     if (criticalHit <= 0.2f)
                         hitRate *= ATTACK_MULTIPLIER;
                     break;
@@ -156,18 +131,8 @@ namespace Units
             return hitRate;
         }
 
-        public void Attack(string _usedWeaponName)
+        public void Attack()
         {
-            for (int i = 0; i < inventories.Length; i++)
-            {
-                if (inventories[i].item.gameObject.name.ToLower() == _usedWeaponName.ToLower())
-                {
-                    inventories[currentWeaponIndex].isUsed = false;
-
-                    inventories[i].isUsed = true;
-                    currentWeaponIndex = i;  // Sauvegarde du nouvel index de l'arme utilisée
-                }
-            }
             isWasMoved = true;
         }
 

@@ -190,13 +190,12 @@ MonoBehaviour:
   defense: 50
   spirituality: 0
   mobility: 7
-  inventories:
-  - item: {fileID: 7888510734823376022}
-    isUsed: 1
-  isWasMoved: 0
-  isCanAttack: 0
+  weapon: {fileID: 7888510734823376022}
   commander: 1
   moveSpeed: 5
+  isWasMoved: 0
+  isCanMove: 0
+  isCanAttack: 0
 --- !u!1001 &5452629968222311437
 PrefabInstance:
   m_ObjectHideFlags: 0
