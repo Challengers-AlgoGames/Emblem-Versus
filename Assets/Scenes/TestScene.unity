@@ -1433,13 +1433,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 347f247900e5fb1459be8c71fff63874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gassTilePrefab: {fileID: 2105858911259631019, guid: 44ea2b7b5e3ec55348bd8fd56b00c9a5,
+  gassTilePrefab: {fileID: 2105858911259631019, guid: dcf451d8810df4c37abae8ca4a2374d3,
     type: 3}
-  waterTilePrefab: {fileID: 2105858911259631019, guid: c8071ddf46ccbde7a81964e6d40f1751,
+  waterTilePrefab: {fileID: 2105858911259631019, guid: b78e1ed3505e61202a7e6a5a3693a652,
     type: 3}
-  forestTilePrefab: {fileID: 2105858911259631019, guid: 23fe8a95f1c803b69a10841d7894fc28,
+  forestTilePrefab: {fileID: 2105858911259631019, guid: 39449dec023b0ec09916c4e97975d61f,
     type: 3}
-  deathForestTilePrefab: {fileID: 2105858911259631019, guid: 823b567a99f050b9fbb8d008455697a7,
+  deathForestTilePrefab: {fileID: 2105858911259631019, guid: fda71021d7df015488da4573c2b0717d,
     type: 3}
   cuirassierPrefab: {fileID: 0}
   hyssardPrefab: {fileID: 0}
@@ -1461,6 +1461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c3aaec7d75a61343bd5a4883280ba2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  combatSystem: {fileID: 0}
 --- !u!1 &1812595994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1722,11 +1723,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db638af377610fbc94cf2ac62eeb29c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textPrefab: {fileID: 8851995232059873334, guid: edb718a760124615d8f827109c1e132f,
+  textPrefab: {fileID: 8851995232059873334, guid: 1dfc2335787429d67b4cae8a01e66204,
     type: 3}
-  panelPrefab: {fileID: 1360956815426616684, guid: cce03fe82411566879724d4c8955f359,
+  panelPrefab: {fileID: 1360956815426616684, guid: 6b8c3ecbadb8abd9bb812656195ff8c0,
     type: 3}
-  buttonPrefab: {fileID: 594702313222102626, guid: 616e899c8a89ea85f8fc80ee42d955c6,
+  buttonPrefab: {fileID: 594702313222102626, guid: eca2b8eae908627e18bf4f293b7b4a1e,
     type: 3}
   unitActionMenuContainer: {fileID: 1430063076}
   topLeftContainer: {fileID: 1812595995}

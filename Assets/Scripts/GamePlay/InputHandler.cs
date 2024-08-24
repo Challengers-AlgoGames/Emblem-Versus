@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System;
 using Units;
 using UnityEngine.SceneManagement;
+using GamePlay.Cameras;
 
 namespace GamePlay
 {
@@ -63,6 +64,11 @@ namespace GamePlay
         void OnUnitWaitButtonWasClicked()
         {
             SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
+        }
+
+        void OnCameraSwitched()
+        {
+            _mainCamera = Camera.main;
         }
 
         void SetLeftClickMode(LeftClickInputMode mode)

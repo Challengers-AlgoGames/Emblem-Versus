@@ -35,8 +35,9 @@ namespace GamePlay
         {
             Vector3Int start = tileSystem.ConvertWorldToCellPosition(_unit.transform.position);
             Vector3Int end = tileSystem.ConvertWorldToCellPosition(_targetPosition);
+            bool IsConsideringObstacle = true;
 
-            List<Vector3Int> path = pathfindingAStar.FindPath(start, end);
+            List<Vector3Int> path = pathfindingAStar.FindPath(start, end, IsConsideringObstacle);
 
             if (path.Count > 0 && path.Count <= (_unit.Mobility + 1))
             {
