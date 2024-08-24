@@ -24,6 +24,7 @@ namespace Units
         private const float ATTACK_MULTIPLIER = 1.5f;
         private int currentWeaponIndex = -1;
         [SerializeField] private bool isWasMoved;
+        [SerializeField] private bool isCanMove;
         public bool IsWasMoved { get => isWasMoved; }
         private bool isDead;
         [SerializeField] private bool isCanAttack;
@@ -49,6 +50,11 @@ namespace Units
             }
         }
 
+        void Start()
+        {
+            isCanMove = true;
+        }
+
         void Update()
         {
             // Death state update
@@ -68,11 +74,12 @@ namespace Units
         public void ResetWasMovedState()
         {
             isWasMoved = false;
+            isCanMove = true;
         }
 
         public void Move(List<Vector3> _path)
         {
-            if (isWasMoved)
+            if (isWasMoved || !isCanMove)
             {
                 Debug.LogWarning("This unit has already moved and cannot move again.");
                 return;
@@ -103,6 +110,7 @@ namespace Units
 
             IsMoving = false;
             movePath = null;  // Réinitialisation du chemin après le mouvement
+            isCanMove = false;
             OnWasMoved?.Invoke();
         }
 
