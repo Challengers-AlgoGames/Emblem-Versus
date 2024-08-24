@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 99c9720ab356a0642a771bea13969a05
+<<<<<<<< HEAD:Assets/Scenes/MainScene 1.unity.meta
+guid: a01d144cedaca249c92946c6a8e8dd61
+========
+guid: a8d6a7686131fc41fb62744095ba0d34
+>>>>>>>> origin/pathfinding:Assets/Scenes/OverView.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

@@ -1,27 +1,27 @@
 using System.Collections.Generic;
 using GamePlay;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Tools
 {
     public class PathfindingAStar : MonoBehaviour
     {
-        public TileSystem tileSystem;
-        private Ground ground;
-
+        private TileSystem tileSystem;
+        [SerializeField] private CombatSystem combatSystem;
 
         void Start()
         {
             tileSystem = FindObjectOfType<TileSystem>();
-            ground = FindObjectOfType<Ground>();
+
         }
 
-        public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
+        public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target, bool IsConsideringObstacle)
         {
             List<Vector3Int> path = new List<Vector3Int>();
+
             HashSet<Vector3Int> openSet = new HashSet<Vector3Int>();
             HashSet<Vector3Int> closedSet = new HashSet<Vector3Int>();
+
             Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>();
             Dictionary<Vector3Int, float> gScore = new Dictionary<Vector3Int, float>();
             Dictionary<Vector3Int, float> fScore = new Dictionary<Vector3Int, float>();
@@ -43,7 +43,7 @@ namespace Tools
                 openSet.Remove(current);
                 closedSet.Add(current);
 
-                foreach (Vector3Int neighbor in GetNeighbors(current))
+                foreach (Vector3Int neighbor in GetNeighbors(current, IsConsideringObstacle))
                 {
                     if (closedSet.Contains(neighbor) || !IsTileActive(neighbor))
                         continue;
@@ -64,36 +64,54 @@ namespace Tools
             return path;
         }
 
-        private List<Vector3Int> GetNeighbors(Vector3Int current)
+        private List<Vector3Int> GetNeighbors(Vector3Int current, bool IsConsideringObstacle)
         {
+            // mur
             List<Vector3Int> neighbors = new List<Vector3Int>();
             Vector3Int[] directions = new Vector3Int[] {
-        Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down
-    };
+                Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down
+            };
 
             foreach (Vector3Int direction in directions)
             {
                 Vector3Int neighbor = current + direction;
-                if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
+                if (IsConsideringObstacle)
                 {
-                    neighbors.Add(neighbor);
+                    ConsiderObstacle(neighbor, neighbors);
+                }
+                else
+                {
+                    NotConsiderObstacle(neighbor, neighbors);
                 }
             }
 
             return neighbors;
+        }
+        private void ConsiderObstacle(Vector3Int neighbor, List<Vector3Int> neighbors)
+        {
+            if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
+            {
+                neighbors.Add(neighbor);
+            }
+        }
+        private void NotConsiderObstacle(Vector3Int neighbor, List<Vector3Int> neighbors)
+        {
+            if (combatSystem.NotVerifieWalkability(neighbor))
+            {
+                neighbors.Add(neighbor);
+            }
         }
 
         private bool IsTileActive(Vector3Int position)
         {
             return tileSystem.tilemap.GetTile(position) != null;
         }
+
         private bool IsTileWalkable(Vector3Int position)
         {
             Vector3 targetPosition = tileSystem.ConvertCellToWorldPosition(position);
-            GameObject hitObject = ground.GetObjectAtPosition(targetPosition);
-            return hitObject != null && ground.IsWalkable(hitObject);
+            return Ground.VerifieWalkability(targetPosition);
         }
-
         private float Heuristic(Vector3Int a, Vector3Int b)
         {
             // Use Manhattan distance for heuristic

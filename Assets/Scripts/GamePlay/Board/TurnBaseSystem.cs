@@ -1,76 +1,72 @@
+using Units;
 using UnityEngine;
-using System.Collections.Generic;
 
 namespace GamePlay
 {
     public class TurnBaseSystem : MonoBehaviour
     {
-        /* States */
-        public static Commander commanderTurn;
-        private int turnNumber;
-        private Dictionary<Commander, bool> ARMIES_WAS_MOVED = new()
+        public static event System.Action<Commander> OnPhaseUpdate;
+
+        [SerializeField] private Unit[] manalambaUnits;
+        [SerializeField] private Unit[] frenchUnits;
+
+        private Commander phase = Commander.NULL;
+        public Commander Phase { get => phase; }
+
+        public void Active()
         {
-            {Commander.PLAYER_1, false},
-            {Commander.PLAYER_2, false}
-        };
+            phase = DetermineStartPhase();
 
-        /* Players */
-        [SerializeField] private Army commander1_army;
-        [SerializeField] private Army commander2_army;
+            OnPhaseUpdate?.Invoke(phase);
 
-        void Awake()
-        {
-            /* Listen Army class events */
-            commander1_army.OnArmyWasMoved += OnCommander1_ArmyWasMove;
-            commander2_army.OnArmyWasMoved += OnCommander2_ArmyWasMove;
-
-            /* Set biginer player */
-            commanderTurn = Commander.PLAYER_1;
-        }
-
-        void Start()
-        {
-            turnNumber = 1; // initialise turn number
-
-            Debug.Log("Turn : " + turnNumber);
-            Debug.Log("Commander 1 turn");
+            print("Starting phase: " + phase);
         }
 
         void Update()
         {
-            /* Pass to next turn */
-            if(ARMIES_WAS_MOVED[Commander.PLAYER_1] && ARMIES_WAS_MOVED[Commander.PLAYER_2])
+            if (phase != Commander.NULL)
             {
-                turnNumber++;
+                if (AllUnitsMoved())
+                {
+                    EndPhase();
+                    OnPhaseUpdate?.Invoke(phase);
+                }
+            }
 
-                /* Reset Armies move states */
-                ARMIES_WAS_MOVED[Commander.PLAYER_1] = false;
-                ARMIES_WAS_MOVED[Commander.PLAYER_2] = false;
+        }
 
-                Debug.Log("Turn : " + turnNumber);
-                Debug.Log("Commander 1 turn");
+        bool AllUnitsMoved()
+        {
+            Unit[] currentArmy = (phase == Commander.PLAYER_1) ? manalambaUnits : frenchUnits;
+
+            foreach (Unit unit in currentArmy)
+            {
+                if (!unit.IsWasMoved)
+                    return false;
+            }
+            return true;
+        }
+
+        void EndPhase()
+        {
+            Unit[] currentArmy = (phase == Commander.PLAYER_1) ? manalambaUnits : frenchUnits;
+            ResetArmyMove(currentArmy);
+            phase = (phase == Commander.PLAYER_1) ? Commander.PLAYER_2 : Commander.PLAYER_1;
+            print("New phase: " + phase);
+
+        }
+
+        void ResetArmyMove(Unit[] army)
+        {
+            foreach (Unit unit in army)
+            {
+                unit.ResetWasMovedState();
             }
         }
 
-    /* Envent Actions */
-        void OnCommander1_ArmyWasMove()
+        Commander DetermineStartPhase()
         {
-            ARMIES_WAS_MOVED[Commander.PLAYER_1] = true;
-            commanderTurn = Commander.PLAYER_2; // Past turn to the second player
-            Debug.Log("Commander 2 turn");
-        }
-        void OnCommander2_ArmyWasMove()
-        {
-            ARMIES_WAS_MOVED[Commander.PLAYER_2] = true;
-            commanderTurn = Commander.PLAYER_1; // Past turn to the second player
-            Debug.Log("Commander 1 turn");
-        }
-
-        /* Unlistent Army class events if destroied */
-        void OnDestroy()
-        {
-            commander1_army.OnArmyWasMoved -= OnCommander1_ArmyWasMove;
-            commander2_army.OnArmyWasMoved -= OnCommander2_ArmyWasMove;
+            return (Random.value < 0.5f) ? Commander.PLAYER_1 : Commander.PLAYER_2;
         }
     }
 }

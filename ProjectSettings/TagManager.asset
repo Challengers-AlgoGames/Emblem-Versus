@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Unit
   - Ground
+  - Tree
   layers:
   - Default
   - TransparentFX
