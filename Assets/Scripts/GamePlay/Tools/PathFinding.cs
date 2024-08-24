@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace Tools
 {
-    public class PathfindingAStar : MonoBehaviour
+    public class PathfindingAStar
     {
         private TileSystem tileSystem;
         [SerializeField] private CombatSystem combatSystem;
 
-        void Start()
+        public PathfindingAStar(TileSystem _tileSystem, CombatSystem _combatSystem)
         {
-            tileSystem = FindObjectOfType<TileSystem>();
-
+            tileSystem = _tileSystem;
+            combatSystem = _combatSystem;
         }
 
         public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target, bool IsConsideringObstacle)
@@ -104,7 +104,7 @@ namespace Tools
 
         private bool IsTileActive(Vector3Int position)
         {
-            return tileSystem.tilemap.GetTile(position) != null;
+            return tileSystem.TileMap.GetTile(position) != null;
         }
 
         private bool IsTileWalkable(Vector3Int position)

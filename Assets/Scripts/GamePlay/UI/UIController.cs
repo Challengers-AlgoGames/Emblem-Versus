@@ -1,14 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using GamePlay.Cameras;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace GamePlay.UIs
 {
-    /* Dependences : CameraController */
     public class UIController : MonoBehaviour
     {
         [SerializeField] private GameObject textPrefab;
@@ -22,14 +19,13 @@ namespace GamePlay.UIs
 
         private Text topLeftHelpText;
         private Text bottomLeftHelpText;
-        private Text bottomRighttHelpText;
 
         public void Active()
         {
             DisplayMainTips();
         }
 
-        public void DisplayPhaseNotice(Units.Commander _phase)
+        public void DisplayPhaseNotice(Commander _phase)
         {
             StartCoroutine(DisplayPhaseNotice(_phase, 2.5f));
 
@@ -41,7 +37,7 @@ namespace GamePlay.UIs
             SetTopLeftText(_phase.ToString());
         }
 
-        IEnumerator DisplayPhaseNotice(Units.Commander _phase, float time)
+        IEnumerator DisplayPhaseNotice(Commander _phase, float time)
         {
             GameObject phaseNoticePanel = Instantiate(panelPrefab, phaseNoticeContainer);
 
