@@ -34,9 +34,10 @@ namespace GamePlay {
         private Grid grid;
         private Tilemap tilemap;
         private List<Unit> player1Units;
-        public List<Unit> player1Army { get => player1Units; }
         private List<Unit> player2Units;
-        public List<Unit> player2Army { get => player2Units; }
+
+        public List<Unit> Player1Army { get => player1Units; }
+        public List<Unit> Player2Army { get => player2Units; }
 
         /* "o" : water, "" : grass, "T" : tree, "t" : deathTree */
         /* "cu" : cuirassier, "hu" : hussard, "if" : infanterie */ // unités camp 1
@@ -167,6 +168,18 @@ namespace GamePlay {
         public Tilemap GetTilemap()
         {
             return tilemap;
+        }
+
+        public void ElimineUnit(Unit _unit)
+        {
+            if(_unit.Commander == Commander.PLAYER_1)
+            {
+                Player1Army.Remove(_unit);
+            } else {
+                Player2Army.Remove(_unit);
+            }
+
+            Destroy(_unit);
         }
     }
 }

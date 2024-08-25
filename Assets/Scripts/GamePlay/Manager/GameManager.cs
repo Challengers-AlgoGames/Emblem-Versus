@@ -29,23 +29,28 @@ namespace GamePlay {
         void Awake()
         {
             Unit.OnWasMoved += OnUnitWasMoved;
+            FightSystem.OnAttackEnd += OnAttackEnd;
             TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdated;
 
-            InputHandler.OnDisplayUnitActions += DisplayUnitActions;
-            InputHandler.OnEscapeKeyForCancelPressed += OnEscapeKeyForCancelPressed;
-            InputHandler.OnLeftClickModeListenUnitClick += DisplayUnitMoveRange;
+            InputHandler.OnDisplayUnitActions += DisplayUnitWaitAction;
             InputHandler.OnLeftClickModeListenGroundClick += MoveUnit;
+            InputHandler.OnLeftClickModeListenUnitClick += DisplayUnitMoveRange;
+            InputHandler.OnEscapeKeyForCancelPressed += OnEscapeKeyForCancelPressed;
+            InputHandler.OnLeftClickModeListenUnitActionClick += DisplayUnitAttackAction;
         }
 
         void OnDestroy()
         {
             Unit.OnWasMoved -= OnUnitWasMoved;
+            FightSystem.OnAttackEnd -= OnAttackEnd;
             TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdated;
 
-            InputHandler.OnDisplayUnitActions -= DisplayUnitActions;
-            InputHandler.OnEscapeKeyForCancelPressed -= OnEscapeKeyForCancelPressed;
-            InputHandler.OnLeftClickModeListenUnitClick -= DisplayUnitMoveRange;
+            
+            InputHandler.OnDisplayUnitActions -= DisplayUnitWaitAction;
             InputHandler.OnLeftClickModeListenGroundClick -= MoveUnit;
+            InputHandler.OnLeftClickModeListenUnitClick -= DisplayUnitMoveRange;
+            InputHandler.OnEscapeKeyForCancelPressed -= OnEscapeKeyForCancelPressed;
+            InputHandler.OnLeftClickModeListenUnitActionClick -= DisplayUnitAttackAction;
         }
 
         void Start()
@@ -86,48 +91,69 @@ namespace GamePlay {
             moveSystem.ClearActiveTiles();
         }
 
+        void OnAttackEnd(Unit _attackReceiver) //
+        {
+            if(_attackReceiver.Health == 0f)
+            {
+                Debug.Log("Unit death");
+                board.ElimineUnit(_attackReceiver);
+            }
+            
+            fightSystem.Clear();
+            currentCameraController.UnZoom();
+            uIController.DisplayMainTips();
+            Debug.Log("attack end");
+        }
+
         void OnEscapeKeyForCancelPressed()
         {
             moveSystem.ClearActiveTiles();
+            fightSystem.Clear();
             currentCameraController.UnZoom();
             uIController.DisplayMainTips();
         }
 
-        void DisplayUnitActions(Unit _unit)
+        void DisplayUnitWaitAction(Unit _unit)
         {
             if(_unit.Commander != turnBaseSystem.Phase)
             {
                 OnDisplayUnitActionAborded?.Invoke();
                 return;
             }
-                
 
             activeUnit = _unit;
-            HadleDisplayUnitActionMenu(activeUnit);
-            fightSystem.DetectEnemies(activeUnit);
+            HadleDisplayUnitWaitAction(activeUnit);
+        }
+
+        void DisplayUnitAttackAction(Unit _attackTarget)
+        {
+            Button attackButton = uIController.DisplayUnitAttackAction();
+
+            attackButton.onClick.AddListener(() => {
+                fightSystem.Attack(_attackTarget.transform.position);
+                inputHandler.Pause();
+            });
+
         }
 
         void OnUnitWasMoved()
         {
-            HadleDisplayUnitActionMenu(activeUnit);
-            fightSystem.DetectEnemies(activeUnit);
+            HadleDisplayUnitWaitAction(activeUnit);
         }
 
-        void HadleDisplayUnitActionMenu(Unit unit)
+        void HadleDisplayUnitWaitAction(Unit unit)
         {
-            Dictionary<UnitAction, Button> actionsButtons = uIController.DisplayUnitActions();
+            Button waitButton = uIController.DisplayUnitWaitAction();
 
-            actionsButtons[UnitAction.ATTACK].onClick.AddListener(() => {
-                Debug.Log("attack");
-                OnUnitAttackButtonWasClicked?.Invoke();
-            });
-
-            actionsButtons[UnitAction.WAIT].onClick.AddListener(() => {
+            waitButton.onClick.AddListener(() => {
                 currentCameraController.UnZoom();
                 uIController.DisplayMainTips();
                 activeUnit.Wait();
                 OnUnitWaitButtonWasClicked?.Invoke();
             });
+
+            fightSystem.DetectEnemies(unit);
+            fightSystem.DisplayTouchebleEnnemiesTile();
 
             currentCameraController.ZoomOut(unit.transform.position);
             uIController.DisplayUnZoomTips();

@@ -108,7 +108,7 @@ MonoBehaviour:
   mobility: 5
   weapon: {fileID: 4447102071687523134}
   commander: 1
-  moveSpeed: 5
+  moveSpeed: 8
   isWasMoved: 0
   isCanMove: 0
   isCanAttack: 0

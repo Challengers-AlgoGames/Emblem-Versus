@@ -18,7 +18,7 @@ namespace Units
         [SerializeField] private Weapon weapon;
         [SerializeField] private Commander commander;
 
-        [SerializeField] private float moveSpeed = 5f;
+        [SerializeField] private float moveSpeed = 8f;
 
         [SerializeField] private bool isWasMoved;
         [SerializeField] private bool isCanMove;
@@ -29,10 +29,11 @@ namespace Units
         private const float ATTACK_MULTIPLIER = 1.5f;
 
         public bool IsMoving { get => isMoving; }
+        public float Health { get => health; }
         public Weapon Weapon { get => weapon; }
         public int Mobility { get => mobility; }
         public bool IsWasMoved { get => isWasMoved; }
-        public bool IsCanAttack { get => isCanAttack; }
+        public bool IsCanAttack { get => isCanAttack; set => isCanAttack = value;  }
         public Commander Commander {get => commander; }
 
         void Start()
@@ -52,6 +53,7 @@ namespace Units
         {
             isWasMoved = false;
             isCanMove = true;
+            isCanAttack = false;
         }
 
         public void Move(List<Vector3> _path)
@@ -94,6 +96,7 @@ namespace Units
         public void Wait()
         {
             isWasMoved = true;
+            isCanAttack = false;
             isCanMove = false;
         }
 
@@ -131,14 +134,17 @@ namespace Units
             return hitRate;
         }
 
-        public void Attack()
+        public float Attack()
         {
             isWasMoved = true;
+            isCanAttack = false;
+            return CalculateHit();
         }
 
-        public void TakeDamages(float _inflictedDamages)
+        public float TakeDamages(float _inflictedDamages)
         {
-            health = Mathf.Max(health - _inflictedDamages, 0f); // Prend les dégâts
+            health = Mathf.Max(health - _inflictedDamages, 0f);
+            return health;
         }
     }
 }

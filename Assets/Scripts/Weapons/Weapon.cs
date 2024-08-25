@@ -14,6 +14,7 @@ namespace Weapons {
 		public int MaxRange { get => maxRange; }
 		public int MinRange { get => minRange; }
 		public int Acuracy { get => acuracy; }
+		public WeaponAttribute Attribute { get => attribute; }
 		public WeaponCategory Category { get => category; }
 		
 	}

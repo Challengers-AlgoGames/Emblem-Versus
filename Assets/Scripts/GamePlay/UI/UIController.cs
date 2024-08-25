@@ -92,23 +92,26 @@ namespace GamePlay.UIs
             }
         }
 
-        public Dictionary<UnitAction, Button> DisplayUnitActions()
+        public Button DisplayUnitWaitAction()
         {
-            Dictionary<UnitAction, Button> buttons = new Dictionary<UnitAction, Button>();
+            ClearContainer(unitActionMenuContainer);
 
-            GameObject actionButton;
-                
-            actionButton = Instantiate(buttonPrefab, unitActionMenuContainer);
-            actionButton.name = UnitAction.ATTACK.ToString();
-            actionButton.GetComponentInChildren<Text>().text = UnitAction.ATTACK.ToString();
-            buttons.Add(UnitAction.ATTACK, actionButton.GetComponent<Button>());
+            GameObject waitButton = Instantiate(buttonPrefab, unitActionMenuContainer);
+            waitButton.name = UnitAction.WAIT.ToString();
+            waitButton.GetComponentInChildren<Text>().text = UnitAction.WAIT.ToString();
 
-            actionButton = Instantiate(buttonPrefab, unitActionMenuContainer);
-            actionButton.name = UnitAction.WAIT.ToString();
-            actionButton.GetComponentInChildren<Text>().text = UnitAction.WAIT.ToString();
-            buttons.Add(UnitAction.WAIT, actionButton.GetComponent<Button>());
+            return waitButton.GetComponent<Button>();
+        }
 
-            return buttons;
+        public Button DisplayUnitAttackAction()
+        {
+            ClearContainer(unitActionMenuContainer);
+            
+            GameObject attackButton = Instantiate(buttonPrefab, unitActionMenuContainer);
+            attackButton.name = UnitAction.ATTACK.ToString();
+            attackButton.GetComponentInChildren<Text>().text = UnitAction.ATTACK.ToString();
+            
+            return attackButton.GetComponent<Button>();
         }
 
     }

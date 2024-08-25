@@ -78,6 +78,14 @@ namespace GamePlay.Sys
         public void SetTile(Vector3Int _tilePosition)
         {
             Tile newTile = tile;
+            newTile.color = Color.white; 
+            tilemap.SetTile(_tilePosition, newTile);
+        }
+
+        public void SetTile(Vector3Int _tilePosition, Color _color)
+        {
+            Tile newTile = tile;
+            newTile.color = _color;
             tilemap.SetTile(_tilePosition, newTile);
         }
 

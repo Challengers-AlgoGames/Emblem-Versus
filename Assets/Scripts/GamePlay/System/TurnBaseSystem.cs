@@ -31,12 +31,11 @@ namespace GamePlay.Sys
                     OnPhaseUpdate?.Invoke(phase);
                 }
             }
-
         }
 
         bool AllUnitsMoved()
         {
-            List<Unit> currentArmy = (phase == Commander.PLAYER_1) ? board.player1Army : board.player2Army;
+            List<Unit> currentArmy = (phase == Commander.PLAYER_1) ? board.Player1Army : board.Player2Army;
             foreach (Unit unit in currentArmy)
             {
                 if (!unit.IsWasMoved)
@@ -47,7 +46,7 @@ namespace GamePlay.Sys
 
         void EndPhase()
         {
-            List<Unit> currentArmy = (phase == Commander.PLAYER_1) ? board.player1Army : board.player2Army;
+            List<Unit> currentArmy = (phase == Commander.PLAYER_1) ? board.Player1Army : board.Player2Army;
             ResetArmyMove(currentArmy);
             phase = (phase == Commander.PLAYER_1) ? Commander.PLAYER_2 : Commander.PLAYER_1;
             print("New phase: " + phase);

@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Tools;
@@ -7,11 +9,14 @@ using UnityEngine;
 namespace GamePlay.Sys {
     public class FightSystem : MonoBehaviour
     {
+        public static event Action<Unit> OnAttackEnd;
+        
         private TileSystem tileSystem;
         private PathfindingAStar pathfindingAStar;
         private Grid grid;
         private float gridScale;
         private Unit currentUnit;
+        private List<Vector3Int> touchableEnnemiesCellPos;
 
         public void Activate(TileSystem _tileSystem, Grid _grid)
         {
@@ -20,33 +25,99 @@ namespace GamePlay.Sys {
             gridScale = grid.cellSize.x;
 
             pathfindingAStar = new PathfindingAStar(tileSystem);
+            touchableEnnemiesCellPos = new List<Vector3Int>();
         }
 
-        public List<Vector3Int> DetectEnemies(Unit _unit)
+        public void Attack(Vector3 _target)
         {
+            if(touchableEnnemiesCellPos.Contains(tileSystem.ConvertWorldToCellPosition(_target)))
+            {
+                Unit receiver = GetTarget(_target);
+                StartCoroutine(RefereeingAttack(currentUnit, receiver));
+            }
+        }
+
+        public void DetectEnemies(Unit _unit)
+        {
+            Clear();
+
             currentUnit = _unit;
             Vector3 startPosition = GetGroundPositionBelow(currentUnit.transform.position);
+
+            if(startPosition == Vector3.negativeInfinity)
+                return;
             
-            List<Vector3Int> touchableEnnemiesCellPos = new List<Vector3Int>();
+            int minRange = currentUnit.Weapon.MinRange;
+            int maxRange = currentUnit.Weapon.MaxRange;
 
-            if(startPosition != Vector3.negativeInfinity)
+            touchableEnnemiesCellPos = SelectTouchable(startPosition, minRange, maxRange, LocalizeEnemies(startPosition, maxRange));
+        
+            if(touchableEnnemiesCellPos.Count == 0)
             {
-                Debug.Log("Ennemie detection");
-                int minRange = currentUnit.Weapon.MinRange;
-                int maxRange = currentUnit.Weapon.MaxRange;
-
-                touchableEnnemiesCellPos = SelectTouchable(startPosition, minRange, maxRange, LocalizeEnemies(startPosition, maxRange));
+                Debug.Log("Not touchable ennemy");
+                return;
             }
 
-            if(touchableEnnemiesCellPos.Count > 0)
+            _unit.IsCanAttack = true;
+        }
+
+        public List<Vector3Int> SelectTouchable(Vector3 startPosition, int minRange, int maxRange, List<Vector3> enemiesPosition)
+        {
+            List<Vector3Int> touchableEnemiesCellPosition = new List<Vector3Int>();
+
+            foreach (Vector3 position in enemiesPosition)
             {
-                foreach (var item in touchableEnnemiesCellPos)
+                Debug.Log("Unit pos: " + startPosition);
+                Debug.Log("Ennemy pos: " + position);
+
+                Debug.Log("Search path operation begin... ");
+                Vector3Int start = tileSystem.ConvertWorldToCellPosition(startPosition);
+                Vector3Int target = tileSystem.ConvertWorldToCellPosition(position);
+
+                Debug.Log("start tile position: " + start);
+                Debug.Log("target tile position: " + target);
+
+                // Utilisation de la fonction FindPath en ignorant les obstacles
+                List<Vector3Int> pathToEnemy = pathfindingAStar.FindPath(start, target, false);
+
+                if(pathToEnemy.Count > 0)
                 {
-                    Debug.Log("touchable ennemi pos :" + item);
+                     // Calcul de la distance du chemin
+                    int distance = pathToEnemy.Count - 1;
+
+                    // Vérification si l'ennemi est dans la portée d'attaque
+                    if (distance <= maxRange && distance >= minRange)
+                    {
+                        Debug.Log("Add");
+                        touchableEnemiesCellPosition.Add(target);
+                    }
+                } else {
+                    Debug.Log("Path to ennemi is empty");
                 }
             }
 
-            return touchableEnnemiesCellPos;
+            return touchableEnemiesCellPosition;
+        }
+
+        public void DisplayTouchebleEnnemiesTile()
+        {
+            foreach(Vector3Int point in touchableEnnemiesCellPos)
+            {
+                tileSystem.SetTile(point, Color.red);
+            }
+        }
+
+        public void Clear()
+        {
+            if(touchableEnnemiesCellPos != null)
+            {
+                foreach(Vector3Int point in touchableEnnemiesCellPos)
+                {
+                    tileSystem.RemoveTile(point);
+                }
+                touchableEnnemiesCellPos = null;
+            }
+            currentUnit = null;
         }
 
         Vector3 GetGroundPositionBelow(Vector3 unitPosition)
@@ -77,7 +148,7 @@ namespace GamePlay.Sys {
         {
             List<Vector3> enemiesPosition = new List<Vector3>();
 
-            Debug.Log("Ennemie localization");
+            Debug.Log("Ennemy localization");
 
             for (int line = 0; line <= maxRange; line++)
             {
@@ -139,43 +210,22 @@ namespace GamePlay.Sys {
 
             return false;
         }
-
-        public List<Vector3Int> SelectTouchable(Vector3 startPosition, int minRange, int maxRange, List<Vector3> enemiesPosition)
+    
+        Unit GetTarget(Vector3 target)
         {
-            List<Vector3Int> touchableEnemiesCellPosition = new List<Vector3Int>();
+            Physics.Raycast(new Vector3(target.x, 4f, target.z), Vector3.down, out RaycastHit hit);
+            return hit.collider.GetComponent<Unit>();
+        }
+    
+        IEnumerator RefereeingAttack(Unit attacker, Unit receiver)
+        {
+            Debug.Log("Refereeing attack");
+            receiver.TakeDamages(attacker.Attack());
+                
+            yield return new WaitForSeconds(1.0f);
 
-            foreach (Vector3 position in enemiesPosition)
-            {
-                Vector3Int start = tileSystem.ConvertWorldToCellPosition(startPosition);
-                Vector3Int target = tileSystem.ConvertWorldToCellPosition(position);
-
-                // Utilisation de la fonction FindPath en ignorant les obstacles
-                List<Vector3Int> pathToEnemy = pathfindingAStar.FindPath(start, target, false);
-                foreach (Vector3Int path in pathToEnemy)
-                {
-                    Debug.Log(path);
-                }
-
-                // Si le chemin est vide, cela signifie qu'il n'y a pas de chemin valide
-                if (pathToEnemy == null || pathToEnemy.Count == 0)
-                    continue;
-                Debug.Log("Continue");
-
-
-                // Calcul de la distance du chemin
-                int distance = pathToEnemy.Count - 1;
-
-                // Vérification si l'ennemi est dans la portée d'attaque
-                if (distance <= maxRange && distance >= minRange)
-                {
-                    Debug.Log("ajout");
-
-                    // Ajout des coordonnées de l'ennemi à la liste des ennemis attaquables
-                    touchableEnemiesCellPosition.Add(target);
-                }
-            }
-
-            return touchableEnemiesCellPosition;
+            Clear();
+            OnAttackEnd?.Invoke(receiver);
         }
     }
 }

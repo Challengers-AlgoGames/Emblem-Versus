@@ -17,17 +17,19 @@ namespace Tools
         {
             List<Vector3Int> path = new List<Vector3Int>();
 
-            HashSet<Vector3Int> openSet = new HashSet<Vector3Int>();
-            HashSet<Vector3Int> closedSet = new HashSet<Vector3Int>();
+            HashSet<Vector3Int> openSet = new HashSet<Vector3Int>(); // case à explorer
+            HashSet<Vector3Int> closedSet = new HashSet<Vector3Int>(); // case déjà exploré
 
             Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>();
             Dictionary<Vector3Int, float> gScore = new Dictionary<Vector3Int, float>();
             Dictionary<Vector3Int, float> fScore = new Dictionary<Vector3Int, float>();
 
-            openSet.Add(start);
+            openSet.Add(start); // Débuté l'exploration à la position de départ
+
             gScore[start] = 0;
             fScore[start] = Heuristic(start, target);
 
+            // generation des path
             while (openSet.Count > 0)
             {
                 Vector3Int current = GetLowestFScore(openSet, fScore);
@@ -38,13 +40,13 @@ namespace Tools
                     break;
                 }
 
-                openSet.Remove(current);
-                closedSet.Add(current);
-
+                openSet.Remove(current);  closedSet.Add(current); // passer les tiles exploser dans closedSet
+               
                 foreach (Vector3Int neighbor in GetNeighbors(current, IsConsideringObstacle))
-                {
-                    if (closedSet.Contains(neighbor) || !IsTileActive(neighbor))
-                        continue;
+                {   
+                    // check si on a déjà passer sur ce point
+                    if (closedSet.Contains(neighbor))
+                        continue; // pass à l'iteration suivante
 
                     float tentativeGScore = gScore[current] + Heuristic(current, neighbor);
 
@@ -64,7 +66,6 @@ namespace Tools
 
         private List<Vector3Int> GetNeighbors(Vector3Int current, bool IsConsideringObstacle)
         {
-            // mur
             List<Vector3Int> neighbors = new List<Vector3Int>();
             Vector3Int[] directions = new Vector3Int[] {
                 Vector3Int.right, Vector3Int.left, Vector3Int.up, Vector3Int.down
@@ -75,6 +76,7 @@ namespace Tools
                 Vector3Int neighbor = current + direction;
                 if (IsConsideringObstacle)
                 {
+                    Debug.Log("Considère obstacle");
                     if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
                     {
                         neighbors.Add(neighbor);
@@ -82,6 +84,7 @@ namespace Tools
                 }
                 else
                 {
+                    Debug.Log("Considère pas les obstacles");
                     neighbors.Add(neighbor);
                 }
             }

@@ -160,7 +160,7 @@ MonoBehaviour:
   mobility: 5
   weapon: {fileID: 7947269446291519219}
   commander: 0
-  moveSpeed: 5
+  moveSpeed: 8
   isWasMoved: 0
   isCanMove: 0
   isCanAttack: 0
