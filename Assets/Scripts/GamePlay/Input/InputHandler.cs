@@ -3,10 +3,18 @@ using UnityEngine.InputSystem;
 using System;
 using Units;
 using UnityEngine.SceneManagement;
-using GamePlay.Cameras;
 
 namespace GamePlay
 {
+    public enum LeftClickInputMode
+    {
+        LISTEN_UNIT_CLICK,
+        LISTEN_GROUND_CLICK,
+        LISTEN_UNIT_ACTION_CLICK,
+        LISTEN_ATK_TARGET_CLICK,
+        NONE,
+    }
+
     public class InputHandler : MonoBehaviour
     {
         public static event Action<Unit> OnDisplayUnitActions;
@@ -20,29 +28,6 @@ namespace GamePlay
         private Camera _mainCamera;
         private LeftClickInputMode _leftClickMode;
 
-        private enum LeftClickInputMode
-        {
-            LISTEN_UNIT_CLICK,
-            LISTEN_GROUND_CLICK,
-            LISTEN_UNIT_ACTION_CLICK,
-            LISTEN_ATK_TARGET_CLICK,
-            NONE,
-        }
-
-        void Awake()
-        {
-            GameManager.OnDisplayUnitActionAborded += OnDisplayUnitActionAborded;
-            GameManager.OnUnitAttackButtonWasClicked += OnUnitAttackButtonWasClicked;
-            GameManager.OnUnitWaitButtonWasClicked += OnUnitWaitButtonWasClicked;
-        }
-
-        void OnDestroy()
-        {
-            GameManager.OnDisplayUnitActionAborded -= OnDisplayUnitActionAborded;
-            GameManager.OnUnitAttackButtonWasClicked -= OnUnitAttackButtonWasClicked;
-            GameManager.OnUnitWaitButtonWasClicked -= OnUnitWaitButtonWasClicked;
-        }
-
         void Start()
         {
             _mainCamera = Camera.main;
@@ -54,29 +39,9 @@ namespace GamePlay
             _mainCamera = Camera.main;
         }
 
-        public void Pause()
+        public void LeftClickListen(LeftClickInputMode _mode)
         {
-            SetLeftClickMode(LeftClickInputMode.NONE);
-        }
-
-        public void Play()
-        {
-            SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
-        }
-
-        void OnDisplayUnitActionAborded()
-        {
-            SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
-        }
-
-        void OnUnitAttackButtonWasClicked() //
-        {
-            SetLeftClickMode(LeftClickInputMode.LISTEN_ATK_TARGET_CLICK);
-        }
-
-        void OnUnitWaitButtonWasClicked()
-        {
-            SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
+            SetLeftClickMode(_mode);
         }
 
         void SetLeftClickMode(LeftClickInputMode mode)

@@ -10,10 +10,6 @@ using UnityEngine.UI;
 namespace GamePlay {
     public class GameManager : MonoBehaviour
     {
-        public static Action OnUnitAttackButtonWasClicked;
-        public static Action OnUnitWaitButtonWasClicked;
-        public static Action OnDisplayUnitActionAborded;
-        
         [SerializeField] Board board;
         [SerializeField] InputHandler inputHandler;
         [SerializeField] UIController uIController;
@@ -102,7 +98,8 @@ namespace GamePlay {
             fightSystem.Clear();
             currentCameraController.UnZoom();
             uIController.DisplayMainTips();
-            inputHandler.Play();
+
+            inputHandler.LeftClickListen(LeftClickInputMode.LISTEN_UNIT_CLICK);
             Debug.Log("attack end");
         }
 
@@ -118,7 +115,7 @@ namespace GamePlay {
         {
             if(_unit.Commander != turnBaseSystem.Phase)
             {
-                OnDisplayUnitActionAborded?.Invoke();
+                inputHandler.LeftClickListen(LeftClickInputMode.LISTEN_UNIT_CLICK);
                 return;
             }
 
@@ -132,9 +129,8 @@ namespace GamePlay {
 
             attackButton.onClick.AddListener(() => {
                 fightSystem.Attack(_attackTarget.transform.position);
-                inputHandler.Pause();
+                inputHandler.LeftClickListen(LeftClickInputMode.NONE);
             });
-
         }
 
         void OnUnitWasMoved()
@@ -149,8 +145,10 @@ namespace GamePlay {
             waitButton.onClick.AddListener(() => {
                 currentCameraController.UnZoom();
                 uIController.DisplayMainTips();
+
                 activeUnit.Wait();
-                OnUnitWaitButtonWasClicked?.Invoke();
+
+                inputHandler.LeftClickListen(LeftClickInputMode.LISTEN_UNIT_CLICK);
             });
 
             fightSystem.DetectEnemies(unit);
@@ -158,6 +156,8 @@ namespace GamePlay {
 
             currentCameraController.ZoomOut(unit.transform.position);
             uIController.DisplayUnZoomTips();
+
+            inputHandler.LeftClickListen(LeftClickInputMode.LISTEN_UNIT_ACTION_CLICK);
         }
     }
 }
