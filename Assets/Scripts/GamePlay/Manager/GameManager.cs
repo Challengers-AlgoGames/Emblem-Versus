@@ -102,6 +102,7 @@ namespace GamePlay {
             fightSystem.Clear();
             currentCameraController.UnZoom();
             uIController.DisplayMainTips();
+            inputHandler.Play();
             Debug.Log("attack end");
         }
 

@@ -179,7 +179,7 @@ namespace GamePlay {
                 Player2Army.Remove(_unit);
             }
 
-            Destroy(_unit);
+            Destroy(_unit.gameObject);
         }
     }
 }
