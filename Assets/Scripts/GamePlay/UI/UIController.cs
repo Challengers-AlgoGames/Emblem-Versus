@@ -37,6 +37,21 @@ namespace GamePlay.UIs
             SetTopLeftText(_phase.ToString());
         }
 
+        public void DisplayWinScreen(Commander _winner)
+        {
+            ClearContainer(bottomContainer);
+            ClearContainer(phaseNoticeContainer);
+            ClearContainer(phaseNoticeContainer);
+
+            GameObject winNoticePanel = Instantiate(panelPrefab, phaseNoticeContainer);
+
+            GameObject winNoticeTextObj = Instantiate(textPrefab, winNoticePanel.transform);
+            winNoticeTextObj.GetComponent<Text>().text = "Winner : " + _winner;
+
+            string[] helpTexts = {"PRESS (R) TO RESTART GAME"};
+            SetBottomHelpTexts(helpTexts);
+        }
+
         IEnumerator DisplayPhaseNotice(Commander _phase, float time)
         {
             GameObject phaseNoticePanel = Instantiate(panelPrefab, phaseNoticeContainer);
@@ -62,6 +77,7 @@ namespace GamePlay.UIs
             ClearContainer(unitActionMenuContainer);
 
             string[] helpTexts = {
+                "(Z-Q-S-D) Move Camera",
                 "(Left click to unit) Move", 
                 "(Right click to unit) Action"
             };

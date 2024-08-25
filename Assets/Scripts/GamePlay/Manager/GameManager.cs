@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using GamePlay.Cameras;
 using GamePlay.Sys;
 using GamePlay.UIs;
@@ -24,6 +22,7 @@ namespace GamePlay {
 
         void Awake()
         {
+            Board.OnWin += OnWin;
             Unit.OnWasMoved += OnUnitWasMoved;
             FightSystem.OnAttackEnd += OnAttackEnd;
             TurnBaseSystem.OnPhaseUpdate += OnTurnPhaseUpdated;
@@ -37,6 +36,7 @@ namespace GamePlay {
 
         void OnDestroy()
         {
+            Board.OnWin -= OnWin;
             Unit.OnWasMoved -= OnUnitWasMoved;
             FightSystem.OnAttackEnd -= OnAttackEnd;
             TurnBaseSystem.OnPhaseUpdate -= OnTurnPhaseUpdated;
@@ -65,6 +65,13 @@ namespace GamePlay {
             currentCameraController = cameraManager.SwitchCamera(_phase);
             inputHandler.Actualise();
             uIController.DisplayPhaseNotice(_phase);
+        }
+
+        void OnWin(Commander _winner)
+        {
+            turnBaseSystem.Phase = Commander.NULL;
+            inputHandler.LeftClickListen(LeftClickInputMode.NONE);
+            inputHandler.StopListenInput = true;
         }
 
         void DisplayUnitMoveRange(Unit _unit, Vector3 _unitGroundCellPosition)

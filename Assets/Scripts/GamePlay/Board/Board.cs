@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
@@ -38,6 +39,8 @@ namespace GamePlay {
 
         public List<Unit> Player1Army { get => player1Units; }
         public List<Unit> Player2Army { get => player2Units; }
+
+        public static event Action<Commander> OnWin;
 
         /* "o" : water, "" : grass, "T" : tree, "t" : deathTree */
         /* "cu" : cuirassier, "hu" : hussard, "if" : infanterie */ // unités camp 1
@@ -172,14 +175,24 @@ namespace GamePlay {
 
         public void ElimineUnit(Unit _unit)
         {
+            List<Unit> camp = new List<Unit>();
+
             if(_unit.Commander == Commander.PLAYER_1)
             {
                 Player1Army.Remove(_unit);
+                camp = Player1Army;
             } else {
                 Player2Army.Remove(_unit);
+                camp = Player2Army;
             }
-
+            
             Destroy(_unit.gameObject);
+
+            if(camp.Count == 0)
+            {
+                Commander winner = _unit.Commander == Commander.PLAYER_1 ? Commander.PLAYER_2 : Commander.PLAYER_1;
+                OnWin?.Invoke(winner);
+            }
         }
     }
 }

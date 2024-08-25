@@ -10,7 +10,7 @@ namespace GamePlay.Sys
 
         private Board board;
         private Commander phase = Commander.NULL;
-        public Commander Phase { get => phase; }
+        public Commander Phase { get => phase; set => phase = value; }
 
         public void Activate(Board _board)
         {

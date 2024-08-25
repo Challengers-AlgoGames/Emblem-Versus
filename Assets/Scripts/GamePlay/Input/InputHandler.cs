@@ -24,9 +24,10 @@ namespace GamePlay
         public static event Action<Unit> OnLeftClickModeListenUnitActionClick;
         public static event Action<Unit, Vector3> OnLeftClickModeListenUnitClick;
         
-        
+        public bool StopListenInput {get; set;}
+
         private Camera _mainCamera;
-        private LeftClickInputMode _leftClickMode;
+        private LeftClickInputMode leftClickMode;
 
         void Start()
         {
@@ -46,12 +47,12 @@ namespace GamePlay
 
         void SetLeftClickMode(LeftClickInputMode mode)
         {
-            _leftClickMode = mode;
+            leftClickMode = mode;
         }
 
         public void OnRightClick(InputAction.CallbackContext context)
         {
-            if (_leftClickMode != LeftClickInputMode.LISTEN_UNIT_CLICK || !context.started)
+            if (leftClickMode != LeftClickInputMode.LISTEN_UNIT_CLICK || !context.started)
                 return;
 
             if (Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit))
@@ -72,7 +73,7 @@ namespace GamePlay
 
             if (Physics.Raycast(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()), out RaycastHit hit))
             {
-                switch (_leftClickMode)
+                switch (leftClickMode)
                 {
                     case LeftClickInputMode.LISTEN_UNIT_CLICK:
                         HandleUnitClick(hit);
@@ -127,7 +128,7 @@ namespace GamePlay
 
         public void OnEscape(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.started && !StopListenInput)
             {
                 SetLeftClickMode(LeftClickInputMode.LISTEN_UNIT_CLICK);
                 OnEscapeKeyForCancelPressed?.Invoke();
@@ -136,7 +137,7 @@ namespace GamePlay
 
         public void OnReloadScene(InputAction.CallbackContext context)
         {
-            if (context.started)
+            if (context.started && StopListenInput)
             {
                 Scene scene = SceneManager.GetActiveScene();
                 SceneManager.LoadSceneAsync(scene.buildIndex);
