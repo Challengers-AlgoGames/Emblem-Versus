@@ -7,12 +7,10 @@ namespace Tools
     public class PathfindingAStar
     {
         private TileSystem tileSystem;
-        [SerializeField] private CombatSystem combatSystem;
 
-        public PathfindingAStar(TileSystem _tileSystem, CombatSystem _combatSystem)
+        public PathfindingAStar(TileSystem _tileSystem)
         {
             tileSystem = _tileSystem;
-            combatSystem = _combatSystem;
         }
 
         public List<Vector3Int> FindPath(Vector3Int start, Vector3Int target, bool IsConsideringObstacle)
@@ -77,29 +75,18 @@ namespace Tools
                 Vector3Int neighbor = current + direction;
                 if (IsConsideringObstacle)
                 {
-                    ConsiderObstacle(neighbor, neighbors);
+                    if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
+                    {
+                        neighbors.Add(neighbor);
+                    }
                 }
                 else
                 {
-                    NotConsiderObstacle(neighbor, neighbors);
+                    neighbors.Add(neighbor);
                 }
             }
 
             return neighbors;
-        }
-        private void ConsiderObstacle(Vector3Int neighbor, List<Vector3Int> neighbors)
-        {
-            if (IsTileActive(neighbor) && IsTileWalkable(neighbor))
-            {
-                neighbors.Add(neighbor);
-            }
-        }
-        private void NotConsiderObstacle(Vector3Int neighbor, List<Vector3Int> neighbors)
-        {
-            if (combatSystem.NotVerifieWalkability(neighbor))
-            {
-                neighbors.Add(neighbor);
-            }
         }
 
         private bool IsTileActive(Vector3Int position)

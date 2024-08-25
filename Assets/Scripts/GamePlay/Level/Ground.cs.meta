@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/GamePlay/Board/GameManager1.cs.meta
 guid: f0378ed0a278446ed9e920c4fcc16177
-========
-guid: 93ab687a51dbf0848b18a0c93463111b
->>>>>>>> origin/pathfinding:Assets/Scripts/GamePlay/Tools/Ground.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

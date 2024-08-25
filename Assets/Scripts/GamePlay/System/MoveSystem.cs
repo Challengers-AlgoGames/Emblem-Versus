@@ -17,7 +17,7 @@ namespace GamePlay.Sys
         {
             gridScale = _grid.cellSize.x;
             tileSystem = GetComponent<TileSystem>();
-            pathfindingAStar = new PathfindingAStar(tileSystem, GetComponent<CombatSystem>());
+            pathfindingAStar = new PathfindingAStar(tileSystem);
             activeTilesPosition = new List<Vector3Int>();
         }
 

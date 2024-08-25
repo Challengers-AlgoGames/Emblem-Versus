@@ -55,7 +55,6 @@ public class CombatSystem : MonoBehaviour
                 attackableEnemies.Add(target);
             }
         }
-        Debug.Log(attackableEnemies);
 
         return attackableEnemies;
     }

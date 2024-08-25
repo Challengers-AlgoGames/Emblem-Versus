@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using Tools;
 using Units;
 using UnityEngine;
 
@@ -5,6 +8,7 @@ namespace GamePlay.Sys {
     public class FightSystem : MonoBehaviour
     {
         private TileSystem tileSystem;
+        private PathfindingAStar pathfindingAStar;
         private Grid grid;
         private float gridScale;
         private Unit currentUnit;
@@ -14,20 +18,35 @@ namespace GamePlay.Sys {
             tileSystem = _tileSystem;
             grid = _grid;
             gridScale = grid.cellSize.x;
+
+            pathfindingAStar = new PathfindingAStar(tileSystem);
         }
 
-        public void DetectEnemies(Unit _unit)
+        public List<Vector3Int> DetectEnemies(Unit _unit)
         {
             currentUnit = _unit;
             Vector3 startPosition = GetGroundPositionBelow(currentUnit.transform.position);
             
+            List<Vector3Int> touchableEnnemiesCellPos = new List<Vector3Int>();
+
             if(startPosition != Vector3.negativeInfinity)
             {
                 Debug.Log("Ennemie detection");
                 int minRange = currentUnit.Weapon.MinRange;
                 int maxRange = currentUnit.Weapon.MaxRange;
-                LocalizeTouchableEnemies(startPosition, minRange, maxRange);
+
+                touchableEnnemiesCellPos = SelectTouchable(startPosition, minRange, maxRange, LocalizeEnemies(startPosition, maxRange));
             }
+
+            if(touchableEnnemiesCellPos.Count > 0)
+            {
+                foreach (var item in touchableEnnemiesCellPos)
+                {
+                    Debug.Log("touchable ennemi pos :" + item);
+                }
+            }
+
+            return touchableEnnemiesCellPos;
         }
 
         Vector3 GetGroundPositionBelow(Vector3 unitPosition)
@@ -54,9 +73,12 @@ namespace GamePlay.Sys {
             return Vector3.negativeInfinity;
         }
 
-        void LocalizeTouchableEnemies(Vector3 start, int minRange, int maxRange)
+        List<Vector3> LocalizeEnemies(Vector3 start, int maxRange)
         {
+            List<Vector3> enemiesPosition = new List<Vector3>();
+
             Debug.Log("Ennemie localization");
+
             for (int line = 0; line <= maxRange; line++)
             {
                 Vector3 topLineDirection = start + new Vector3(0, 0, (maxRange - line) * gridScale); // montée
@@ -78,26 +100,29 @@ namespace GamePlay.Sys {
 
                     // Check for enemies in each direction
                     if (SearchEnemy(topLeftPosition)) {
-                        // Process or mark the enemy at topPosition
-                        Debug.Log("Enemy found at topLeftPosition");
+                        enemiesPosition.Add(topLeftPosition);
                     }
 
                     if (SearchEnemy(bottomLeftPosition)) {
-                        // Process or mark the enemy at bottomPosition
-                        Debug.Log("Enemy found at bottomLeftPosition");
+                        enemiesPosition.Add(bottomLeftPosition);
                     }
 
                     if (SearchEnemy(topRightPosition)) {
-                        // Process or mark the enemy at topRightPosition
-                        Debug.Log("Enemy found at topRightPosition");
+                        enemiesPosition.Add(topRightPosition);
                     }
 
                     if (SearchEnemy(bottomRightPosition)) {
-                        // Process or mark the enemy at bottomRightPosition
-                        Debug.Log("Enemy found at bottomRightPosition");
+                        enemiesPosition.Add(bottomRightPosition);
                     }
                 }
             }
+
+            if(enemiesPosition.Count > 1)
+            {
+                enemiesPosition = enemiesPosition.Distinct<Vector3>().ToList<Vector3>();
+            }
+
+            return enemiesPosition; 
         }
 
         bool SearchEnemy(Vector3 position)
@@ -113,6 +138,44 @@ namespace GamePlay.Sys {
             }
 
             return false;
+        }
+
+        public List<Vector3Int> SelectTouchable(Vector3 startPosition, int minRange, int maxRange, List<Vector3> enemiesPosition)
+        {
+            List<Vector3Int> touchableEnemiesCellPosition = new List<Vector3Int>();
+
+            foreach (Vector3 position in enemiesPosition)
+            {
+                Vector3Int start = tileSystem.ConvertWorldToCellPosition(startPosition);
+                Vector3Int target = tileSystem.ConvertWorldToCellPosition(position);
+
+                // Utilisation de la fonction FindPath en ignorant les obstacles
+                List<Vector3Int> pathToEnemy = pathfindingAStar.FindPath(start, target, false);
+                foreach (Vector3Int path in pathToEnemy)
+                {
+                    Debug.Log(path);
+                }
+
+                // Si le chemin est vide, cela signifie qu'il n'y a pas de chemin valide
+                if (pathToEnemy == null || pathToEnemy.Count == 0)
+                    continue;
+                Debug.Log("Continue");
+
+
+                // Calcul de la distance du chemin
+                int distance = pathToEnemy.Count - 1;
+
+                // Vérification si l'ennemi est dans la portée d'attaque
+                if (distance <= maxRange && distance >= minRange)
+                {
+                    Debug.Log("ajout");
+
+                    // Ajout des coordonnées de l'ennemi à la liste des ennemis attaquables
+                    touchableEnemiesCellPosition.Add(target);
+                }
+            }
+
+            return touchableEnemiesCellPosition;
         }
     }
 }

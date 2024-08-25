@@ -1,10 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scenes/OverView.unity.meta
 guid: a8d6a7686131fc41fb62744095ba0d34
-========
-guid: 1b3596b36c0c82d65a2ed1e8bc0bc12a
-folderAsset: yes
->>>>>>>> origin/pathfinding:Assets/Prefabs/Level/Tiles.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
